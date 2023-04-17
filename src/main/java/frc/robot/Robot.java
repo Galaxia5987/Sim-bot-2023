@@ -4,10 +4,12 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.PowerDistribution;
+import com.pathplanner.lib.server.PathPlannerServer;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.LoggedSubsystem;
+import frc.robot.subsystems.drivetrain.SwerveDrive;
+import frc.robot.subsystems.drivetrain.SwerveModule;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -23,9 +25,16 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  */
 public class Robot extends LoggedRobot {
     public static boolean debug = false;
-
+    private static boolean lastEnabled = false;
+    private static boolean justEnabled = false;
+    private final Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+    private final Timer timer = new Timer();
     private RobotContainer robotContainer;
     private Command autonomousCommand;
+
+    public static boolean justEnabled() {
+        return justEnabled;
+    }
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -33,13 +42,15 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void robotInit() {
+//        compressor.disable();
+        PathPlannerServer.startServer(5811);
         robotContainer = RobotContainer.getInstance();
         autonomousCommand = robotContainer.getAutonomousCommand();
 
-        Logger.getInstance().recordMetadata("ProjectName", "Wcp-Swerve-2023"); // Set a metadata value
+        Logger.getInstance().recordMetadata("ProjectName", "Robot-2023"); // Set a metadata value
 
         if (isReal()) {
-            Logger.getInstance().addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick
+            Logger.getInstance().addDataReceiver(new WPILOGWriter("/home/lvuser")); // Log to a USB stick
             Logger.getInstance().addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
             new PowerDistribution(1, PowerDistribution.ModuleType.kRev); // Enables power distribution logging
         } else {
@@ -49,7 +60,12 @@ public class Robot extends LoggedRobot {
             Logger.getInstance().addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
         }
 
+        PathPlannerServer.startServer(5811);
+
         Logger.getInstance().start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
+
+        timer.start();
+        timer.reset();
     }
 
     /**
@@ -63,6 +79,17 @@ public class Robot extends LoggedRobot {
     public void robotPeriodic() {
         LoggedSubsystem.getSubsystems().forEach(LoggedSubsystem::updateSubsystem);
         CommandScheduler.getInstance().run();
+
+        boolean enabled = DriverStation.isEnabled();
+        justEnabled = !lastEnabled && enabled;
+        lastEnabled = enabled;
+
+        if (timer.hasElapsed(1)) {
+            timer.reset();
+            for (SwerveModule module : SwerveDrive.getInstance().getModules()) {
+                module.initializeOffset();
+            }
+        }
     }
 
     /**
@@ -83,6 +110,8 @@ public class Robot extends LoggedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }
+
+        Logger.getInstance().recordOutput("Start Game", Timer.getFPGATimestamp());
     }
 
     /**

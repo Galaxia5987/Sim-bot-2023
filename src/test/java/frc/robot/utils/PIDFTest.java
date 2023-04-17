@@ -1,6 +1,6 @@
 package frc.robot.utils;
 
-import frc.robot.utils.controllers.PIDFController;
+import frc.robot.utils.controllers.DieterController;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,11 +16,11 @@ public class PIDFTest {
     @Test
     public void pidfTest() {
         try {
-            PIDFController pidfController;
+            DieterController pidfController;
             Scanner in = new Scanner(new File("test-files/pidf.txt"));
             int numControllers = in.nextInt(), numTests;
             for (int i = 0; i < numControllers; i++) {
-                pidfController = new PIDFController(
+                pidfController = new DieterController(
                         in.nextDouble(),
                         in.nextDouble(),
                         in.nextDouble(),
