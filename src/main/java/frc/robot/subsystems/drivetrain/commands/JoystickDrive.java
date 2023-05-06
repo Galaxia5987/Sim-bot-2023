@@ -14,6 +14,7 @@ public class JoystickDrive extends CommandBase {
     public JoystickDrive(Joystick leftJoystick, Joystick rightJoystick) {
         this.leftJoystick = leftJoystick;
         this.rightJoystick = rightJoystick;
+        addRequirements(drive);
     }
 
     @Override

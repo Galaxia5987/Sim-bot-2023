@@ -22,7 +22,7 @@ public class Drive extends SubsystemBase {
     private final Module rearRight;
 
     private final SwerveDriveKinematics kinematics;
-    private ChassisSpeeds desiredSpeeds;
+    private ChassisSpeeds desiredSpeeds = new ChassisSpeeds();
     private SwerveModuleState[] desiredModuleStates;
 
     private final GyroIO gyroIO;
@@ -90,7 +90,7 @@ public class Drive extends SubsystemBase {
         if (fieldOriented) {
             speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                     speeds,
-                    new Rotation2d(gyroInputs.rawYawPositionRad)
+                    new Rotation2d(gyroInputs.yawPositionRad)
             );
         }
 
@@ -168,7 +168,7 @@ public class Drive extends SubsystemBase {
         } else {
             yawSim.update(currentSpeeds.omegaRadiansPerSecond);
 
-            gyroInputs.connected = true;
+            gyroInputs.gyroConnected = true;
             gyroInputs.rawYawPositionRad = yawSim.get();
         }
         currentYaw = gyroInputs.rawYawPositionRad + yawOffset;
@@ -184,6 +184,9 @@ public class Drive extends SubsystemBase {
         Logger.getInstance().recordOutput("Drive/PoseMeters", odometry.getPoseMeters());
 
         // Setting desired states
+        desiredModuleStates = kinematics.toSwerveModuleStates(desiredSpeeds);
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredModuleStates, MAX_VELOCITY);
+
         if (Utils.speedsEpsilonEquals(desiredSpeeds)) {
             for (int i = 0; i < 4; i++) {
                 desiredModuleStates[i] = new SwerveModuleState(0, currentModuleStates[i].angle);

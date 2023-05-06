@@ -6,7 +6,7 @@ public interface GyroIO {
 
     @AutoLog
     class GyroIOInputs {
-        public boolean connected = false;
+        public boolean gyroConnected = false;
 
         public double yawPositionRad = 0.0;
 

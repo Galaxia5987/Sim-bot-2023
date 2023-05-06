@@ -45,7 +45,7 @@ public class SwerveConstants {
     public static final double ACCELERATION_FEEDFORWARD = 0.080553;
     public static final double STATIC_FEEDFORWARD = 0.21189;
 
-    public static final double DRIVE_Kp = 0.5;
-    public static final double DRIVE_Ki = 0.0;
+    public static final double DRIVE_Kp = 3.0;
+    public static final double DRIVE_Ki = 0.001;
     public static final double DRIVE_Kd = 0.0;
 }

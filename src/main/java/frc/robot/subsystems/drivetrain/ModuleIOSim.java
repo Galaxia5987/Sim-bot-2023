@@ -1,5 +1,6 @@
 package frc.robot.subsystems.drivetrain;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import frc.robot.utils.controllers.DieterController;
@@ -28,8 +29,12 @@ public class ModuleIOSim implements ModuleIO {
 
     @Override
     public void updateInputs(ModuleInputs inputs) {
+        driveMotor.update(0.02);
+        angleMotor.update(0.02);
+
         inputs.angleRads = inputs.angleRads +
                 angleMotor.getAngularVelocityRadPerSec() * 0.02;
+        inputs.angleRads = MathUtil.angleModulus(inputs.angleRads);
         currentAngleRads = inputs.angleRads;
         inputs.setpointAngleRads = setpointAngleRads;
         inputs.encoderAngleRads = inputs.angleRads;
@@ -55,6 +60,7 @@ public class ModuleIOSim implements ModuleIO {
     @Override
     public void setDriveVoltage(double voltage) {
         appliedDriveVoltage = voltage;
+        driveMotor.setInputVoltage(voltage);
     }
 
     @Override

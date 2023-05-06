@@ -12,13 +12,14 @@ public class XboxDrive extends CommandBase {
 
     public XboxDrive(XboxController xboxController) {
         this.xboxController = xboxController;
+        addRequirements(drive);
     }
 
     @Override
     public void execute() {
         drive.drive(
                 -xboxController.getLeftY(),
-                xboxController.getLeftX(),
+                -xboxController.getLeftX(),
                 xboxController.getRightX(),
                 true
         );

@@ -63,15 +63,13 @@ public class Module extends SubsystemBase {
 
     public void set(SwerveModuleState desiredState) {
         desiredState = SwerveModuleState.optimize(desiredState, new Rotation2d(inputs.angleRads));
-        double angleRads = desiredState.angle.getRadians();
 
-        double driveVoltage = driveFeedforward.calculate(
-                desiredState.speedMetersPerSecond,
-                driveFeedback.calculate(inputs.velocityMetersPerSecond, desiredState.speedMetersPerSecond));
+        double driveVoltage =
+                driveFeedback.calculate(inputs.velocityMetersPerSecond, desiredState.speedMetersPerSecond);
 
         inputs.setpointVelocityMetersPerSecond = desiredState.speedMetersPerSecond;
         inputs.setpointDriveVoltage = driveVoltage;
-        inputs.setpointAngleRads = angleRads;
+        inputs.setpointAngleRads = desiredState.angle.getRadians();
     }
 
     public SwerveModuleState getState() {

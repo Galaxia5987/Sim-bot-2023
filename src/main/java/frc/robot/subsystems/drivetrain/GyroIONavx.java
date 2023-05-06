@@ -20,11 +20,11 @@ public class GyroIONavx implements GyroIO {
 
     @Override
     public void updateInputs(GyroIOInputs inputs) {
-        inputs.connected = navx.isConnected();
+        inputs.gyroConnected = navx.isConnected();
 
-        inputs.rawYawPositionRad = navx.getYaw();
-        inputs.rawPitchPositionRad = navx.getPitch();
-        inputs.rawRollPositionRad = navx.getRoll();
+        inputs.rawYawPositionRad = Math.toRadians(navx.getYaw());
+        inputs.rawPitchPositionRad = Math.toRadians(navx.getPitch());
+        inputs.rawRollPositionRad = Math.toRadians(navx.getRoll());
 
         yawDerivative.update(inputs.rawYawPositionRad);
         pitchDerivative.update(inputs.rawPitchPositionRad);
