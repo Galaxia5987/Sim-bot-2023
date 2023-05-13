@@ -1,12 +1,14 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Joystick;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.drivetrain.Drive;
-import frc.robot.subsystems.drivetrain.commands.TestDriveResponseSim;
+import frc.robot.subsystems.drivetrain.commands.KeyboardDriveSim;
 import frc.robot.subsystems.drivetrain.commands.XboxDrive;
 
 public class RobotContainer {
@@ -14,19 +16,10 @@ public class RobotContainer {
 
     private final Drive drive = Drive.getInstance();
 
-    private final XboxController xboxController;
-
-    private final Joystick leftJoystick = new Joystick(1);
-    private final Joystick rightJoystick = new Joystick(2);
-
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
      */
     private RobotContainer() {
-        DriverStation.silenceJoystickConnectionWarning(true);
-
-        xboxController = new XboxController(0);
-
         configureDefaultCommands();
         configureButtonBindings();
     }
@@ -40,7 +33,7 @@ public class RobotContainer {
 
     private void configureDefaultCommands() {
         drive.setDefaultCommand(
-                new XboxDrive(xboxController)
+                new XboxDrive(new XboxController(0))
         );
     }
 
@@ -54,7 +47,17 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return null;
+        return new InstantCommand(() -> drive.resetOdometry(new Pose2d(), 0))
+                .andThen(new PPSwerveControllerCommand(
+                        PathPlanner.loadPath("Test", 5, 3),
+                        drive::getCurrentPose,
+                        new PIDController(7, 0, 0),
+                        new PIDController(7, 0, 0),
+                        new PIDController(10, 0, 0),
+                        (speeds) -> drive.drive(speeds, false),
+                        false,
+                        drive
+                ));
     }
 
 }

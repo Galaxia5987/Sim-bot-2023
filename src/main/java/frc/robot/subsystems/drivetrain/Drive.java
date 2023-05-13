@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.utils.Utils;
 import frc.robot.utils.math.differential.Integral;
+import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.Logger;
 
 import static frc.robot.subsystems.drivetrain.SwerveConstants.*;
@@ -36,6 +37,7 @@ public class Drive extends SubsystemBase {
     private SwerveModulePosition[] currentModulePositions;
     private ChassisSpeeds currentSpeeds;
     private final SwerveDriveOdometry odometry;
+    private final DriveIOInputsAutoLogged driveInputs;
 
     private double yawOffset = 0.0;
     private double currentYaw = 0.0;
@@ -79,7 +81,9 @@ public class Drive extends SubsystemBase {
             yawSim = new Integral(0, 0);
             gyroIO = new GyroIO() {};
         }
+
         gyroInputs = new GyroIOInputsAutoLogged();
+        driveInputs = new DriveIOInputsAutoLogged();
     }
 
     public static Drive getInstance() {
@@ -98,12 +102,13 @@ public class Drive extends SubsystemBase {
         }
 
         desiredSpeeds = speeds;
+        desiredModuleStates = kinematics.toSwerveModuleStates(desiredSpeeds);
     }
 
     public void drive(double xOutput, double yOutput, double omegaOutput, boolean fieldOriented) {
-        xOutput = MathUtil.applyDeadband(xOutput, 0.15);
-        yOutput = MathUtil.applyDeadband(yOutput, 0.15);
-        omegaOutput = MathUtil.applyDeadband(omegaOutput, 0.15);
+        xOutput = MathUtil.applyDeadband(xOutput, 0.05);
+        yOutput = MathUtil.applyDeadband(yOutput, 0.05);
+        omegaOutput = MathUtil.applyDeadband(omegaOutput, 0.05);
 
         drive(new ChassisSpeeds(
                 xOutput * MAX_VELOCITY_METERS_PER_SECOND,
@@ -112,7 +117,7 @@ public class Drive extends SubsystemBase {
                 fieldOriented);
     }
 
-    public void setDesiredModuleStates(SwerveModuleState... desiredModuleStates) {
+    public void setDesiredModuleStates(SwerveModuleState[] desiredModuleStates) {
         this.desiredModuleStates = desiredModuleStates;
     }
 
@@ -122,6 +127,10 @@ public class Drive extends SubsystemBase {
 
     public Pose2d getCurrentPose() {
         return odometry.getPoseMeters();
+    }
+
+    public SwerveDriveKinematics getKinematics() {
+        return kinematics;
     }
 
     public void resetOdometry(Pose2d pose) {
@@ -188,14 +197,7 @@ public class Drive extends SubsystemBase {
         // Updating odometry and pose estimation
         odometry.update(new Rotation2d(gyroInputs.rawYawPositionRad), currentModulePositions);
 
-        // Logging current states
-        Logger.getInstance().processInputs("Drive", gyroInputs);
-        Logger.getInstance().recordOutput("Drive/CurrentModuleStates", currentModuleStates);
-        Logger.getInstance().recordOutput("Drive/CurrentSpeeds", Utils.chassisSpeedsToArray(currentSpeeds));
-        Logger.getInstance().recordOutput("Drive/PoseMeters", odometry.getPoseMeters());
-
         // Setting desired states
-        desiredModuleStates = kinematics.toSwerveModuleStates(desiredSpeeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredModuleStates, MAX_VELOCITY_METERS_PER_SECOND);
 
         if (Utils.speedsEpsilonEquals(desiredSpeeds)) {
@@ -211,8 +213,24 @@ public class Drive extends SubsystemBase {
             rearRight.set(desiredModuleStates[3]);
         }
 
-        // Logging desired states
-        Logger.getInstance().recordOutput("Drive/DesiredModuleStates", desiredModuleStates);
-        Logger.getInstance().recordOutput("Drive/DesiredSpeeds", Utils.chassisSpeedsToArray(desiredSpeeds));
+        // Update drive inputs
+        driveInputs.currentModuleStates = Utils.swerveModuleStatesToArray(currentModuleStates);
+        driveInputs.currentSpeeds = Utils.chassisSpeedsToArray(currentSpeeds);
+        driveInputs.desiredModuleStates = Utils.swerveModuleStatesToArray(desiredModuleStates);
+        driveInputs.desiredSpeeds = Utils.chassisSpeedsToArray(desiredSpeeds);
+        driveInputs.poseMeters = Utils.pose2dToArray(odometry.getPoseMeters());
+
+        // Log inputs
+        Logger.getInstance().processInputs("Drive", gyroInputs);
+        Logger.getInstance().processInputs("Drive", driveInputs);
+    }
+
+    @AutoLog
+    public static class DriveIOInputs {
+        public double[] currentSpeeds;
+        public double[] desiredSpeeds;
+        public double[] currentModuleStates;
+        public double[] desiredModuleStates;
+        public double[] poseMeters;
     }
 }

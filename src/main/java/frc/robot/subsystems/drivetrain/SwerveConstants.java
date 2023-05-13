@@ -47,8 +47,8 @@ public class SwerveConstants {
         public static final double ACCELERATION_FEEDFORWARD_REAL = 0.080553;
         public static final double STATIC_FEEDFORWARD_REAL = 0.21189;
 
-        public static final double VELOCITY_FEEDFORWARD_SIM = 0.33031;
-        public static final double ACCELERATION_FEEDFORWARD_SIM = 0.080553;
+        public static final double VELOCITY_FEEDFORWARD_SIM = 0.33031 / DRIVE_REDUCTION;
+        public static final double ACCELERATION_FEEDFORWARD_SIM = 0.080553 / DRIVE_REDUCTION;
         public static final double STATIC_FEEDFORWARD_SIM = 0.21189 / 2.0;
 
         public static final double DRIVE_Kp = 3.5;

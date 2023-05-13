@@ -29,7 +29,7 @@ public class ModuleIOSim implements ModuleIO {
         angleMotor = new FlywheelSim(
                 DCMotor.getFalcon500(1), 1 / ANGLE_REDUCTION, ANGLE_MOMENT_OF_INERTIA);
 
-        angleFeedback = new PIDController(6, 0, 0, 0.02);
+        angleFeedback = new PIDController(3.5, 0, 0, 0.02);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ModuleIOSim implements ModuleIO {
         inputs.appliedAngleCurrent = angleMotor.getCurrentDrawAmps();
 
         inputs.velocityMetersPerSecond = driveMotor.getAngularVelocityRadPerSec()
-                * WHEEL_DIAMETER / 2 / DRIVE_REDUCTION;
+                * WHEEL_DIAMETER / 2;
         moduleDistance.update(inputs.velocityMetersPerSecond);
         inputs.moduleDistanceMeters = moduleDistance.get();
         inputs.appliedDriveVoltage = appliedDriveVoltage;

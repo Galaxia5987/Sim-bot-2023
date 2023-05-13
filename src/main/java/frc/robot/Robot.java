@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.utils.TunableNumber;
+import frc.robot.utils.math.differential.BooleanTrigger;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -24,16 +25,11 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  */
 public class Robot extends LoggedRobot {
     public static boolean debug = false;
-    private static boolean lastEnabled = false;
-    private static boolean justEnabled = false;
+    private static final BooleanTrigger enabledTrigger = new BooleanTrigger(false, false);
     private final Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
     private final Timer timer = new Timer();
     private RobotContainer robotContainer;
     private Command autonomousCommand;
-
-    public static boolean justEnabled() {
-        return justEnabled;
-    }
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -44,7 +40,6 @@ public class Robot extends LoggedRobot {
 //        compressor.disable();
         PathPlannerServer.startServer(5811);
         robotContainer = RobotContainer.getInstance();
-        autonomousCommand = robotContainer.getAutonomousCommand();
 
         Logger.getInstance().recordMetadata("ProjectName", "Sim-bot-2023"); // Set a metadata value
 
@@ -52,7 +47,6 @@ public class Robot extends LoggedRobot {
             Logger.getInstance().addDataReceiver(new WPILOGWriter("/home/lvuser")); // Log to a USB stick
             Logger.getInstance().addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
             new PowerDistribution(1, PowerDistribution.ModuleType.kRev); // Enables power distribution logging
-            PathPlannerServer.startServer(5811);
         } else {
             Logger.getInstance().addDataReceiver(new NT4Publisher());
         }
@@ -75,9 +69,7 @@ public class Robot extends LoggedRobot {
         TunableNumber.INSTANCES.forEach(TunableNumber::update);
         CommandScheduler.getInstance().run();
 
-        boolean enabled = DriverStation.isEnabled();
-        justEnabled = !lastEnabled && enabled;
-        lastEnabled = enabled;
+        enabledTrigger.update(isEnabled());
     }
 
     /**
@@ -98,8 +90,6 @@ public class Robot extends LoggedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }
-
-        Logger.getInstance().recordOutput("Start Game", Timer.getFPGATimestamp());
     }
 
     /**
@@ -154,5 +144,9 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void testPeriodic() {
+    }
+
+    public static boolean justEnabled() {
+        return enabledTrigger.triggered();
     }
 }

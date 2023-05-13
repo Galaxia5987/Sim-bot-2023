@@ -22,8 +22,6 @@ public class ModuleIOTalonFX implements ModuleIO {
             new BooleanTrigger(false, false);
     private boolean initializedAngleFalcon = false;
 
-    private double setpointAngle = 0;
-
     public ModuleIOTalonFX(int drivePort, boolean driveInverted,
                            int anglePort, boolean angleInverted,
                            int encoderPort, double offsetRads) {
@@ -72,7 +70,6 @@ public class ModuleIOTalonFX implements ModuleIO {
     public void updateInputs(ModuleInputs inputs) {
         inputs.angleRads = SwerveModuleUtils
                 .getModuleAngleFromFalcon(angleMotor.getSelectedSensorPosition());
-        inputs.setpointAngleRads = setpointAngle;
         inputs.encoderAngleRads = SwerveModuleUtils
                 .getModuleAngleFromEncoder(encoder.getAbsolutePosition());
         inputs.encoderConnected = encoder.isConnected();
@@ -91,7 +88,6 @@ public class ModuleIOTalonFX implements ModuleIO {
 
     @Override
     public void setAngle(double angleRads) {
-        setpointAngle = angleRads;
         double ticks = SwerveModuleUtils.getFalconTicksFromAngle(angleRads);
         angleMotor.set(TalonFXControlMode.MotionMagic, ticks);
     }
