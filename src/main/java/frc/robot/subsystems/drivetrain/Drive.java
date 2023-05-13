@@ -1,9 +1,12 @@
 package frc.robot.subsystems.drivetrain;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.simulation.DriverStationSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.utils.Utils;
@@ -74,7 +77,7 @@ public class Drive extends SubsystemBase {
             yawSim = null;
         } else {
             yawSim = new Integral(0, 0);
-            gyroIO = null;
+            gyroIO = new GyroIO() {};
         }
         gyroInputs = new GyroIOInputsAutoLogged();
     }
@@ -98,9 +101,13 @@ public class Drive extends SubsystemBase {
     }
 
     public void drive(double xOutput, double yOutput, double omegaOutput, boolean fieldOriented) {
+        xOutput = MathUtil.applyDeadband(xOutput, 0.15);
+        yOutput = MathUtil.applyDeadband(yOutput, 0.15);
+        omegaOutput = MathUtil.applyDeadband(omegaOutput, 0.15);
+
         drive(new ChassisSpeeds(
-                xOutput * MAX_VELOCITY,
-                yOutput * MAX_VELOCITY,
+                xOutput * MAX_VELOCITY_METERS_PER_SECOND,
+                yOutput * MAX_VELOCITY_METERS_PER_SECOND,
                 omegaOutput * MAX_ROTATIONAL_VELOCITY),
                 fieldOriented);
     }
@@ -147,6 +154,11 @@ public class Drive extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (DriverStation.isDisabled()) {
+            desiredSpeeds = new ChassisSpeeds();
+            desiredModuleStates = kinematics.toSwerveModuleStates(desiredSpeeds);
+        }
+
         // Updating swerve module states
         currentModuleStates = new SwerveModuleState[]{
                 frontLeft.getState(),
@@ -163,34 +175,34 @@ public class Drive extends SubsystemBase {
         currentSpeeds = kinematics.toChassisSpeeds(currentModuleStates);
 
         // Updating gyro inputs
-        if (gyroIO != null) {
-            gyroIO.updateInputs(gyroInputs);
-        } else {
+        gyroIO.updateInputs(gyroInputs);
+
+        if (Robot.isSimulation()) {
             yawSim.update(currentSpeeds.omegaRadiansPerSecond);
 
             gyroInputs.gyroConnected = true;
             gyroInputs.rawYawPositionRad = yawSim.get();
         }
-        currentYaw = gyroInputs.rawYawPositionRad + yawOffset;
+        gyroInputs.yawPositionRad = gyroInputs.rawYawPositionRad + yawOffset;
 
         // Updating odometry and pose estimation
         odometry.update(new Rotation2d(gyroInputs.rawYawPositionRad), currentModulePositions);
 
         // Logging current states
         Logger.getInstance().processInputs("Drive", gyroInputs);
-        Logger.getInstance().recordOutput("Drive/CurrentYawRads", currentYaw);
         Logger.getInstance().recordOutput("Drive/CurrentModuleStates", currentModuleStates);
         Logger.getInstance().recordOutput("Drive/CurrentSpeeds", Utils.chassisSpeedsToArray(currentSpeeds));
         Logger.getInstance().recordOutput("Drive/PoseMeters", odometry.getPoseMeters());
 
         // Setting desired states
         desiredModuleStates = kinematics.toSwerveModuleStates(desiredSpeeds);
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredModuleStates, MAX_VELOCITY);
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredModuleStates, MAX_VELOCITY_METERS_PER_SECOND);
 
         if (Utils.speedsEpsilonEquals(desiredSpeeds)) {
             for (int i = 0; i < 4; i++) {
                 desiredModuleStates[i] = new SwerveModuleState(0, currentModuleStates[i].angle);
             }
+            desiredSpeeds = new ChassisSpeeds();
             stop();
         } else {
             frontLeft.set(desiredModuleStates[0]);

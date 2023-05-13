@@ -1,5 +1,7 @@
 package frc.robot.utils.math.differential;
 
+import edu.wpi.first.wpilibj.Timer;
+
 public class Integral {
 
     private double value;
@@ -24,7 +26,7 @@ public class Integral {
     }
 
     public void update(double newValue) {
-        double timestamp = System.currentTimeMillis();
+        double timestamp = Timer.getFPGATimestamp();
 
         lastValue = value;
         value = newValue;

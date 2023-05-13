@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.utils.TunableNumber;
 import org.littletonrobotics.junction.Logger;
 
@@ -38,15 +39,25 @@ public class Module extends SubsystemBase {
         io.configMotionMagic(motionMagicConfig);
         inputs = new ModuleInputsAutoLogged();
 
-        driveFeedforward = new SimpleMotorFeedforward(
-                STATIC_FEEDFORWARD,
-                VELOCITY_FEEDFORWARD,
-                ACCELERATION_FEEDFORWARD
-        );
+        if (Robot.isReal()) {
+            driveFeedforward = new SimpleMotorFeedforward(
+                    STATIC_FEEDFORWARD_REAL,
+                    VELOCITY_FEEDFORWARD_REAL,
+                    ACCELERATION_FEEDFORWARD_REAL
+            );
+        } else {
+            driveFeedforward = new SimpleMotorFeedforward(
+                    STATIC_FEEDFORWARD_SIM,
+                    VELOCITY_FEEDFORWARD_SIM,
+                    ACCELERATION_FEEDFORWARD_SIM
+            );
+        }
+
         driveFeedback = new PIDController(
                 DRIVE_Kp,
                 DRIVE_Ki,
-                DRIVE_Kd
+                DRIVE_Kd,
+                0.02
         );
 
         kP = new TunableNumber(moduleNameOf(number) + "/kP", motionMagicConfig[0]);
@@ -65,9 +76,11 @@ public class Module extends SubsystemBase {
         desiredState = SwerveModuleState.optimize(desiredState, new Rotation2d(inputs.angleRads));
 
         double driveVoltage =
-                driveFeedback.calculate(inputs.velocityMetersPerSecond, desiredState.speedMetersPerSecond);
+                driveFeedforward.calculate(desiredState.speedMetersPerSecond,
+                driveFeedback.calculate(inputs.velocityMetersPerSecond, desiredState.speedMetersPerSecond));
 
-        inputs.setpointVelocityMetersPerSecond = desiredState.speedMetersPerSecond;
+        inputs.setpointVelocityMetersPerSecond = desiredState.speedMetersPerSecond
+                * Math.cos(desiredState.angle.getRadians() - inputs.angleRads);
         inputs.setpointDriveVoltage = driveVoltage;
         inputs.setpointAngleRads = desiredState.angle.getRadians();
     }
@@ -86,6 +99,7 @@ public class Module extends SubsystemBase {
 
     public void stop() {
         inputs.setpointDriveVoltage = 0;
+        inputs.setpointVelocityMetersPerSecond = 0;
         inputs.setpointAngleRads = inputs.angleRads;
     }
 
@@ -94,6 +108,7 @@ public class Module extends SubsystemBase {
      */
     public void stop(double xVelocity, double yVelocity) {
         inputs.setpointDriveVoltage = 0;
+        inputs.setpointVelocityMetersPerSecond = 0;
         inputs.setpointAngleRads = Math.atan2(yVelocity, xVelocity);
     }
 
