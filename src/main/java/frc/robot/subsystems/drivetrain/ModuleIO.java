@@ -35,7 +35,6 @@ public interface ModuleIO {
         public boolean encoderConnected = false;
         public double appliedAngleVoltage = 0;
         public double appliedAngleCurrent = 0;
-
         public double velocityMetersPerSecond = 0;
         public double setpointVelocityMetersPerSecond = 0;
         public double setpointDriveVoltage = 0;
