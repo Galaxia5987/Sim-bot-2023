@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import frc.robot.utils.Utils;
 import frc.robot.utils.math.differential.BooleanTrigger;
 
 import static frc.robot.Constants.TALON_TIMEOUT;
@@ -21,6 +22,8 @@ public class ModuleIOTalonFX implements ModuleIO {
     private final BooleanTrigger encoderConnectionTrigger =
             new BooleanTrigger(false, false);
     private boolean initializedAngleFalcon = false;
+
+    private double[] motionMagicConfigs = new double[10];
 
     public ModuleIOTalonFX(int drivePort, boolean driveInverted,
                            int anglePort, boolean angleInverted,
@@ -99,16 +102,37 @@ public class ModuleIOTalonFX implements ModuleIO {
 
     @Override
     public void configMotionMagic(double[] motionMagicConfigs) {
-        angleMotor.config_kP(0, motionMagicConfigs[0], TALON_TIMEOUT);
-        angleMotor.config_kI(0, motionMagicConfigs[1], TALON_TIMEOUT);
-        angleMotor.config_kD(0, motionMagicConfigs[2], TALON_TIMEOUT);
-        angleMotor.config_kF(0, motionMagicConfigs[3], TALON_TIMEOUT);
-        angleMotor.configMotionSCurveStrength((int) motionMagicConfigs[4], TALON_TIMEOUT);
-        angleMotor.configMotionCruiseVelocity(motionMagicConfigs[5], TALON_TIMEOUT);
-        angleMotor.configMotionAcceleration(motionMagicConfigs[6], TALON_TIMEOUT);
-        angleMotor.configAllowableClosedloopError(0, motionMagicConfigs[7], TALON_TIMEOUT);
-        angleMotor.configMaxIntegralAccumulator(0, motionMagicConfigs[8], TALON_TIMEOUT);
-        angleMotor.configClosedLoopPeakOutput(0, motionMagicConfigs[9], TALON_TIMEOUT);
+        if (!Utils.epsilonEquals(this.motionMagicConfigs[0], motionMagicConfigs[0])) {
+            angleMotor.config_kP(0, motionMagicConfigs[0], TALON_TIMEOUT);
+        }
+        if (!Utils.epsilonEquals(this.motionMagicConfigs[1], motionMagicConfigs[1])) {
+            angleMotor.config_kI(0, motionMagicConfigs[1], TALON_TIMEOUT);
+        }
+        if (!Utils.epsilonEquals(this.motionMagicConfigs[2], motionMagicConfigs[2])) {
+            angleMotor.config_kD(0, motionMagicConfigs[2], TALON_TIMEOUT);
+        }
+        if (!Utils.epsilonEquals(this.motionMagicConfigs[3], motionMagicConfigs[3])) {
+            angleMotor.config_kF(0, motionMagicConfigs[3], TALON_TIMEOUT);
+        }
+        if (!Utils.epsilonEquals(this.motionMagicConfigs[4], motionMagicConfigs[4])) {
+            angleMotor.configMotionSCurveStrength((int) motionMagicConfigs[4], TALON_TIMEOUT);
+        }
+        if (!Utils.epsilonEquals(this.motionMagicConfigs[5], motionMagicConfigs[5])) {
+            angleMotor.configMotionCruiseVelocity(motionMagicConfigs[5], TALON_TIMEOUT);
+        }
+        if (!Utils.epsilonEquals(this.motionMagicConfigs[6], motionMagicConfigs[6])) {
+            angleMotor.configMotionAcceleration(motionMagicConfigs[6], TALON_TIMEOUT);
+        }
+        if (!Utils.epsilonEquals(this.motionMagicConfigs[7], motionMagicConfigs[7])) {
+            angleMotor.configAllowableClosedloopError(0, motionMagicConfigs[7], TALON_TIMEOUT);
+        }
+        if (!Utils.epsilonEquals(this.motionMagicConfigs[8], motionMagicConfigs[8])) {
+            angleMotor.configMaxIntegralAccumulator(0, motionMagicConfigs[8], TALON_TIMEOUT);
+        }
+        if (!Utils.epsilonEquals(this.motionMagicConfigs[9], motionMagicConfigs[9])) {
+            angleMotor.configClosedLoopPeakOutput(0, motionMagicConfigs[9], TALON_TIMEOUT);
+        }
+        this.motionMagicConfigs = motionMagicConfigs;
     }
 
     @Override

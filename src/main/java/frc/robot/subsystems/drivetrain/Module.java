@@ -1,5 +1,6 @@
 package frc.robot.subsystems.drivetrain;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -82,7 +83,7 @@ public class Module extends SubsystemBase {
         inputs.setpointVelocityMetersPerSecond = desiredState.speedMetersPerSecond
                 * Math.cos(desiredState.angle.getRadians() - inputs.angleRads);
         inputs.setpointDriveVoltage = driveVoltage;
-        inputs.setpointAngleRads = desiredState.angle.getRadians();
+        inputs.setpointAngleRads = MathUtil.angleModulus(desiredState.angle.getRadians());
     }
 
     public SwerveModuleState getState() {
@@ -123,7 +124,7 @@ public class Module extends SubsystemBase {
         Logger.getInstance().processInputs("Module_" + moduleNameOf(number), inputs);
 
         io.setDriveVoltage(inputs.setpointDriveVoltage);
-        io.setAngle(inputs.setpointAngleRads);
+        io.setAngle(inputs.angleRads + (inputs.setpointAngleRads - MathUtil.angleModulus(inputs.angleRads)));
     }
 
     public double[] getConfigFromDashboard() {

@@ -4,6 +4,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import frc.robot.Constants;
 import frc.robot.utils.controllers.DieterController;
 import frc.robot.utils.math.differential.Integral;
 
@@ -39,7 +40,6 @@ public class ModuleIOSim implements ModuleIO {
 
         angleRads.update(angleMotor.getAngularVelocityRadPerSec());
         inputs.angleRads = angleRads.get();
-        inputs.angleRads = MathUtil.angleModulus(inputs.angleRads);
         currentAngleRads = inputs.angleRads;
         inputs.encoderAngleRads = inputs.angleRads;
         inputs.encoderConnected = true;

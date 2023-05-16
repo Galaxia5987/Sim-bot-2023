@@ -4,6 +4,8 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -33,7 +35,7 @@ public class RobotContainer {
 
     private void configureDefaultCommands() {
         drive.setDefaultCommand(
-                new KeyboardDriveSim()
+                new XboxDrive(new XboxController(0))
         );
     }
 
@@ -47,7 +49,7 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new InstantCommand(() -> drive.resetOdometry(new Pose2d(), 0))
+        return new InstantCommand(() -> drive.resetOdometry(new Pose2d(new Translation2d(1.93, 4.96), new Rotation2d()), 0))
                 .andThen(new PPSwerveControllerCommand(
                         PathPlanner.loadPath("Test", 5, 3),
                         drive::getCurrentPose,

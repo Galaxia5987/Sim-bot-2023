@@ -20,7 +20,8 @@ public class XboxDrive extends CommandBase {
         drive.drive(
                 -xboxController.getLeftY(),
                 -xboxController.getLeftX(),
-                xboxController.getRightX(),
+                -xboxController.getRightX(),
+                0.15,
                 true
         );
     }

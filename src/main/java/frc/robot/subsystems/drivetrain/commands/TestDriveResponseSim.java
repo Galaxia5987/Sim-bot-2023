@@ -30,6 +30,7 @@ public class TestDriveResponseSim extends CommandBase {
                     Math.random(),
                     Math.random(),
                     Math.random(),
+                    0,
                     true
             );
             timer.reset();

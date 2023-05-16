@@ -105,15 +105,18 @@ public class Drive extends SubsystemBase {
         desiredModuleStates = kinematics.toSwerveModuleStates(desiredSpeeds);
     }
 
-    public void drive(double xOutput, double yOutput, double omegaOutput, boolean fieldOriented) {
-        xOutput = MathUtil.applyDeadband(xOutput, 0.05);
-        yOutput = MathUtil.applyDeadband(yOutput, 0.05);
+    public void drive(double xOutput, double yOutput, double omegaOutput, double deadband, boolean fieldOriented) {
+        double magnitude = Math.sqrt(xOutput * xOutput + yOutput * yOutput);
+        double angle = Math.atan2(yOutput, xOutput);
+        magnitude = MathUtil.applyDeadband(magnitude, deadband);
+        xOutput = magnitude * Math.cos(angle);
+        yOutput = magnitude * Math.sin(angle);
         omegaOutput = MathUtil.applyDeadband(omegaOutput, 0.05);
 
         drive(new ChassisSpeeds(
-                xOutput * MAX_VELOCITY_METERS_PER_SECOND,
-                yOutput * MAX_VELOCITY_METERS_PER_SECOND,
-                omegaOutput * MAX_ROTATIONAL_VELOCITY),
+                        xOutput * MAX_VELOCITY_METERS_PER_SECOND,
+                        yOutput * MAX_VELOCITY_METERS_PER_SECOND,
+                        omegaOutput * MAX_ROTATIONAL_VELOCITY),
                 fieldOriented);
     }
 

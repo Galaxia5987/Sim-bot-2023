@@ -23,6 +23,7 @@ public class JoystickDrive extends CommandBase {
                 -leftJoystick.getY(),
                 leftJoystick.getX(),
                 rightJoystick.getX(),
+                0.05,
                 true
         );
     }
