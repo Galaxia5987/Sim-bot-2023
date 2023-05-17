@@ -21,8 +21,8 @@ public interface IntakeIO {
         public double angleSetpoint = 0;
         public double angleMotorVelocity = 0;
         public double angleMotorVelocitySetpoint = 0;
-        public double motorVelocity = 0;
-        public double motorVelocitySetpoint = 0;
+        public double spinMotorVelocity = 0;
+        public double spinMotorVelocitySetpoint = 0;
 
     }
 }

@@ -21,7 +21,8 @@ public class IntakeIOSim implements IntakeIO{
         spinMotor.update(0.02);
         angleMotor.update(0.02);
 
-        inputs.angle =
+        inputs.angleMotorVelocity = angleMotor.getAngularVelocityRadPerSec();
+        inputs.spinMotorVelocity = spinMotor.getAngularVelocityRadPerSec();
     }
 
     @Override
