@@ -30,11 +30,12 @@ public class IntakeIOSim implements IntakeIO{
     }
 
     @Override
-    public void setAngleMotorVelocity(double velocity) {
+    public void setAngleMotorPower(double velocity) {
+
     }
 
     @Override
-    public void setSpinMotorVelocity(double velocity) {
+    public void setSpinMotorPower(double power) {
     }
 
     @Override

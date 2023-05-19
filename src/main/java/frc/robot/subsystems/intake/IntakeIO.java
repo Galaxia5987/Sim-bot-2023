@@ -6,10 +6,10 @@ public interface IntakeIO {
     default void updateInputs(IntakeInputs inputs){
     }
 
-    default void setAngleMotorVelocity(double velocity){
+    default void setAngleMotorPower(double power){
     }
 
-    default void setSpinMotorVelocity(double velocity){
+    default void setSpinMotorPower(double power){
     }
 
     default void setAngle(double angle){
