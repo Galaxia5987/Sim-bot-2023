@@ -1,2 +1,4 @@
-package frc.robot.subsystems.hood;public class hoodConstant {
+package frc.robot.subsystems.hood;
+
+public class HoodConstant {
 }

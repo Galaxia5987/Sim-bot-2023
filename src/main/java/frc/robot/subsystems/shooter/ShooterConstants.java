@@ -1,2 +1,4 @@
-package frc.robot.subsystems.shooter;public class ShooterConstants {
+package frc.robot.subsystems.shooter;
+
+public class ShooterConstants {
 }
