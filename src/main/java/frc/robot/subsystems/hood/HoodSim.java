@@ -1,2 +1,4 @@
-package frc.robot.subsystems.hood;public class HoodSim {
+package frc.robot.subsystems.hood;
+
+public class HoodSim{
 }
