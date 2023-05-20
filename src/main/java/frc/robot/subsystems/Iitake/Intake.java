@@ -3,35 +3,22 @@ package frc.robot.subsystems.Iitake;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 
 public class Intake extends SubsystemBase {
-    private final SingleJointedArmSim angleMotor;
-    private final FlywheelSim powerMotor;
-    private Intake INSTANCE;
+    private final IntakeIO io;
+    private final IntakeInputsAutoLogged inputs;
 
-    public Intake getINSTANCE() {
-        if (INSTANCE == null) {
-            INSTANCE = new Intake();
+    private Intake(IntakeIO io) {
+        inputs = new IntakeInputsAutoLogged();
+        this.io = io;
+        if (Robot.isReal()){
+
         }
-        return INSTANCE;
     }
 
-    private Intake() {
-        angleMotor = new SingleJointedArmSim();
-        powerMotor = new FlywheelSim();
+    @Override
+    public void periodic() {
+        io.updateInputs(inputs);
     }
-
-    public void setPowerMotor(double power) {
-        powerMotor.setInputVoltage(power);
-    }
-
-    public double getPowerMotor() {
-        return powerMotor.getAngularVelocityRadPerSec();
-    }
-
-    //TODO: PID controller (voltage to angle)
-    public void setAngleMotor(double angle) {
-        angleMotor.setInputVoltage();
-    }
-
 }

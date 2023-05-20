@@ -6,9 +6,13 @@ public interface IntakeIO {
     default void setMotorPower(double power){
 
     }
-    default void setAngleMotor(double angle){
+    default void setAngleMotor(double desiredAngle){
 
     }
+    default void updateInputs(IntakeInputs inputs){
+
+    }
+
     @AutoLog
     class IntakeInputs{
         double motorPower = 0;
