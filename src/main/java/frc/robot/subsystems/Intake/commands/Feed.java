@@ -1,7 +1,7 @@
-package frc.robot.subsystems.Iitake.commands;
+package frc.robot.subsystems.Intake.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Iitake.Intake;
-import frc.robot.subsystems.Iitake.IntakeConstants;
+import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Intake.IntakeConstants;
 
 public class Feed extends CommandBase {
     Intake intake;
