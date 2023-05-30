@@ -15,7 +15,11 @@ public interface IntakeIO {
 
     @AutoLog
     class IntakeInputs{
-        double motorPower = 0;
-        double motorAngle = 0;
+        double powerCurrent = 0;
+        double angleMotorCurrent = 0;
+        double powerMotorPower = 0;
+        double angleMotorAngle = 0;
+        double angleMotorPower = 0;
+
     }
 }
