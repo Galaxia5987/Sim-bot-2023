@@ -19,6 +19,7 @@ public interface IntakeIO {
     class IntakeInputs{
         public double angle = 0;
         public double angleSetpoint = 0;
+        public double angleVoltage = 0;
         public double angleMotorVelocity = 0;
         public double angleMotorVelocitySetpoint = 0;
         public double spinMotorVelocity = 0;
