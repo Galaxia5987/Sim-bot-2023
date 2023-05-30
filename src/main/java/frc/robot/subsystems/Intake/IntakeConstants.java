@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Iitake;
+package frc.robot.subsystems.Intake;
 
 public class IntakeConstants {
     public static final double FEED_ANGLE = 0;

@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Iitake;
+package frc.robot.subsystems.Intake;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -15,7 +15,7 @@ public class IntakeIOSim implements IntakeIO{
         angleMotor = new SingleJointedArmSim(DCMotor.getNEO(1));
         powerMotor = new FlywheelSim(DCMotor.getFalcon500(1));
     }
-
+    @Override
     public void updateInputs(IntakeInputs inputs) {
         inputs.powerMotorPower = powerMotor.getAngularVelocityRPM();
         inputs.powerCurrent  = powerMotor.getCurrentDrawAmps();
