@@ -17,16 +17,12 @@ public class IntakeIOSim implements IntakeIO{
     }
 
     public void updateInputs(IntakeInputs inputs) {
-        inputs.motorPower = powerMotor.getAngularVelocityRPM();
-        inputs.motorAngle = angleMotor.getAngleRads();
-    }
+        inputs.powerMotorPower = powerMotor.getAngularVelocityRPM();
+        inputs.powerCurrent  = powerMotor.getCurrentDrawAmps();
+        inputs.angleMotorAngle = angleMotor.getAngleRads();
+        inputs.angleMotorPower  = angleMotor.getVelocityRadPerSec();
+        inputs.angleMotorCurrent = angleMotor.getCurrentDrawAmps();
 
-    public double getPowerMotor() {
-        return powerMotor.getAngularVelocityRadPerSec();
-    }
-
-    public double getAngleMotor(){
-        return angleMotor.getAngleRads();
     }
 
     public void setMotorPower(double power) {
@@ -34,7 +30,7 @@ public class IntakeIOSim implements IntakeIO{
     }
 
     public void setAngleMotor(double desiredAngleRads) {
-        angleVoltage = angleController.calculate(getAngleMotor(), desiredAngleRads);
+        angleVoltage = angleController.calculate(angleMotor.getAngleRads(), desiredAngleRads);
         angleMotor.setInputVoltage(angleVoltage);
     }
 
