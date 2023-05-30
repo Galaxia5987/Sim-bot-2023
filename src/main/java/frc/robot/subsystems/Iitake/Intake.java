@@ -14,6 +14,22 @@ public class Intake extends SubsystemBase {
         }
     }
 
+    public void setPowerMotor(double power){
+        io.setMotorPower(power);
+    }
+
+    public double getPowerMotor(){
+        return  inputs.powerMotorPower;
+    }
+
+    public void setAngleMotor(double angleRads){
+        io.setAngleMotor(angleRads);
+    }
+
+    public double getAngle(){
+        return inputs.angleMotorAngle;
+    }
+
     @Override
     public void periodic() {
         io.updateInputs(inputs);
