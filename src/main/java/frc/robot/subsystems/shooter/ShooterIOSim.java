@@ -3,36 +3,51 @@ package frc.robot.subsystems.shooter;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
-import frc.robot.Constants;
-import frc.robot.utils.units.UnitModel;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
-public class ShooterIOSim {
+public class ShooterIOSim extends SubsystemBase implements ShooterIO {
+    public static ShooterIOSim INSTANCE;
     private final FlywheelSim simMotor;
-    private PIDController pidController;
+    private final PIDController velocityFeedback;
+    private double currentVelocity = 0;
 
 
     public ShooterIOSim(){
         simMotor = new FlywheelSim(
-                DCMotor.getFalcon500(2), 1, 0);
+                DCMotor.getFalcon500(1), 1, ShooterConstants.MOMENT_OF_INERTIA);
 
-        pidController = new PIDController(0, 0, 0);
+        velocityFeedback = new PIDController(1, 0, 0);
     }
 
+    public static ShooterIOSim getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ShooterIOSim();
+        }
+        return INSTANCE;
+    }
 
     @Override
-    public void updateInput(){
+    public void updateInput(ShooterInputs inputs){
         simMotor.update(0.02);
-
+        inputs.velocity = simMotor.getAngularVelocityRPM();
+        currentVelocity = simMotor.getAngularVelocityRPM();
     }
 
-    private void setVelocity(){
-
+    @Override
+    public void setVelocity(double velocity){
+        currentVelocity = velocityFeedback.calculate(currentVelocity, velocity);
+        simMotor.setInput(currentVelocity);
     }
 
-    private int getVelocity(){
-
+    @Override
+    public double getVelocity() {
+        return 0;
     }
 
+    @Override
+    public double getSetpoint() {
+        return 0;
+    }
 
 }
