@@ -81,6 +81,10 @@ public final class Ports {
 
     }
 
+    public static class Shooter {
+        public static final int MAIN_MOTOR = 31;
+    }
+
     public static class Intake {
         public static final int BEAM_BREAKER_SENSOR = 9;
         public static final int INTAKE_MOTOR = 17;
