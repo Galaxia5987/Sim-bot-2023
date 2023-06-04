@@ -101,7 +101,23 @@
       "type": 6,
       "fields": [],
       "listFields": [
-        [],
+        [
+          {
+            "type": "Component (Robot)",
+            "key": "NT:/AdvantageKit/RealOutputs/BottomArmPose",
+            "fieldTypeIndex": 0
+          },
+          {
+            "type": "Component (Robot)",
+            "key": "NT:/AdvantageKit/RealOutputs/TopArmPose",
+            "fieldTypeIndex": 0
+          },
+          {
+            "type": "Component (Robot)",
+            "key": "NT:/AdvantageKit/RealOutputs/IntakePose",
+            "fieldTypeIndex": 0
+          }
+        ],
         [
           {
             "type": "Robot",
@@ -113,7 +129,7 @@
       "options": {
         "field": "2023",
         "alliance": "blue",
-        "robot": "Duck Bot",
+        "robot": "Scorpio",
         "unitDistance": "meters",
         "unitRotation": "radians"
       },
