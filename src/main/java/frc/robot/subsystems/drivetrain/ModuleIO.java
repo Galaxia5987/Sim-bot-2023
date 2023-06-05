@@ -42,5 +42,7 @@ public interface ModuleIO {
         public double moduleDistanceMeters = 0;
         public double appliedDriveVoltage = 0;
         public double appliedDriveCurrent = 0;
+
+        public double totalCurrentDrawCoulombs = 0;
     }
 }

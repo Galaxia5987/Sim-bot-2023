@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.utils.TunableNumber;
+import frc.robot.utils.math.differential.Integral;
 import org.littletonrobotics.junction.Logger;
 
 import static frc.robot.Ports.SwerveDrive.*;
@@ -33,6 +34,8 @@ public class Module extends SubsystemBase {
     private final TunableNumber allowableError;
     private final TunableNumber maxIntegralAccumulator;
     private final TunableNumber peakOutput;
+
+    private final Integral currentDrawCoulombs = new Integral(0, 0);
 
     public Module(ModuleIO io, int number, double[] motionMagicConfig) {
         this.number = number;
@@ -120,6 +123,9 @@ public class Module extends SubsystemBase {
             io.resetAngle();
         }
         io.configMotionMagic(getConfigFromDashboard());
+
+        currentDrawCoulombs.update(inputs.appliedDriveCurrent + inputs.appliedAngleCurrent);
+        inputs.totalCurrentDrawCoulombs = currentDrawCoulombs.get();
 
         Logger.getInstance().processInputs("Module_" + moduleNameOf(number), inputs);
 
