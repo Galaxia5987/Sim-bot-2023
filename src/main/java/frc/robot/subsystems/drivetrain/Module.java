@@ -166,7 +166,7 @@ public class Module extends SubsystemBase {
                     new ModuleIOTalonFX(
                             DRIVE_IDS[number - 1], DRIVE_INVERTED[number - 1],
                             ANGLE_IDS[number - 1], ANGLE_INVERTED[number - 1],
-                            ENCODER_IDS[number - 1], OFFSETS[number - 1], 0, 0, 0
+                            ENCODER_IDS[number - 1], OFFSETS[number - 1]
                     ),
                     number, MOTION_MAGIC_CONFIGS[number - 1]);
         } else {
