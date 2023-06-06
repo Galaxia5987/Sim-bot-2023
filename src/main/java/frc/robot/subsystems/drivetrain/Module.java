@@ -129,7 +129,7 @@ public class Module extends SubsystemBase {
 
         Logger.getInstance().processInputs("Module_" + moduleNameOf(number), inputs);
 
-        io.setDriveVoltage(inputs.setpointDriveVoltage);
+        io.setDriveVelocity(inputs.setpointVelocityMetersPerSecond);
         io.setAngle(inputs.angleRads + (inputs.setpointAngleRads - MathUtil.angleModulus(inputs.angleRads)));
     }
 
@@ -165,7 +165,7 @@ public class Module extends SubsystemBase {
                     new ModuleIOTalonFX(
                             DRIVE_IDS[number - 1], DRIVE_INVERTED[number - 1],
                             ANGLE_IDS[number - 1], ANGLE_INVERTED[number - 1],
-                            ENCODER_IDS[number - 1], OFFSETS[number - 1]
+                            ENCODER_IDS[number - 1], OFFSETS[number - 1], 0, 0, 0
                     ),
                     number, MOTION_MAGIC_CONFIGS[number - 1]);
         } else {

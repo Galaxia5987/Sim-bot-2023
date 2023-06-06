@@ -1,11 +1,8 @@
 package frc.robot.subsystems.drivetrain;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
-import frc.robot.Constants;
-import frc.robot.utils.controllers.DieterController;
 import frc.robot.utils.math.differential.Integral;
 
 import static frc.robot.subsystems.drivetrain.SwerveConstants.*;
@@ -16,7 +13,9 @@ public class ModuleIOSim implements ModuleIO {
     private final FlywheelSim angleMotor;
 
     private double currentAngleRads = 0;
+    private double currentDriveVelocity = 0;
     private final PIDController angleFeedback;
+    private final PIDController driveVelocityFeedback;
 
     private double appliedAngleVoltage = 0;
     private double appliedDriveVoltage = 0;
@@ -31,6 +30,7 @@ public class ModuleIOSim implements ModuleIO {
                 DCMotor.getFalcon500(1), 1 / ANGLE_REDUCTION, ANGLE_MOMENT_OF_INERTIA);
 
         angleFeedback = new PIDController(3.5, 0, 0, 0.02);
+        driveVelocityFeedback = new PIDController(0, 0, 0.02); //TODO: tune
     }
 
     @Override
@@ -41,6 +41,7 @@ public class ModuleIOSim implements ModuleIO {
         angleRads.update(angleMotor.getAngularVelocityRadPerSec());
         inputs.angleRads = angleRads.get();
         currentAngleRads = inputs.angleRads;
+        currentDriveVelocity = inputs.velocityMetersPerSecond;
         inputs.encoderAngleRads = inputs.angleRads;
         inputs.encoderConnected = true;
         inputs.appliedAngleVoltage = appliedAngleVoltage;
@@ -61,9 +62,9 @@ public class ModuleIOSim implements ModuleIO {
     }
 
     @Override
-    public void setDriveVoltage(double voltage) {
-        appliedDriveVoltage = voltage;
-        driveMotor.setInputVoltage(voltage);
+    public void setDriveVelocity(double velocity) {
+        appliedDriveVoltage = driveVelocityFeedback.calculate(currentDriveVelocity, velocity);
+        driveMotor.setInputVoltage(appliedDriveVoltage);
     }
 
     @Override

@@ -10,7 +10,7 @@ public interface ModuleIO {
     default void setAngle(double angleRads) {
     }
 
-    default void setDriveVoltage(double voltage) {
+    default void setDriveVelocity(double velocity) {
     }
 
     default void configMotionMagic(double[] motionMagicConfigs) {

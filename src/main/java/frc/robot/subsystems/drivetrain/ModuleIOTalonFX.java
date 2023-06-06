@@ -96,8 +96,8 @@ public class ModuleIOTalonFX implements ModuleIO {
     }
 
     @Override
-    public void setDriveVoltage(double voltage) {
-        driveMotor.set(TalonFXControlMode.PercentOutput, voltage / 12.0);
+    public void setDriveVelocity(double velocity) {
+        driveMotor.set(TalonFXControlMode.Velocity, velocity);
     }
 
     @Override
