@@ -1,9 +1,11 @@
 package frc.robot.subsystems.drivetrain;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import frc.robot.utils.math.differential.Integral;
+import org.eclipse.jetty.util.MathUtils;
 
 import static frc.robot.subsystems.drivetrain.SwerveConstants.*;
 
@@ -30,7 +32,7 @@ public class ModuleIOSim implements ModuleIO {
                 DCMotor.getFalcon500(1), 1 / ANGLE_REDUCTION, ANGLE_MOMENT_OF_INERTIA);
 
         angleFeedback = new PIDController(3.5, 0, 0, 0.02);
-        driveVelocityFeedback = new PIDController(5, 0, 0, 0.02); //TODO: tune
+        driveVelocityFeedback = new PIDController(2.8, 0, 0.03, 0.02);
     }
 
     @Override
@@ -39,6 +41,7 @@ public class ModuleIOSim implements ModuleIO {
         angleMotor.update(0.02);
 
         angleRads.update(angleMotor.getAngularVelocityRadPerSec());
+        angleRads.override(MathUtil.angleModulus(angleRads.get()));
         inputs.angleRads = angleRads.get();
         currentAngleRads = inputs.angleRads;
         currentDriveVelocity = inputs.velocityMetersPerSecond;
@@ -63,7 +66,7 @@ public class ModuleIOSim implements ModuleIO {
 
     @Override
     public void setDriveVelocity(double velocity) {
-        appliedDriveVoltage = driveVelocityFeedback.calculate(currentDriveVelocity, velocity);
+        appliedDriveVoltage = driveVelocityFeedback.calculate(currentDriveVelocity, velocity) + kV*velocity;
         driveMotor.setInputVoltage(appliedDriveVoltage);
     }
 
