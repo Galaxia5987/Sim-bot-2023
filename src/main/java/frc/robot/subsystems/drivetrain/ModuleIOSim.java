@@ -30,7 +30,7 @@ public class ModuleIOSim implements ModuleIO {
                 DCMotor.getFalcon500(1), 1 / ANGLE_REDUCTION, ANGLE_MOMENT_OF_INERTIA);
 
         angleFeedback = new PIDController(3.5, 0, 0, 0.02);
-        driveVelocityFeedback = new PIDController(0, 0, 0.02); //TODO: tune
+        driveVelocityFeedback = new PIDController(5, 0, 0, 0.02); //TODO: tune
     }
 
     @Override

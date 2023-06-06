@@ -84,7 +84,8 @@ public class Module extends SubsystemBase {
                 driveFeedback.calculate(inputs.velocityMetersPerSecond, desiredState.speedMetersPerSecond));
 
         inputs.setpointVelocityMetersPerSecond = desiredState.speedMetersPerSecond
-                * Math.cos(desiredState.angle.getRadians() - inputs.angleRads);
+                * Math.cos(desiredState.angle.getRadians() - inputs.angleRads)
+        ;
         inputs.setpointDriveVoltage = driveVoltage;
         inputs.setpointAngleRads = MathUtil.angleModulus(desiredState.angle.getRadians());
     }
