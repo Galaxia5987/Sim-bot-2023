@@ -36,6 +36,7 @@ public class SwerveConstants {
         public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0 *
                         DRIVE_REDUCTION *
                         WHEEL_DIAMETER * Math.PI;
+        public static final double kV = 12/MAX_VELOCITY_METERS_PER_SECOND;
         public static final double MAX_ROTATIONAL_VELOCITY = MAX_VELOCITY_METERS_PER_SECOND /
                         Math.sqrt(Math.pow(DRIVETRAIN_TRACK_WIDTH_METERS / 2, 2)
                                 + Math.pow(DRIVETRAIN_WHEELBASE_METERS / 2, 2));
