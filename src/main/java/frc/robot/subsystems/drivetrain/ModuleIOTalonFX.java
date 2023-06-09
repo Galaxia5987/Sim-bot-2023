@@ -53,6 +53,7 @@ public class ModuleIOTalonFX implements ModuleIO {
         driveMotor.config_kI(0, REAL_DRIVE_Ki, TALON_TIMEOUT);
         driveMotor.config_kD(0, REAL_DRIVE_Kd, TALON_TIMEOUT);
 
+        angleMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToZero);
         angleMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, TALON_TIMEOUT);
         angleMotor.configFeedbackNotContinuous(false, TALON_TIMEOUT);
         angleMotor.setInverted(angleInverted);
