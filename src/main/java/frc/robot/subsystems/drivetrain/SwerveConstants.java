@@ -55,4 +55,8 @@ public class SwerveConstants {
         public static final double DRIVE_Kp = 3.5;
         public static final double DRIVE_Ki = 0.0;
         public static final double DRIVE_Kd = 0.0;
+
+        public static final double REAL_DRIVE_Kp = 0;
+        public static final double REAL_DRIVE_Ki = 0;
+        public static final double REAL_DRIVE_Kd = 0;
 }

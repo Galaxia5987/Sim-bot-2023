@@ -49,6 +49,9 @@ public class ModuleIOTalonFX implements ModuleIO {
         driveMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToZero, TALON_TIMEOUT);
         driveMotor.setStatusFramePeriod(1, 50);
         driveMotor.setStatusFramePeriod(3, 500);
+        driveMotor.config_kP(0, REAL_DRIVE_Kp, TALON_TIMEOUT);
+        driveMotor.config_kI(0, REAL_DRIVE_Ki, TALON_TIMEOUT);
+        driveMotor.config_kD(0, REAL_DRIVE_Kd, TALON_TIMEOUT);
 
         angleMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, TALON_TIMEOUT);
         angleMotor.configFeedbackNotContinuous(false, TALON_TIMEOUT);
