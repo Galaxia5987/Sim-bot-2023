@@ -7,8 +7,8 @@ public class SwerveConstants {
         public static final double TICKS_PER_ROTATION = 2048;
         public static final double[] OFFSETS = { 1.315585310558, 0.065930564633, 0.51785716145, 5.05422140514 }; //FL, FR, RL, RR
 
-        public static final double DRIVETRAIN_TRACK_WIDTH_METERS = 0.51594;
-        public static final double DRIVETRAIN_WHEELBASE_METERS = 0.66594;
+        public static final double DRIVETRAIN_TRACK_WIDTH_METERS = 0.744;
+        public static final double DRIVETRAIN_WHEELBASE_METERS = 0.781;
 
         public static final double DRIVE_REDUCTION = (1 / 2.0) * (22.0 / 24.0) * (15.0 / 45.0);
         public static final double ANGLE_REDUCTION = (14.0 / 72.0) * 0.5;
