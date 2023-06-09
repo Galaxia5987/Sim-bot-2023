@@ -5,7 +5,7 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 
 public class SwerveConstants {
         public static final double TICKS_PER_ROTATION = 2048;
-        public static final int[] OFFSETS = { 0, 0, 0, 0 };
+        public static final double[] OFFSETS = { 1.315585310558, 0.065930564633, 0.51785716145, 5.05422140514 }; //FL, FR, RL, RR
 
         public static final double DRIVETRAIN_TRACK_WIDTH_METERS = 0.51594;
         public static final double DRIVETRAIN_WHEELBASE_METERS = 0.66594;
