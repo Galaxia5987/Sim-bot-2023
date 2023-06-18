@@ -66,7 +66,7 @@ public class Vision extends SubsystemBase {
         return photonPoseEstimator1.update();
     }
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose2() {
-        return photonPoseEstimator1.update();
+        return photonPoseEstimator2.update();
     }
 
     @Override
