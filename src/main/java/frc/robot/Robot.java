@@ -14,11 +14,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.utils.TunableNumber;
 import frc.robot.utils.math.differential.BooleanTrigger;
-import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
-import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.photonvision.EstimatedRobotPose;
 
@@ -83,8 +81,10 @@ public class Robot extends LoggedRobot {
 
         enabledTrigger.update(isEnabled());
 
-        Optional<EstimatedRobotPose> estimatedGlobalPose = vision.getEstimatedGlobalPose();
-        estimatedGlobalPose.ifPresent(pose -> System.out.println(pose.estimatedPose));
+        Optional<EstimatedRobotPose> estimatedGlobalPose1 = vision.getEstimatedGlobalPose1();
+        estimatedGlobalPose1.ifPresent(pose -> System.out.println(pose.estimatedPose));
+        Optional<EstimatedRobotPose> estimatedGlobalPose2 = vision.getEstimatedGlobalPose2();
+        estimatedGlobalPose2.ifPresent(pose -> System.out.println(pose.estimatedPose));
     }
 
     /**
