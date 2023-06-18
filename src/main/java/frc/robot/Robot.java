@@ -81,9 +81,9 @@ public class Robot extends LoggedRobot {
 
         enabledTrigger.update(isEnabled());
 
-        Optional<EstimatedRobotPose> estimatedGlobalPose1 = vision.getEstimatedGlobalPose1();
+        Optional<EstimatedRobotPose> estimatedGlobalPose1 = vision.getEstimatedGlobal1();
         estimatedGlobalPose1.ifPresent(pose -> System.out.println(pose.estimatedPose));
-        Optional<EstimatedRobotPose> estimatedGlobalPose2 = vision.getEstimatedGlobalPose2();
+        Optional<EstimatedRobotPose> estimatedGlobalPose2 = vision.getEstimatedGlobal2();
         estimatedGlobalPose2.ifPresent(pose -> System.out.println(pose.estimatedPose));
     }
 

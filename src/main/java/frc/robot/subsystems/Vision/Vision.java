@@ -2,10 +2,12 @@ package frc.robot.subsystems.Vision;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -62,11 +64,23 @@ public class Vision extends SubsystemBase {
         alternateCameraToTarget2 = target2.getAlternateCameraToTarget();
     }
 
-    public Optional<EstimatedRobotPose> getEstimatedGlobalPose1() {
+    public Optional<EstimatedRobotPose> getEstimatedGlobal1() {
         return photonPoseEstimator1.update();
     }
-    public Optional<EstimatedRobotPose> getEstimatedGlobalPose2() {
+    public Pose3d getEstimatedGlobal1_3d() {
+        if (getEstimatedGlobal1().isPresent()){
+            return photonPoseEstimator1.update().get().estimatedPose;
+        }
+        return new Pose3d();
+    }
+    public Optional<EstimatedRobotPose> getEstimatedGlobal2() {
         return photonPoseEstimator2.update();
+    }
+    public Pose3d getEstimatedGlobal2_3d() {
+        if (getEstimatedGlobal1().isPresent()){
+            return photonPoseEstimator1.update().get().estimatedPose;
+        }
+        return new Pose3d();
     }
 
     @Override
@@ -87,6 +101,8 @@ public class Vision extends SubsystemBase {
         inputs.targetID_2 = target2.getFiducialId();
         inputs.poseAmbiguity1 = target1.getPoseAmbiguity();
         inputs.poseAmbiguity2 = target2.getPoseAmbiguity();
+        inputs.estimatedRobotPose_1 = photonPoseEstimator1.update().get();
+        inputs.estimatedRobotPose_2 = photonPoseEstimator2.update().get();
     }
 
     @AutoLog
@@ -105,5 +121,8 @@ public class Vision extends SubsystemBase {
         int targetID_2 = 0;
         double poseAmbiguity1 = 0;
         double poseAmbiguity2 = 0;
+        EstimatedRobotPose estimatedRobotPose_1 = null;
+        EstimatedRobotPose estimatedRobotPose_2 = null;
+
     }
 }
