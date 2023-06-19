@@ -27,13 +27,14 @@ public class SwerveModule extends SubsystemBase {
         driveMotor.configNeutralDeadband(SwerveConstants.NEUTRAL_DEADBAND);
         driveMotor.setNeutralMode(NeutralMode.Brake);
         driveMotor.configSupplyCurrentLimit(SwerveConstants.SUPPLY_CURRENT_LIMIT);
-//        driveMotor.setInverted();
+        driveMotor.setInverted(SwerveConstants.CLOCKWISE);
 
         angleMotor.enableVoltageCompensation(true);
         angleMotor.configVoltageCompSaturation(SwerveConstants.VOLT_COMP_SATURATION);
         angleMotor.configNeutralDeadband(SwerveConstants.NEUTRAL_DEADBAND);
         angleMotor.setNeutralMode(NeutralMode.Brake);
         angleMotor.configSupplyCurrentLimit(SwerveConstants.SUPPLY_CURRENT_LIMIT);
+        angleMotor.setInverted(SwerveConstants.CLOCKWISE);
     }
 
     public void setModuleState(SwerveModuleState moduleState){
