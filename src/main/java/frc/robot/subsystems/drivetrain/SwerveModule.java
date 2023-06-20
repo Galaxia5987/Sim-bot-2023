@@ -1,6 +1,5 @@
 package frc.robot.subsystems.drivetrain;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -27,6 +26,7 @@ public class SwerveModule extends SubsystemBase {
         driveMotor.configNeutralDeadband(SwerveConstants.NEUTRAL_DEADBAND);
         driveMotor.setNeutralMode(NeutralMode.Brake);
         driveMotor.configSupplyCurrentLimit(SwerveConstants.SUPPLY_CURRENT_LIMIT);
+        driveMotor.configStatorCurrentLimit(SwerveConstants.STATOR_CURRENT_LIMIT);
         driveMotor.setInverted(SwerveConstants.CLOCKWISE);
 
         angleMotor.enableVoltageCompensation(true);
@@ -34,6 +34,7 @@ public class SwerveModule extends SubsystemBase {
         angleMotor.configNeutralDeadband(SwerveConstants.NEUTRAL_DEADBAND);
         angleMotor.setNeutralMode(NeutralMode.Brake);
         angleMotor.configSupplyCurrentLimit(SwerveConstants.SUPPLY_CURRENT_LIMIT);
+        angleMotor.configStatorCurrentLimit(SwerveConstants.STATOR_CURRENT_LIMIT);
         angleMotor.setInverted(SwerveConstants.CLOCKWISE);
     }
 
