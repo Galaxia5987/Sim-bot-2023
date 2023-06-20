@@ -8,6 +8,10 @@ public class SwerveConstants {
     public static final double VOLT_COMP_SATURATION = 12;
     public static final SupplyCurrentLimitConfiguration SUPPLY_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration();
 
+    public static final double MAX_X_VELOCITY = 0;
+    public static final double MAX_Y_VELOCITY = 0;
+    public static final double MAX_OMEGA_VELOCITY = 0;
+
     public static final TalonFXInvertType CLOCKWISE = TalonFXInvertType.Clockwise;
     public static final TalonFXInvertType COUNTER_CLOCKWISE = TalonFXInvertType.CounterClockwise;
 
