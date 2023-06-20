@@ -16,6 +16,7 @@ public class SwerveConstants {
     public static final TalonFXInvertType COUNTER_CLOCKWISE = TalonFXInvertType.CounterClockwise;
 
     public static final double NEUTRAL_DEADBAND = 0.15;
+    public static final double XBOX_DEADBAND = 0.15;
 
     public static final double robotWidth = 0;
     public static final double robotLength = 0;
