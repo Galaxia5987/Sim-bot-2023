@@ -1,12 +1,14 @@
 package frc.robot.subsystems.drivetrain;
 
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import edu.wpi.first.math.geometry.Translation2d;
 
 public class SwerveConstants {
     public static final double VOLT_COMP_SATURATION = 12;
-    public static final SupplyCurrentLimitConfiguration SUPPLY_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration();
+    public static final SupplyCurrentLimitConfiguration SUPPLY_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(true, 50, 0, 0);
+    public static final StatorCurrentLimitConfiguration STATOR_CURRENT_LIMIT = new StatorCurrentLimitConfiguration(true, 50, 0, 0);
 
     public static final double MAX_X_VELOCITY = 0;
     public static final double MAX_Y_VELOCITY = 0;
