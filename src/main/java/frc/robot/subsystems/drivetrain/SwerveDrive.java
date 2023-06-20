@@ -4,10 +4,13 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Ports;
+import frc.robot.utils.Utils;
 
 public class SwerveDrive extends SubsystemBase {
+    private SwerveDriveInputsAutoLogged loggerInputs = new SwerveDriveInputsAutoLogged();
+
     private final SwerveModule[] modules = new SwerveModule[4]; //FL, FR, RL, RR
+    private final SwerveModuleState[] currentModuleStates = new SwerveModuleState[4];
     private final double[] offsets = {0, 0, 0, 0};
 
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
@@ -18,18 +21,18 @@ public class SwerveDrive extends SubsystemBase {
 
     public SwerveDrive(int[] driveMotorPorts, int[] angleMotorPorts, int[] encoderPorts) {
         for (int i = 0; i < modules.length; i++) {
-            modules[i] = new SwerveModule(driveMotorPorts[i], angleMotorPorts[i], encoderPorts[i]);
+            modules[i] = new SwerveModule(driveMotorPorts[i], angleMotorPorts[i], encoderPorts[i], i+1);
         }
     }
 
-    public void setModuleStates(SwerveModuleState[] desiredModuleStates) {
+    public void setCurrentModuleStates(SwerveModuleState[] desiredModuleStates) {
         for (int i = 0; i < modules.length; i++) {
             modules[i].setModuleState(desiredModuleStates[i]);
         }
     }
 
     public void drive(ChassisSpeeds chassisSpeeds) {
-        setModuleStates(kinematics.toSwerveModuleStates(chassisSpeeds));
+        setCurrentModuleStates(kinematics.toSwerveModuleStates(chassisSpeeds));
     }
 
     /**
@@ -46,6 +49,14 @@ public class SwerveDrive extends SubsystemBase {
                 SwerveConstants.MAX_Y_VELOCITY * yOutput,
                 SwerveConstants.MAX_OMEGA_VELOCITY * omegaOutput);
 
-        setModuleStates(kinematics.toSwerveModuleStates(chassisSpeeds));
+        setCurrentModuleStates(kinematics.toSwerveModuleStates(chassisSpeeds));
+    }
+
+    public void periodic(){
+        double[] currentModuleStates = Utils.swerveModuleStatesToArray(kinematics.toSwerveModuleStates())
+        for (int i = 0; i< this.currentModuleStates.length; i++){
+//            this.currentModuleStates[i] =
+        }
+        double[] currentSpeeds = Utils.chassisSpeedsToArray(kinematics.toChassisSpeeds(modules))
     }
 }

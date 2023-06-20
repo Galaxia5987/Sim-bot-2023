@@ -7,16 +7,29 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.utils.math.differential.Integral;
 
 public class SwerveModule extends SubsystemBase {
+
+    private final SwerveModuleInputsAutoLogged loggerInputs = new SwerveModuleInputsAutoLogged();
+
     private final TalonFX driveMotor;
     private final TalonFX angleMotor;
     private final DutyCycleEncoder encoder;
 
-    public SwerveModule(int driveMotorPort, int angleMotorPort, int encoderID) {
+    private final int number;
+
+    private Integral driveSupplyChargeUsedCoulomb = new Integral(0, 0);
+    private Integral driveStatorChargeUsedCoulomb = new Integral(0, 0);
+
+    private Integral angleSupplyChargeUsedCoulomb = new Integral(0, 0);
+    private Integral angleStatorChargeUsedCoulomb = new Integral(0, 0);
+
+    public SwerveModule(int driveMotorPort, int angleMotorPort, int encoderID, int number) {
         this.driveMotor = new TalonFX(driveMotorPort);
         this.angleMotor = new TalonFX(angleMotorPort);
         this.encoder = new DutyCycleEncoder(encoderID);
+        this.number = number;
 
         driveMotor.configFactoryDefault(Constants.TALON_TIMEOUT);
         angleMotor.configFactoryDefault(Constants.TALON_TIMEOUT);
@@ -49,5 +62,22 @@ public class SwerveModule extends SubsystemBase {
 
     public void setAngle(double angle){
         angleMotor.set(TalonFXControlMode.Position, angle);
+    }
+
+    @Override
+    public void periodic() {
+        loggerInputs.driveMotorSupplyCurrent = driveMotor.getSupplyCurrent();
+        loggerInputs.driveMotorStatorCurrent = driveMotor.getStatorCurrent();
+        driveSupplyChargeUsedCoulomb.update(loggerInputs.driveMotorSupplyCurrent);
+        loggerInputs.driveMotorSupplyCurrentOverTime = driveSupplyChargeUsedCoulomb.get();
+        driveStatorChargeUsedCoulomb.update(loggerInputs.driveMotorStatorCurrent);
+        loggerInputs.driveMotorStatorCurrentOverTime = driveStatorChargeUsedCoulomb.get();
+
+        loggerInputs.angleMotorSupplyCurrent = angleMotor.getSupplyCurrent();
+        loggerInputs.angleMotorStatorCurrent = angleMotor.getStatorCurrent();
+        angleSupplyChargeUsedCoulomb.update(loggerInputs.angleMotorSupplyCurrent);
+        loggerInputs.angleMotorSupplyCurrentOverTime = angleSupplyChargeUsedCoulomb.get();
+        angleStatorChargeUsedCoulomb.update(loggerInputs.angleMotorStatorCurrent);
+        loggerInputs.angleMotorStatorCurrentOverTime = angleStatorChargeUsedCoulomb.get();
     }
 }
