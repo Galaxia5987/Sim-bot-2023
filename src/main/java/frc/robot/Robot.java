@@ -36,6 +36,7 @@ public class Robot extends LoggedRobot {
     private RobotContainer robotContainer;
     private Command autonomousCommand;
     private Vision vision;
+    private RobotState robotState = RobotState.getINSTANCE();
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -76,6 +77,7 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void robotPeriodic() {
+        robotState.update();
         TunableNumber.INSTANCES.forEach(TunableNumber::update);
         CommandScheduler.getInstance().run();
 
