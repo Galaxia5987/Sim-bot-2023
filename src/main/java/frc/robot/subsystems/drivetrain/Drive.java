@@ -26,6 +26,7 @@ public class Drive extends SubsystemBase {
     private final Module rearRight;
 
     private final SwerveDriveKinematics kinematics;
+    public Rotation2d Angle;
     private ChassisSpeeds desiredSpeeds = new ChassisSpeeds();
     private SwerveModuleState[] desiredModuleStates;
 
@@ -130,6 +131,10 @@ public class Drive extends SubsystemBase {
 
     public Pose2d getCurrentPose() {
         return odometry.getPoseMeters();
+    }
+
+    public Rotation2d getCurrentAngle(){
+        return new Rotation2d();
     }
 
     public SwerveDriveKinematics getKinematics() {
