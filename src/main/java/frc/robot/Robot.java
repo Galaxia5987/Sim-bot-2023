@@ -11,6 +11,8 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.drivetrain.SwerveConstants;
+import frc.robot.subsystems.drivetrain.SwerveDrive;
 import frc.robot.utils.TunableNumber;
 import frc.robot.utils.math.differential.BooleanTrigger;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -47,7 +49,6 @@ public class Robot extends LoggedRobot {
         Logger.getInstance().recordMetadata("ProjectName", "Sim-bot-2023"); // Set a metadata value
 
         if (isReal()) {
-            Logger.getInstance().addDataReceiver(new WPILOGWriter("/home/lvuser")); // Log to a USB stick
             Logger.getInstance().addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
             new PowerDistribution(1, PowerDistribution.ModuleType.kRev); // Enables power distribution logging
         } else {
@@ -62,6 +63,8 @@ public class Robot extends LoggedRobot {
         Logger.getInstance().recordOutput("BottomArmPose", new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(Math.toRadians(0), Math.toRadians(0), Math.toRadians(0))));
         Logger.getInstance().recordOutput("TopArmPose", new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(Math.toRadians(0), Math.toRadians(0), Math.toRadians(0))));
         Logger.getInstance().recordOutput("IntakePose", new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(Math.toRadians(-90), Math.toRadians(0), Math.toRadians(0))));
+
+        SwerveDrive.getInstance().updateOffsets(SwerveConstants.OFFSETS);
     }
 
     /**

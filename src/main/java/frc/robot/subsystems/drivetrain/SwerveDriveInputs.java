@@ -10,4 +10,6 @@ public class SwerveDriveInputs {
     public double[] currentSpeeds ={0, 0, 0};
     public double[] desiredSpeeds ={0, 0, 0};
 
+    public double[] absolutePositions =new double[4];
+
 }

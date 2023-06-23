@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.utils.math.differential.Integral;
 import frc.robot.utils.units.UnitModel;
+import org.littletonrobotics.junction.Logger;
 
 public class SwerveModule extends SubsystemBase {
 
@@ -21,7 +22,8 @@ public class SwerveModule extends SubsystemBase {
     private final double[] motionMagicConfigs;
 
     private final int number;
-    private final UnitModel unitModel = new UnitModel(SwerveConstants.TICKS_PER_RADIAN);
+    private final UnitModel ticksPerRad = new UnitModel(SwerveConstants.TICKS_PER_RADIAN);
+    private final UnitModel ticksPerMeter = new UnitModel(SwerveConstants.TICKS_PER_METER);
 
     private Integral driveSupplyChargeUsedCoulomb = new Integral(0, 0);
     private Integral driveStatorChargeUsedCoulomb = new Integral(0, 0);
@@ -61,12 +63,12 @@ public class SwerveModule extends SubsystemBase {
         configMotionMagic(motionMagicConfigs);
     }
 
-    public void configMotionMagic(double[] motionMagicConfigs){
+    public void configMotionMagic(double[] motionMagicConfigs) {
         angleMotor.config_kP(0, motionMagicConfigs[0], Constants.TALON_TIMEOUT);
         angleMotor.config_kI(0, motionMagicConfigs[1], Constants.TALON_TIMEOUT);
         angleMotor.config_kD(0, motionMagicConfigs[2], Constants.TALON_TIMEOUT);
         angleMotor.config_kF(0, motionMagicConfigs[3], Constants.TALON_TIMEOUT);
-        angleMotor.configMotionSCurveStrength((int)motionMagicConfigs[4], Constants.TALON_TIMEOUT);
+        angleMotor.configMotionSCurveStrength((int) motionMagicConfigs[4], Constants.TALON_TIMEOUT);
         angleMotor.configMotionCruiseVelocity(motionMagicConfigs[5], Constants.TALON_TIMEOUT);
         angleMotor.configMotionAcceleration(motionMagicConfigs[6], Constants.TALON_TIMEOUT);
         angleMotor.configAllowableClosedloopError(0, motionMagicConfigs[7], Constants.TALON_TIMEOUT);
@@ -74,36 +76,48 @@ public class SwerveModule extends SubsystemBase {
         angleMotor.configClosedLoopPeakOutput(0, motionMagicConfigs[9], Constants.TALON_TIMEOUT);
     }
 
-    public void setModuleState(SwerveModuleState moduleState){
+    public void setModuleState(SwerveModuleState moduleState) {
+        SwerveModuleState.optimize(moduleState, new Rotation2d(loggerInputs.angle));
         setSpeed(moduleState.speedMetersPerSecond);
         setAngle(moduleState.angle.getRadians());
     }
 
-    public SwerveModuleState getModuleState(){
+    public SwerveModuleState getModuleState() {
         return new SwerveModuleState(
-                driveMotor.getSelectedSensorVelocity(),
-                new Rotation2d(unitModel.toUnits(angleMotor.getSelectedSensorPosition()))
+                ticksPerMeter.toUnits(driveMotor.getSelectedSensorVelocity()),
+                new Rotation2d(ticksPerRad.toUnits(angleMotor.getSelectedSensorPosition()))
         );
     }
 
-    public void setSpeed(double speed){
-        driveMotor.set(TalonFXControlMode.Velocity, speed);
+    public void setSpeed(double speed) {
+        driveMotor.set(TalonFXControlMode.Velocity, ticksPerMeter.toTicks100ms(speed));
     }
 
     public void setAngle(double angle){
-        angleMotor.set(TalonFXControlMode.MotionMagic, unitModel.toTicks(angle));
+        angleMotor.set(TalonFXControlMode.MotionMagic, ticksPerRad.toTicks(angle));
     }
 
-    public double getSupplyCurrent(){
-        return driveMotor.getSupplyCurrent()+ angleMotor.getSupplyCurrent();
+    public double getSupplyCurrent() {
+        return driveMotor.getSupplyCurrent() + angleMotor.getSupplyCurrent();
     }
 
-    public double getStatorCurrent(){
-        return driveMotor.getStatorCurrent()+ angleMotor.getStatorCurrent();
+    public double getStatorCurrent() {
+        return driveMotor.getStatorCurrent() + angleMotor.getStatorCurrent();
+    }
+
+    public double getPosition() {
+        return encoder.getAbsolutePosition();
+    }
+
+    public void updateOffset(double offset) {
+        angleMotor.setSelectedSensorPosition(
+                ((encoder.getAbsolutePosition() - offset) * 2048) / SwerveConstants.ANGLE_REDUCTION);
     }
 
     @Override
     public void periodic() {
+        loggerInputs.absolutePosition = encoder.getAbsolutePosition();
+
         loggerInputs.driveMotorSupplyCurrent = driveMotor.getSupplyCurrent();
         loggerInputs.driveMotorStatorCurrent = driveMotor.getStatorCurrent();
         driveSupplyChargeUsedCoulomb.update(loggerInputs.driveMotorSupplyCurrent);
@@ -117,5 +131,8 @@ public class SwerveModule extends SubsystemBase {
         loggerInputs.angleMotorSupplyCurrentOverTime = angleSupplyChargeUsedCoulomb.get();
         angleStatorChargeUsedCoulomb.update(loggerInputs.angleMotorStatorCurrent);
         loggerInputs.angleMotorStatorCurrentOverTime = angleStatorChargeUsedCoulomb.get();
+        loggerInputs.angleMotorPosition = angleMotor.getSelectedSensorPosition();
+
+        Logger.getInstance().processInputs("module_" + number, loggerInputs);
     }
 }

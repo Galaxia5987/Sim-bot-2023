@@ -5,6 +5,7 @@ import org.littletonrobotics.junction.AutoLog;
 @AutoLog
 public class SwerveModuleInputs {
     public double angle;
+    public double absolutePosition;
     public double angleMotorSpeed;
     public double angleMotorPosition;
     public double angleMotorSupplyCurrent;

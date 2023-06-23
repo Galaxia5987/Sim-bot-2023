@@ -16,10 +16,7 @@ import frc.robot.subsystems.drivetrain.command.XboxDrive;
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
 
-    private final SwerveDrive swerveDrive = new SwerveDrive(
-            Ports.SwerveDrive.DRIVE_IDS,
-            Ports.SwerveDrive.ANGLE_IDS,
-            Ports.SwerveDrive.ENCODER_IDS);
+    private final SwerveDrive swerveDrive = SwerveDrive.getInstance();
 
     private final XboxController xboxController = new XboxController(0);
 
