@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+//import com.pathplanner.lib.server.PathPlannerServer;
 import com.pathplanner.lib.server.PathPlannerServer;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -81,7 +82,7 @@ public class Robot extends LoggedRobot {
 
         enabledTrigger.update(isEnabled());
 
-        Optional<EstimatedRobotPose> estimatedGlobalPose1 = vision.getEstimatedGlobal1();
+       Optional<EstimatedRobotPose> estimatedGlobalPose1 = vision.getEstimatedGlobal1();
         estimatedGlobalPose1.ifPresent(pose -> System.out.println(pose.estimatedPose));
         Optional<EstimatedRobotPose> estimatedGlobalPose2 = vision.getEstimatedGlobal2();
         estimatedGlobalPose2.ifPresent(pose -> System.out.println(pose.estimatedPose));
@@ -99,7 +100,7 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void autonomousInit() {
-        autonomousCommand = robotContainer.getAutonomousCommand();
+//        autonomousCommand = robotContainer.getAutonomousCommand();
 
         // schedule the autonomous command (example)
         if (autonomousCommand != null) {

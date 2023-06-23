@@ -83,6 +83,8 @@ public class Vision extends SubsystemBase {
         return new Pose3d();
     }
 
+    
+
     @Override
     public void periodic() {
         inputs.hasTargets1 = result1.hasTargets();
