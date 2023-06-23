@@ -10,7 +10,8 @@ public class SwerveDrive extends SubsystemBase {
     private SwerveDriveInputsAutoLogged loggerInputs = new SwerveDriveInputsAutoLogged();
 
     private final SwerveModule[] modules = new SwerveModule[4]; //FL, FR, RL, RR
-    private final SwerveModuleState[] currentModuleStates = new SwerveModuleState[4];
+    private SwerveModuleState[] currentModuleStates = new SwerveModuleState[4];
+    private SwerveModuleState[] desiredModuleStates = new SwerveModuleState[4];
     private final double[] offsets = {0, 0, 0, 0};
 
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
@@ -26,14 +27,16 @@ public class SwerveDrive extends SubsystemBase {
         }
     }
 
-    public void setCurrentModuleStates(SwerveModuleState[] desiredModuleStates) {
+    public void setModuleStates(SwerveModuleState[] desiredModuleStates) {
         for (int i = 0; i < modules.length; i++) {
             modules[i].setModuleState(desiredModuleStates[i]);
         }
     }
 
     public void drive(ChassisSpeeds chassisSpeeds) {
-        setCurrentModuleStates(kinematics.toSwerveModuleStates(chassisSpeeds));
+        loggerInputs.desiredSpeeds = Utils.chassisSpeedsToArray(chassisSpeeds);
+
+        setModuleStates(kinematics.toSwerveModuleStates(chassisSpeeds));
     }
 
     /**
@@ -44,20 +47,23 @@ public class SwerveDrive extends SubsystemBase {
      * @param omegaOutput percentage of the omega speed
      */
     public void drive(double xOutput, double yOutput, double omegaOutput) {
-
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(
                 SwerveConstants.MAX_X_VELOCITY * xOutput,
                 SwerveConstants.MAX_Y_VELOCITY * yOutput,
                 SwerveConstants.MAX_OMEGA_VELOCITY * omegaOutput);
 
-        setCurrentModuleStates(kinematics.toSwerveModuleStates(chassisSpeeds));
+        setModuleStates(kinematics.toSwerveModuleStates(chassisSpeeds));
+
+        loggerInputs.desiredSpeeds = Utils.chassisSpeedsToArray(chassisSpeeds);
     }
 
     public void periodic(){
-        double[] currentModuleStates = Utils.swerveModuleStatesToArray(kinematics.toSwerveModuleStates())
-        for (int i = 0; i< this.currentModuleStates.length; i++){
-//            this.currentModuleStates[i] =
+        for (int i=0; i< modules.length; i++){
+            currentModuleStates[i] = modules[i].getModuleState();
+            loggerInputs.currentSpeeds[i] = modules[i].getModuleState().speedMetersPerSecond;
+            loggerInputs.supplyCurrent += modules[i].getSupplyCurrent();
+            loggerInputs.statorCurrent += modules[i].getStatorCurrent();
         }
-        double[] currentSpeeds = Utils.chassisSpeedsToArray(kinematics.toChassisSpeeds(modules))
+
     }
 }
