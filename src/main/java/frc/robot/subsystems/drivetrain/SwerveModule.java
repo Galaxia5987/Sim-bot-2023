@@ -62,6 +62,12 @@ public class SwerveModule extends SubsystemBase {
 
     public void setAngle(double angle){
         angleMotor.set(TalonFXControlMode.Position, angle);
+    public double getSupplyCurrent(){
+        return driveMotor.getSupplyCurrent()+ angleMotor.getSupplyCurrent();
+    }
+
+    public double getStatorCurrent(){
+        return driveMotor.getStatorCurrent()+ angleMotor.getStatorCurrent();
     }
 
     @Override
