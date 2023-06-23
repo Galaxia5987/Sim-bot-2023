@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Vision.Vision;
+import frc.robot.subsystems.Vision.VisionConstants;
 import frc.robot.utils.TunableNumber;
 import frc.robot.utils.math.differential.BooleanTrigger;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -36,7 +37,7 @@ public class Robot extends LoggedRobot {
     private final Timer timer = new Timer();
     private RobotContainer robotContainer;
     private Command autonomousCommand;
-    private Vision vision;
+    private Vision vision = Vision.getInstance();
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -84,8 +85,8 @@ public class Robot extends LoggedRobot {
 
        Optional<EstimatedRobotPose> estimatedGlobalPose1 = vision.getEstimatedGlobal1();
         estimatedGlobalPose1.ifPresent(pose -> System.out.println(pose.estimatedPose));
-        Optional<EstimatedRobotPose> estimatedGlobalPose2 = vision.getEstimatedGlobal2();
-        estimatedGlobalPose2.ifPresent(pose -> System.out.println(pose.estimatedPose));
+//        Optional<EstimatedRobotPose> estimatedGlobalPose2 = vision.getEstimatedGlobal2();
+//        estimatedGlobalPose2.ifPresent(pose -> System.out.println(pose.estimatedPose));
     }
 
     /**
@@ -131,6 +132,8 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void teleopPeriodic() {
+        System.out.println("distance: " + vision.getDistance(VisionConstants.CAMERA_HEIGHT, VisionConstants.TARGET_HEIGHT_FROM_GROUND));
+
     }
 
     /**
