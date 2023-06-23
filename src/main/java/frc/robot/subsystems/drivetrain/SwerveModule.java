@@ -3,11 +3,13 @@ package frc.robot.subsystems.drivetrain;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.utils.math.differential.Integral;
+import frc.robot.utils.units.UnitModel;
 
 public class SwerveModule extends SubsystemBase {
 
@@ -16,8 +18,10 @@ public class SwerveModule extends SubsystemBase {
     private final TalonFX driveMotor;
     private final TalonFX angleMotor;
     private final DutyCycleEncoder encoder;
+    private final double[] motionMagicConfigs;
 
     private final int number;
+    private final UnitModel unitModel = new UnitModel(SwerveConstants.TICKS_PER_RADIAN);
 
     private Integral driveSupplyChargeUsedCoulomb = new Integral(0, 0);
     private Integral driveStatorChargeUsedCoulomb = new Integral(0, 0);
@@ -25,15 +29,20 @@ public class SwerveModule extends SubsystemBase {
     private Integral angleSupplyChargeUsedCoulomb = new Integral(0, 0);
     private Integral angleStatorChargeUsedCoulomb = new Integral(0, 0);
 
-    public SwerveModule(int driveMotorPort, int angleMotorPort, int encoderID, int number) {
+    public SwerveModule(int driveMotorPort, int angleMotorPort, int encoderID,
+                        double[] motionMagicConfigs, int number) {
         this.driveMotor = new TalonFX(driveMotorPort);
         this.angleMotor = new TalonFX(angleMotorPort);
         this.encoder = new DutyCycleEncoder(encoderID);
+        this.motionMagicConfigs = motionMagicConfigs;
         this.number = number;
 
         driveMotor.configFactoryDefault(Constants.TALON_TIMEOUT);
         angleMotor.configFactoryDefault(Constants.TALON_TIMEOUT);
 
+        driveMotor.config_kP(0, SwerveConstants.DRIVE_kP, Constants.TALON_TIMEOUT);
+        driveMotor.config_kI(0, SwerveConstants.DRIVE_kI, Constants.TALON_TIMEOUT);
+        driveMotor.config_kD(0, SwerveConstants.DRIVE_kD, Constants.TALON_TIMEOUT);
         driveMotor.enableVoltageCompensation(true);
         driveMotor.configVoltageCompSaturation(SwerveConstants.VOLT_COMP_SATURATION);
         driveMotor.configNeutralDeadband(SwerveConstants.NEUTRAL_DEADBAND);
@@ -49,6 +58,20 @@ public class SwerveModule extends SubsystemBase {
         angleMotor.configSupplyCurrentLimit(SwerveConstants.SUPPLY_CURRENT_LIMIT);
         angleMotor.configStatorCurrentLimit(SwerveConstants.STATOR_CURRENT_LIMIT);
         angleMotor.setInverted(SwerveConstants.CLOCKWISE);
+        configMotionMagic(motionMagicConfigs);
+    }
+
+    public void configMotionMagic(double[] motionMagicConfigs){
+        angleMotor.config_kP(0, motionMagicConfigs[0], Constants.TALON_TIMEOUT);
+        angleMotor.config_kI(0, motionMagicConfigs[1], Constants.TALON_TIMEOUT);
+        angleMotor.config_kD(0, motionMagicConfigs[2], Constants.TALON_TIMEOUT);
+        angleMotor.config_kF(0, motionMagicConfigs[3], Constants.TALON_TIMEOUT);
+        angleMotor.configMotionSCurveStrength((int)motionMagicConfigs[4], Constants.TALON_TIMEOUT);
+        angleMotor.configMotionCruiseVelocity(motionMagicConfigs[5], Constants.TALON_TIMEOUT);
+        angleMotor.configMotionAcceleration(motionMagicConfigs[6], Constants.TALON_TIMEOUT);
+        angleMotor.configAllowableClosedloopError(0, motionMagicConfigs[7], Constants.TALON_TIMEOUT);
+        angleMotor.configMaxIntegralAccumulator(0, motionMagicConfigs[8], Constants.TALON_TIMEOUT);
+        angleMotor.configClosedLoopPeakOutput(0, motionMagicConfigs[9], Constants.TALON_TIMEOUT);
     }
 
     public void setModuleState(SwerveModuleState moduleState){
@@ -56,12 +79,21 @@ public class SwerveModule extends SubsystemBase {
         setAngle(moduleState.angle.getRadians());
     }
 
+    public SwerveModuleState getModuleState(){
+        return new SwerveModuleState(
+                driveMotor.getSelectedSensorVelocity(),
+                new Rotation2d(unitModel.toUnits(angleMotor.getSelectedSensorPosition()))
+        );
+    }
+
     public void setSpeed(double speed){
         driveMotor.set(TalonFXControlMode.Velocity, speed);
     }
 
     public void setAngle(double angle){
-        angleMotor.set(TalonFXControlMode.Position, angle);
+        angleMotor.set(TalonFXControlMode.MotionMagic, unitModel.toTicks(angle));
+    }
+
     public double getSupplyCurrent(){
         return driveMotor.getSupplyCurrent()+ angleMotor.getSupplyCurrent();
     }

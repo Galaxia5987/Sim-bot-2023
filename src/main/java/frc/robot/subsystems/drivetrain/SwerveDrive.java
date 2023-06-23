@@ -21,7 +21,8 @@ public class SwerveDrive extends SubsystemBase {
 
     public SwerveDrive(int[] driveMotorPorts, int[] angleMotorPorts, int[] encoderPorts) {
         for (int i = 0; i < modules.length; i++) {
-            modules[i] = new SwerveModule(driveMotorPorts[i], angleMotorPorts[i], encoderPorts[i], i+1);
+            modules[i] = new SwerveModule(driveMotorPorts[i], angleMotorPorts[i],
+                    encoderPorts[i], SwerveConstants.motionMagicConfigs[i],i+1);
         }
     }
 
