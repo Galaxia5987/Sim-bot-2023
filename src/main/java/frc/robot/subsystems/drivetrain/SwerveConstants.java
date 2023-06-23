@@ -6,11 +6,18 @@ import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import edu.wpi.first.math.geometry.Translation2d;
 
 public class SwerveConstants {
-    public static final double TICKS_PER_RADIAN = 2048/(Math.PI*2);
+    public static final double[] OFFSETS =
+            {0.009029700225742506, 0.21255585531389637, 0.5379097634477441, 0.08744670218616755};
 
     public static final double VOLT_COMP_SATURATION = 12;
     public static final SupplyCurrentLimitConfiguration SUPPLY_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(true, 50, 0, 0);
     public static final StatorCurrentLimitConfiguration STATOR_CURRENT_LIMIT = new StatorCurrentLimitConfiguration(true, 50, 0, 0);
+
+    public static final double robotWidth = 0.587;
+    public static final double robotLength = 0.62;
+    public static final double WHEEL_DIAMETER = 0.1023679821;
+    public static final double DRIVE_REDUCTION = (1 / 2.0) * (22.0 / 24.0) * (15.0 / 45.0);
+    public static final double ANGLE_REDUCTION = (14.0 / 72.0) * 0.5;
 
     // kP, kI, kD, kF, sCurveStrength, cruiseVelocity, acceleration, allowableError,
     // maxIntegralAccum, peakOutput
@@ -25,13 +32,16 @@ public class SwerveConstants {
             REAR_LEFT_MOTION_MAGIC_CONFIGS,
             REAR_RIGHT_MOTION_MAGIC_CONFIGS};
 
-    public static final double DRIVE_kP = 0;
+    public static final double DRIVE_kP = 0.1;
     public static final double DRIVE_kI = 0;
     public static final double DRIVE_kD = 0;
 
-    public static final double MAX_X_VELOCITY = 0;
-    public static final double MAX_Y_VELOCITY = 0;
-    public static final double MAX_OMEGA_VELOCITY = 0;
+    public static final double MAX_X_Y_VELOCITY = 6380.0 / 60.0 *
+            DRIVE_REDUCTION *
+            WHEEL_DIAMETER * Math.PI;
+
+    public static final double MAX_OMEGA_VELOCITY = MAX_X_Y_VELOCITY/
+            Math.sqrt((robotLength/2)*(robotLength/2)+(robotWidth/2)*(robotWidth/2));
 
     public static final TalonFXInvertType CLOCKWISE = TalonFXInvertType.Clockwise;
     public static final TalonFXInvertType COUNTER_CLOCKWISE = TalonFXInvertType.CounterClockwise;
@@ -39,11 +49,13 @@ public class SwerveConstants {
     public static final double NEUTRAL_DEADBAND = 0.15;
     public static final double XBOX_DEADBAND = 0.15;
 
-    public static final double robotWidth = 0;
-    public static final double robotLength = 0;
+
+    public static final double TICKS_PER_RADIAN = 2048/ANGLE_REDUCTION/(Math.PI*2);
+    public static final double TICKS_PER_METER = (2048/DRIVE_REDUCTION)/(Math.PI*WHEEL_DIAMETER);
+
     public static final Translation2d[] wheelPositions = {
-            new Translation2d(-(robotWidth/2), robotLength/2),   //FL
-            new Translation2d(robotWidth/2, robotLength/2),   //FR
-            new Translation2d(-(robotWidth/2), -(robotLength/2)),  //RL
-            new Translation2d(robotWidth/2, -(robotLength/2))}; //RR
+            new Translation2d(robotLength/2, robotWidth/2),   //FL
+            new Translation2d(robotLength/2, -robotWidth/2),   //FR
+            new Translation2d(-robotLength/2, robotWidth/2),  //RL
+            new Translation2d(-robotLength/2, -robotWidth/2)}; //RR
 }
