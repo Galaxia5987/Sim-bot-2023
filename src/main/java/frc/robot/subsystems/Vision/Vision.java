@@ -83,46 +83,46 @@ public class Vision extends SubsystemBase {
         return new Pose3d();
     }
 
-    @Override
-    public void periodic() {
-        inputs.hasTargets1 = result1.hasTargets();
-        inputs.hasTargets2 = result2.hasTargets();
-        inputs.hasTargets1 = result1.hasTargets();
-        inputs.hasTargets2 = result2.hasTargets();
-        inputs.yaw1 = target1.getYaw();
-        inputs.yaw2 = target2.getYaw();
-        inputs.pitch1 = target1.getPitch();
-        inputs.pitch2 = target2.getPitch();
-        inputs.area1 = target1.getArea();
-        inputs.area2 = target2.getArea();
-        inputs.skew1 = target1.getSkew();
-        inputs.skew2 = target2.getSkew();
-        inputs.targetID_1 = target1.getFiducialId();
-        inputs.targetID_2 = target2.getFiducialId();
-        inputs.poseAmbiguity1 = target1.getPoseAmbiguity();
-        inputs.poseAmbiguity2 = target2.getPoseAmbiguity();
-        inputs.estimatedRobotPose_1 = photonPoseEstimator1.update().get();
-        inputs.estimatedRobotPose_2 = photonPoseEstimator2.update().get();
-    }
+//    @Override
+//    public void periodic() {
+//        inputs.hasTargets1 = result1.hasTargets();
+//        inputs.hasTargets2 = result2.hasTargets();
+//        inputs.hasTargets1 = result1.hasTargets();
+//        inputs.hasTargets2 = result2.hasTargets();
+//        inputs.yaw1 = target1.getYaw();
+//        inputs.yaw2 = target2.getYaw();
+//        inputs.pitch1 = target1.getPitch();
+//        inputs.pitch2 = target2.getPitch();
+//        inputs.area1 = target1.getArea();
+//        inputs.area2 = target2.getArea();
+//        inputs.skew1 = target1.getSkew();
+//        inputs.skew2 = target2.getSkew();
+//        inputs.targetID_1 = target1.getFiducialId();
+//        inputs.targetID_2 = target2.getFiducialId();
+//        inputs.poseAmbiguity1 = target1.getPoseAmbiguity();
+//        inputs.poseAmbiguity2 = target2.getPoseAmbiguity();
+//        inputs.estimatedRobotPose_1 = photonPoseEstimator1.update().get();
+//        inputs.estimatedRobotPose_2 = photonPoseEstimator2.update().get();
+//    }
 
-    @AutoLog
-    public static class VisionInputs {
-        boolean hasTargets1 = false;
-        boolean hasTargets2 = false;
-        double yaw1 = 0;
-        double yaw2 = 0;
-        double pitch1 = 0;
-        double pitch2 = 0;
-        double area1 = 0;
-        double area2 = 0;
-        double skew1 = 0;
-        double skew2 = 0;
-        int targetID_1 = 0;
-        int targetID_2 = 0;
-        double poseAmbiguity1 = 0;
-        double poseAmbiguity2 = 0;
-        EstimatedRobotPose estimatedRobotPose_1 = null;
-        EstimatedRobotPose estimatedRobotPose_2 = null;
-
-    }
+//    @AutoLog
+//    public static class VisionInputs {
+//        boolean hasTargets1 = false;
+//        boolean hasTargets2 = false;
+//        double yaw1 = 0;
+//        double yaw2 = 0;
+//        double pitch1 = 0;
+//        double pitch2 = 0;
+//        double area1 = 0;
+//        double area2 = 0;
+//        double skew1 = 0;
+//        double skew2 = 0;
+//        int targetID_1 = 0;
+//        int targetID_2 = 0;
+//        double poseAmbiguity1 = 0;
+//        double poseAmbiguity2 = 0;
+//        EstimatedRobotPose estimatedRobotPose_1 = null;
+//        EstimatedRobotPose estimatedRobotPose_2 = null;
+//
+//    }
 }
