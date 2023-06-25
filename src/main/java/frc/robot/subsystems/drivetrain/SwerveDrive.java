@@ -1,8 +1,12 @@
 package frc.robot.subsystems.drivetrain;
 
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Ports;
 import frc.robot.utils.Utils;
@@ -12,6 +16,7 @@ public class SwerveDrive extends SubsystemBase {
     private static SwerveDrive INSTANCE = null;
     private SwerveDriveInputsAutoLogged loggerInputs = new SwerveDriveInputsAutoLogged();
 
+    private final AHRS gyro = new AHRS(SPI.Port.kMXP);
     private final SwerveModule[] modules = new SwerveModule[4]; //FL, FR, RL, RR
     private SwerveModuleState[] currentModuleStates = new SwerveModuleState[4];
     private SwerveModuleState[] desiredModuleStates = new SwerveModuleState[4];
@@ -21,6 +26,8 @@ public class SwerveDrive extends SubsystemBase {
             SwerveConstants.wheelPositions[1],
             SwerveConstants.wheelPositions[2],
             SwerveConstants.wheelPositions[3]);
+
+    private double gyroOffset = 0;
 
     private SwerveDrive() {
         for (int i = 0; i < modules.length; i++) {
@@ -36,7 +43,24 @@ public class SwerveDrive extends SubsystemBase {
         return INSTANCE;
     }
 
+    public void resetGyro(double angle){
+        gyroOffset = angle - Math.toRadians(getRawYaw());
+    }
+
+    public void resetGyro(){
+        resetGyro(0);
+    }
+
+    public double getRawYaw(){
+        return gyro.getAngle();
+    }
+
+    public double getYaw(){
+        return getRawYaw() + gyroOffset;
+    }
+
     public void setModuleStates(SwerveModuleState[] desiredModuleStates) {
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredModuleStates, SwerveConstants.MAX_X_Y_VELOCITY);
         for (int i = 0; i < modules.length; i++) {
             modules[i].setModuleState(desiredModuleStates[i]);
         }
