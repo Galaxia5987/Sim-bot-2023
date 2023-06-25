@@ -95,7 +95,9 @@ public class SwerveModule extends SubsystemBase {
     }
 
     public void setAngle(double angle){
-        angleMotor.set(TalonFXControlMode.MotionMagic, ticksPerRad.toTicks(angle));
+        loggerInputs.angleSetpoint = angle;
+        Rotation2d error = new Rotation2d(loggerInputs.angleSetpoint).minus(new Rotation2d(loggerInputs.angle));
+        angleMotor.set(TalonFXControlMode.MotionMagic, loggerInputs.angleMotorTicks + ticksPerRad.toTicks(error.getRadians()));
     }
 
     public double getSupplyCurrent() {
