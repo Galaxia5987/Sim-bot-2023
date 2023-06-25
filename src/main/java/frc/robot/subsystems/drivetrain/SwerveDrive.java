@@ -72,9 +72,17 @@ public class SwerveDrive extends SubsystemBase {
         }
     }
 
-    public void drive(ChassisSpeeds chassisSpeeds) {
+    public void drive(ChassisSpeeds chassisSpeeds, boolean fieldOriented) {
         loggerInputs.desiredSpeeds = Utils.chassisSpeedsToArray(chassisSpeeds);
 
+        if (fieldOriented){
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                    chassisSpeeds.vxMetersPerSecond,
+                    chassisSpeeds.vyMetersPerSecond,
+                    chassisSpeeds.omegaRadiansPerSecond,
+                    new Rotation2d(getYaw())
+            );
+        }
         setModuleStates(kinematics.toSwerveModuleStates(chassisSpeeds));
     }
 
@@ -85,13 +93,13 @@ public class SwerveDrive extends SubsystemBase {
      * @param yOutput     percentage of the y speed
      * @param omegaOutput percentage of the omega speed
      */
-    public void drive(double xOutput, double yOutput, double omegaOutput) {
+    public void drive(double xOutput, double yOutput, double omegaOutput, boolean fieldOriented) {
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(
                 SwerveConstants.MAX_X_Y_VELOCITY * xOutput,
                 SwerveConstants.MAX_X_Y_VELOCITY * yOutput,
                 SwerveConstants.MAX_OMEGA_VELOCITY * omegaOutput);
 
-        drive(chassisSpeeds);
+        drive(chassisSpeeds, fieldOriented);
     }
 
     public void periodic(){
