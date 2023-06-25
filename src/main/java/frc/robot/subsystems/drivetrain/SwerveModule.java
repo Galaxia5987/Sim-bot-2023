@@ -3,6 +3,7 @@ package frc.robot.subsystems.drivetrain;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -77,7 +78,7 @@ public class SwerveModule extends SubsystemBase {
     }
 
     public void setModuleState(SwerveModuleState moduleState) {
-        SwerveModuleState.optimize(moduleState, new Rotation2d(loggerInputs.angle));
+        moduleState = SwerveModuleState.optimize(moduleState, new Rotation2d(loggerInputs.angle));
         setSpeed(moduleState.speedMetersPerSecond);
         setAngle(moduleState.angle.getRadians());
     }
@@ -124,6 +125,7 @@ public class SwerveModule extends SubsystemBase {
         loggerInputs.driveMotorSupplyCurrentOverTime = driveSupplyChargeUsedCoulomb.get();
         driveStatorChargeUsedCoulomb.update(loggerInputs.driveMotorStatorCurrent);
         loggerInputs.driveMotorStatorCurrentOverTime = driveStatorChargeUsedCoulomb.get();
+        loggerInputs.driveMotorTicks = driveMotor.getSelectedSensorPosition();
 
         loggerInputs.angleMotorSupplyCurrent = angleMotor.getSupplyCurrent();
         loggerInputs.angleMotorStatorCurrent = angleMotor.getStatorCurrent();
@@ -132,6 +134,9 @@ public class SwerveModule extends SubsystemBase {
         angleStatorChargeUsedCoulomb.update(loggerInputs.angleMotorStatorCurrent);
         loggerInputs.angleMotorStatorCurrentOverTime = angleStatorChargeUsedCoulomb.get();
         loggerInputs.angleMotorPosition = angleMotor.getSelectedSensorPosition();
+        loggerInputs.angleMotorTicks = angleMotor.getSelectedSensorPosition();
+
+        loggerInputs.angle = ticksPerRad.toUnits(angleMotor.getSelectedSensorPosition());
 
         Logger.getInstance().processInputs("module_" + number, loggerInputs);
     }
