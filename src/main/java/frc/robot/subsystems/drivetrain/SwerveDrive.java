@@ -53,7 +53,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public double getRawYaw(){
-        return gyro.getAngle();
+        return Math.toRadians(gyro.getAngle()); //TODO: check if this fixed the issue
     }
 
     public double getYaw(){
