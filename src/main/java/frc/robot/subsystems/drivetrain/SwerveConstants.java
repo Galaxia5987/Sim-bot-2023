@@ -13,9 +13,9 @@ public class SwerveConstants {
     public static final SupplyCurrentLimitConfiguration SUPPLY_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(true, 50, 0, 0);
     public static final StatorCurrentLimitConfiguration STATOR_CURRENT_LIMIT = new StatorCurrentLimitConfiguration(true, 50, 0, 0);
 
-    public static final double robotWidth = 0.587;
-    public static final double robotLength = 0.62;
-    public static final double WHEEL_DIAMETER = 0.1023679821;
+    public static final double robotWidth = 0.587; //[m]
+    public static final double robotLength = 0.62; //[m]
+    public static final double WHEEL_DIAMETER = 0.1023679821; //[m]
     public static final double DRIVE_REDUCTION = (1 / 2.0) * (22.0 / 24.0) * (15.0 / 45.0);
     public static final double ANGLE_REDUCTION = (14.0 / 72.0) * 0.5;
 
@@ -36,11 +36,11 @@ public class SwerveConstants {
     public static final double DRIVE_kI = 0;
     public static final double DRIVE_kD = 0;
 
-    public static final double MAX_X_Y_VELOCITY = 6380.0 / 60.0 *
+    public static final double MAX_X_Y_VELOCITY = 6380.0 / 60.0 * //[m/s]
             DRIVE_REDUCTION *
             WHEEL_DIAMETER * Math.PI;
 
-    public static final double MAX_OMEGA_VELOCITY = MAX_X_Y_VELOCITY/
+    public static final double MAX_OMEGA_VELOCITY = MAX_X_Y_VELOCITY/ //[m/s]
             Math.sqrt((robotLength/2)*(robotLength/2)+(robotWidth/2)*(robotWidth/2));
 
     public static final TalonFXInvertType CLOCKWISE = TalonFXInvertType.Clockwise;
