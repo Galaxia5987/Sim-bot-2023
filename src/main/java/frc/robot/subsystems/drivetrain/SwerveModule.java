@@ -63,6 +63,10 @@ public class SwerveModule extends SubsystemBase {
         configMotionMagic(motionMagicConfigs);
     }
 
+    /**
+     * Configs motion magic for the angle motor.
+     * @param motionMagicConfigs Array of configs for the motion magic.
+     */
     public void configMotionMagic(double[] motionMagicConfigs) {
         angleMotor.config_kP(0, motionMagicConfigs[0], Constants.TALON_TIMEOUT);
         angleMotor.config_kI(0, motionMagicConfigs[1], Constants.TALON_TIMEOUT);
@@ -76,12 +80,20 @@ public class SwerveModule extends SubsystemBase {
         angleMotor.configClosedLoopPeakOutput(0, motionMagicConfigs[9], Constants.TALON_TIMEOUT);
     }
 
+    /**
+     * Sets the module to a desired module state.
+     * @param moduleState A module state to set the module to.
+     */
     public void setModuleState(SwerveModuleState moduleState) {
         moduleState = SwerveModuleState.optimize(moduleState, new Rotation2d(loggerInputs.angle));
         setSpeed(moduleState.speedMetersPerSecond);
         setAngle(moduleState.angle.getRadians());
     }
 
+    /**
+     * Gets the state of a module.
+     * @return The state of a module.
+     */
     public SwerveModuleState getModuleState() {
         return new SwerveModuleState(
                 ticksPerMeter.toUnits(driveMotor.getSelectedSensorVelocity()),
@@ -89,33 +101,61 @@ public class SwerveModule extends SubsystemBase {
         );
     }
 
+    /**
+     * Sets the speed of the drive motor.
+     * @param speed Desired speed. [m/s]
+     */
     public void setSpeed(double speed) {
         loggerInputs.driveMotorVelocitySetpoint = speed;
         driveMotor.set(TalonFXControlMode.Velocity, ticksPerMeter.toTicks100ms(speed));
     }
 
+    /**
+     * Gets the speed of the drive motor.
+     * @return Speed of the drive motor. [m/s]
+     */
     public double getSpeed(){
         return ticksPerMeter.toVelocity(driveMotor.getActiveTrajectoryVelocity());
     }
 
+    /**
+     * Sets the angle of the angle motor.
+     * @param angle Desired angle to set the angle motor to. [rad]
+     */
     public void setAngle(double angle){
         loggerInputs.angleSetpoint = angle;
         Rotation2d error = new Rotation2d(loggerInputs.angleSetpoint).minus(new Rotation2d(loggerInputs.angle));
         angleMotor.set(TalonFXControlMode.MotionMagic, loggerInputs.angleMotorPosition + ticksPerRad.toTicks(error.getRadians()));
     }
 
+    /**
+     * Gets the supply current of both motors combined.
+     * @return Sum of the drive motor supply current and angle motor supply current. [amps]
+     */
     public double getSupplyCurrent() {
         return driveMotor.getSupplyCurrent() + angleMotor.getSupplyCurrent();
     }
 
+    /**
+     * Gets the stator current of both motors combined.
+     * @return Sum of the drive motor stator current and angle motor stator current. [amps]
+     */
     public double getStatorCurrent() {
         return driveMotor.getStatorCurrent() + angleMotor.getStatorCurrent();
     }
 
+    /**
+     * Gets the position of the absolute encoder.
+     * @return Position of the absolute encoder. [sensor ticks]
+     */
     public double getPosition() {
         return encoder.getAbsolutePosition();
     }
 
+    /**
+     * Updates the position of the angle motor with an offset and an absolute encoder.
+     * @param offset The offset to update the angle motor's position. [sensor ticks]
+     */
     public void updateOffset(double offset) {
         angleMotor.setSelectedSensorPosition(
                 ((encoder.getAbsolutePosition() - offset) * 2048) / SwerveConstants.ANGLE_REDUCTION);
