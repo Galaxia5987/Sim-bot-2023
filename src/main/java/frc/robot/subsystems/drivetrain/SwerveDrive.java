@@ -43,6 +43,10 @@ public class SwerveDrive extends SubsystemBase {
         return INSTANCE;
     }
 
+    /**
+     * Updates the offset for the gyro.
+     * @param angle The desired angle. [rad]
+     */
     public void resetGyro(double angle){
         gyroOffset = angle - Math.toRadians(getRawYaw());
         loggerInputs.gyroOffset = gyroOffset;
@@ -52,14 +56,26 @@ public class SwerveDrive extends SubsystemBase {
         resetGyro(0);
     }
 
+    /**
+     * Gets the raw yaw reading from the gyro.
+     * @return Yaw angle reading from gyro. [rad]
+     */
     public double getRawYaw(){
         return Math.toRadians(gyro.getAngle()); //TODO: check if this fixed the issue
     }
 
+    /**
+     * Gets the yaw reading from the gyro with the calculated offset.
+     * @return Yaw angle with offset. [rad]
+     */
     public double getYaw(){
         return getRawYaw() + gyroOffset;
     }
 
+    /**
+     * Sets the module states to the desired module states.
+     * @param desiredModuleStates The desired module states to set the modules to.
+     */
     public void setModuleStates(SwerveModuleState[] desiredModuleStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredModuleStates, SwerveConstants.MAX_X_Y_VELOCITY);
         for (int i = 0; i < modules.length; i++) {
@@ -67,12 +83,21 @@ public class SwerveDrive extends SubsystemBase {
         }
     }
 
+    /**
+     * Updates each module position with an offset and an absolute encoder.
+     * @param offsets Offsets for each of the modules. [sensor ticks]
+     */
     public void updateOffsets(double[] offsets){
         for (int i = 0; i < modules.length; i++) {
             modules[i].updateOffset(offsets[i]);
         }
     }
 
+    /**
+     * Sets the correct module states from desired chassis speeds.
+     * @param chassisSpeeds Desired chassis speeds.
+     * @param fieldOriented Should the drive be field oriented.
+     */
     public void drive(ChassisSpeeds chassisSpeeds, boolean fieldOriented) {
         loggerInputs.desiredSpeeds = Utils.chassisSpeedsToArray(chassisSpeeds);
 
