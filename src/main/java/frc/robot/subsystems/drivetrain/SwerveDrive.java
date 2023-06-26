@@ -115,6 +115,8 @@ public class SwerveDrive extends SubsystemBase {
         loggerInputs.statorCurrent =
                 modules[0].getStatorCurrent()+modules[1].getStatorCurrent()+modules[2].getStatorCurrent()+modules[3].getStatorCurrent();
 
+        loggerInputs.rawYaw = getRawYaw();
+        loggerInputs.yaw = getYaw();
 
         Logger.getInstance().processInputs("SwerveDrive", loggerInputs);
     }

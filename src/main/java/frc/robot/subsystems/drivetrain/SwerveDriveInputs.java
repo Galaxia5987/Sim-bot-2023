@@ -12,4 +12,7 @@ public class SwerveDriveInputs {
 
     public double[] absolutePositions =new double[4];
 
+    public double rawYaw;
+    public double yaw;
+
 }
