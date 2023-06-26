@@ -14,5 +14,6 @@ public class SwerveDriveInputs {
 
     public double rawYaw;
     public double yaw;
+    public double gyroOffset;
 
 }

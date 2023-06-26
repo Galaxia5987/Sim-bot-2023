@@ -45,6 +45,7 @@ public class SwerveDrive extends SubsystemBase {
 
     public void resetGyro(double angle){
         gyroOffset = angle - Math.toRadians(getRawYaw());
+        loggerInputs.gyroOffset = gyroOffset;
     }
 
     public void resetGyro(){
@@ -105,7 +106,7 @@ public class SwerveDrive extends SubsystemBase {
     public void periodic(){
         for (int i=0; i< modules.length; i++){
             currentModuleStates[i] = modules[i].getModuleState();
-//            loggerInputs.currentSpeeds[i] = modules[i].getModuleState().speedMetersPerSecond;
+            loggerInputs.currentSpeeds[i] = modules[i].getSpeed(); //TODO: check if this works
             loggerInputs.absolutePositions[i] = modules[i].getPosition();
         }
 
