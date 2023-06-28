@@ -21,7 +21,8 @@ public class XboxDrive extends CommandBase {
         swerveDrive.drive(
                 -MathUtil.applyDeadband(xboxController.getLeftY(), SwerveConstants.XBOX_DEADBAND),
                 -MathUtil.applyDeadband(xboxController.getLeftX(), SwerveConstants.XBOX_DEADBAND),
-                -MathUtil.applyDeadband(xboxController.getRightX(), SwerveConstants.XBOX_DEADBAND), true
+                -MathUtil.applyDeadband(xboxController.getRightX(), SwerveConstants.XBOX_DEADBAND),
+                true
         );
     }
 }
