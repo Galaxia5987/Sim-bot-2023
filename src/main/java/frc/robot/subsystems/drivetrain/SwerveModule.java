@@ -115,7 +115,7 @@ public class SwerveModule extends SubsystemBase {
      * @return Speed of the drive motor. [m/s]
      */
     public double getSpeed(){
-        return ticksPerMeter.toVelocity(driveMotor.getActiveTrajectoryVelocity());
+        return ticksPerMeter.toVelocity(driveMotor.getSelectedSensorVelocity());
     }
 
     /**
