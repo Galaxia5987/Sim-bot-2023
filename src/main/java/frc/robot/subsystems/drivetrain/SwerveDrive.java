@@ -1,6 +1,7 @@
 package frc.robot.subsystems.drivetrain;
 
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -10,6 +11,7 @@ import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Ports;
 import frc.robot.utils.Utils;
+import org.eclipse.jetty.util.MathUtils;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveDrive extends SubsystemBase {
@@ -48,7 +50,7 @@ public class SwerveDrive extends SubsystemBase {
      * @param angle The desired angle. [rad]
      */
     public void resetGyro(double angle){
-        gyroOffset = angle - Math.toRadians(getRawYaw());
+        gyroOffset = angle - getRawYaw();
         loggerInputs.gyroOffset = gyroOffset;
     }
 
@@ -61,7 +63,7 @@ public class SwerveDrive extends SubsystemBase {
      * @return Yaw angle reading from gyro. [rad]
      */
     public double getRawYaw(){
-        return Math.toRadians(gyro.getAngle()); //TODO: check if this fixed the issue
+        return MathUtil.angleModulus(Math.toRadians(gyro.getAngle())); //TODO: check if this fixed the issue
     }
 
     /**
@@ -101,14 +103,17 @@ public class SwerveDrive extends SubsystemBase {
     public void drive(ChassisSpeeds chassisSpeeds, boolean fieldOriented) {
         loggerInputs.desiredSpeeds = Utils.chassisSpeedsToArray(chassisSpeeds);
 
-        if (fieldOriented){
+//        if (fieldOriented){
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                     chassisSpeeds.vxMetersPerSecond,
                     chassisSpeeds.vyMetersPerSecond,
                     chassisSpeeds.omegaRadiansPerSecond,
                     new Rotation2d(getYaw())
             );
-        }
+            System.out.println("fieldOriented "+chassisSpeeds.toString());
+//        }
+
+        System.out.println("robot oreiented "+chassisSpeeds.toString());
         setModuleStates(kinematics.toSwerveModuleStates(chassisSpeeds));
     }
 
@@ -131,7 +136,7 @@ public class SwerveDrive extends SubsystemBase {
     public void periodic(){
         for (int i=0; i< modules.length; i++){
             currentModuleStates[i] = modules[i].getModuleState();
-            loggerInputs.currentSpeeds[i] = modules[i].getSpeed(); //TODO: check if this works
+//            loggerInputs.currentSpeeds[i] = modules[i].getSpeed(); //TODO: check if this works
             loggerInputs.absolutePositions[i] = modules[i].getPosition();
         }
 
