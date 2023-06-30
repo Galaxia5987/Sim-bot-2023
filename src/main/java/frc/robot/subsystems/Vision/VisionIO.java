@@ -7,22 +7,22 @@ import java.util.Optional;
 
 public interface VisionIO {
 
-    Pose3d getEstimatedPose();
-
     void setPipeLine(int pipeLineIndex);
 
     void updateInputs(VisionInputsAutoLogged inputs);
 
     @AutoLog
     class VisionInputs {
+        double latency = 0;
         boolean hasTargets = false;
         double yaw = 0;
         double pitch = 0;
         double area = 0;
         double targetSkew = 0;
         int targetID = 0;
-        double poseRelativeToTarget = 0;
-        Pose3d estimatedPose = new Pose3d();
+        double[] poseTargetOriented = new double[7];
+        double[] poseFieldOriented = new double[7];
+        double[] estimatedPose = new double[7];
 
     }
 }
