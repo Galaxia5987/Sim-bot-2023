@@ -35,6 +35,9 @@ public class SwerveConstants {
     public static final double DRIVE_kP = 0.1;
     public static final double DRIVE_kI = 0;
     public static final double DRIVE_kD = 0;
+    public static final double OMEGA_kP = 1.8;
+    public static final double OMEGA_kI = 0.0;
+    public static final double OMEGA_kD = 0.0;
 
     public static final double MAX_X_Y_VELOCITY = 6380.0 / 60.0 * //[m/s]
             DRIVE_REDUCTION *
