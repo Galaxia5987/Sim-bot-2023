@@ -60,8 +60,10 @@ public class IOPhotonVision implements VisionIO {
         inputs.targetSkew = target.getSkew();
         inputs.area = target.getArea();
         inputs.latency = 0;
-        inputs.poseTargetOriented = new double[]{getEstimatedPoseTargetOriented().getX(), getEstimatedPoseTargetOriented().getY(), getEstimatedPoseTargetOriented().getZ(), getEstimatedPoseTargetOriented().getRotation().getQuaternion().getX(), getEstimatedPoseTargetOriented().getRotation().getQuaternion().getY(), getEstimatedPoseTargetOriented().getRotation().getQuaternion().getZ(), getEstimatedPoseTargetOriented().getRotation().getQuaternion().getW()};
-        inputs.poseFieldOriented = new double[]{getEstimatedPoseFieldOriented().getX(), getEstimatedPoseFieldOriented().getY(), getEstimatedPoseFieldOriented().getZ(), getEstimatedPoseFieldOriented().getRotation().getQuaternion().getX(), getEstimatedPoseFieldOriented().getRotation().getQuaternion().getY(), getEstimatedPoseFieldOriented().getRotation().getQuaternion().getZ(), getEstimatedPoseFieldOriented().getRotation().getQuaternion().getW()};
+        Pose3d targetOriented = getEstimatedPoseTargetOriented();
+        Pose3d robotOriented = getEstimatedPoseFieldOriented();
+        inputs.poseTargetOriented = new double[]{targetOriented.getX(), targetOriented.getY(), targetOriented.getZ(), targetOriented.getRotation().getQuaternion().getX(), targetOriented.getRotation().getQuaternion().getY(), targetOriented.getRotation().getQuaternion().getZ(), targetOriented.getRotation().getQuaternion().getW()};
+        inputs.poseFieldOriented = new double[]{robotOriented.getX(), robotOriented.getY(), robotOriented.getZ(), robotOriented.getRotation().getQuaternion().getX(), robotOriented.getRotation().getQuaternion().getY(), robotOriented.getRotation().getQuaternion().getZ(), robotOriented.getRotation().getQuaternion().getW()};
 
     }
 }
