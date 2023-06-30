@@ -45,6 +45,7 @@ public class SwerveModule extends SubsystemBase {
         driveMotor.config_kP(0, SwerveConstants.DRIVE_kP, Constants.TALON_TIMEOUT);
         driveMotor.config_kI(0, SwerveConstants.DRIVE_kI, Constants.TALON_TIMEOUT);
         driveMotor.config_kD(0, SwerveConstants.DRIVE_kD, Constants.TALON_TIMEOUT);
+        driveMotor.config_kF(0, SwerveConstants.DRIVE_KF, Constants.TALON_TIMEOUT);
         driveMotor.enableVoltageCompensation(true);
         driveMotor.configVoltageCompSaturation(SwerveConstants.VOLT_COMP_SATURATION);
         driveMotor.configNeutralDeadband(SwerveConstants.NEUTRAL_DEADBAND);
