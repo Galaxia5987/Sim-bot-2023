@@ -32,9 +32,11 @@ public class SwerveConstants {
             REAR_LEFT_MOTION_MAGIC_CONFIGS,
             REAR_RIGHT_MOTION_MAGIC_CONFIGS};
 
-    public static final double DRIVE_kP = 0.1;
-    public static final double DRIVE_kI = 0;
-    public static final double DRIVE_kD = 0;
+    public static final double DRIVE_kP = 0.005;
+    public static final double DRIVE_kI = 0.0;
+    public static final double DRIVE_kD = 0.148;
+    public static final double DRIVE_KF = 0.05;
+
     public static final double OMEGA_kP = 1.8;
     public static final double OMEGA_kI = 0.0;
     public static final double OMEGA_kD = 0.0;
