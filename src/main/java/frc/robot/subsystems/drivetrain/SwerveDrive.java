@@ -133,18 +133,28 @@ public class SwerveDrive extends SubsystemBase {
         drive(chassisSpeeds, fieldOriented);
     }
 
-    public void periodic(){
-        for (int i=0; i< modules.length; i++){
+    public void periodic() {
+        for (int i = 0; i < modules.length; i++) {
             currentModuleStates[i] = modules[i].getModuleState();
-//            loggerInputs.currentSpeeds[i] = modules[i].getSpeed(); //TODO: check if this works
             loggerInputs.absolutePositions[i] = modules[i].getPosition();
         }
 
+        for (int i=0; i<3; i++) {
+            loggerInputs.currentSpeeds[i] =
+                    Utils.chassisSpeedsToArray(
+                    kinematics.toChassisSpeeds(
+                            currentModuleStates[0],
+                            currentModuleStates[1],
+                            currentModuleStates[2],
+                            currentModuleStates[3]
+                    ))[i];
+        }
+
         loggerInputs.supplyCurrent =
-                modules[0].getSupplyCurrent()+modules[1].getSupplyCurrent()+modules[2].getSupplyCurrent()+modules[3].getStatorCurrent();
+                modules[0].getSupplyCurrent() + modules[1].getSupplyCurrent() + modules[2].getSupplyCurrent() + modules[3].getStatorCurrent();
 
         loggerInputs.statorCurrent =
-                modules[0].getStatorCurrent()+modules[1].getStatorCurrent()+modules[2].getStatorCurrent()+modules[3].getStatorCurrent();
+                modules[0].getStatorCurrent() + modules[1].getStatorCurrent() + modules[2].getStatorCurrent() + modules[3].getStatorCurrent();
 
         loggerInputs.rawYaw = getRawYaw();
         loggerInputs.yaw = getYaw();
