@@ -49,33 +49,36 @@ public class SwerveDrive extends SubsystemBase {
      * Updates the offset for the gyro.
      * @param angle The desired angle. [rad]
      */
-    public void resetGyro(double angle){
-        gyroOffset = angle - getRawYaw();
+    public void resetGyro(double angle) {
+        gyroOffset = angle + getRawYaw();
         loggerInputs.gyroOffset = gyroOffset;
     }
 
-    public void resetGyro(){
+    public void resetGyro() {
         resetGyro(0);
     }
 
     /**
      * Gets the raw yaw reading from the gyro.
+     *
      * @return Yaw angle reading from gyro. [rad]
      */
-    public double getRawYaw(){
-        return MathUtil.angleModulus(Math.toRadians(gyro.getAngle())); //TODO: check if this fixed the issue
+    public double getRawYaw() {
+        return -MathUtil.angleModulus(Math.toRadians(gyro.getAngle()));
     }
 
     /**
      * Gets the yaw reading from the gyro with the calculated offset.
+     *
      * @return Yaw angle with offset. [rad]
      */
-    public double getYaw(){
-        return getRawYaw() + gyroOffset;
+    public double getYaw() {
+        return getRawYaw() - gyroOffset;
     }
 
     /**
      * Sets the module states to the desired module states.
+     *
      * @param desiredModuleStates The desired module states to set the modules to.
      */
     public void setModuleStates(SwerveModuleState[] desiredModuleStates) {
