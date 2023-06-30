@@ -38,14 +38,14 @@ public class SwerveDrive extends SubsystemBase {
     private SwerveDrive() {
         for (int i = 0; i < modules.length; i++) {
             modules[i] = new SwerveModule(Ports.SwerveDrive.DRIVE_IDS[i], Ports.SwerveDrive.ANGLE_IDS[i],
-                    Ports.SwerveDrive.ENCODER_IDS[i], SwerveConstants.motionMagicConfigs[i],i+1);
+                    Ports.SwerveDrive.ENCODER_IDS[i], SwerveConstants.motionMagicConfigs[i], i + 1);
         }
         pidController.enableContinuousInput(0, Math.PI*2);
         pidController.setTolerance(Math.toRadians(3));
     }
 
-    public static SwerveDrive getInstance(){
-        if (INSTANCE==null){
+    public static SwerveDrive getInstance() {
+        if (INSTANCE == null) {
             INSTANCE = new SwerveDrive();
         }
         return INSTANCE;
@@ -53,6 +53,7 @@ public class SwerveDrive extends SubsystemBase {
 
     /**
      * Updates the offset for the gyro.
+     *
      * @param angle The desired angle. [rad]
      */
     public void resetGyro(double angle) {
@@ -96,9 +97,10 @@ public class SwerveDrive extends SubsystemBase {
 
     /**
      * Updates each module position with an offset and an absolute encoder.
+     *
      * @param offsets Offsets for each of the modules. [sensor ticks]
      */
-    public void updateOffsets(double[] offsets){
+    public void updateOffsets(double[] offsets) {
         for (int i = 0; i < modules.length; i++) {
             modules[i].updateOffset(offsets[i]);
         }
@@ -106,6 +108,7 @@ public class SwerveDrive extends SubsystemBase {
 
     /**
      * Sets the correct module states from desired chassis speeds.
+     *
      * @param chassisSpeeds Desired chassis speeds.
      * @param fieldOriented Should the drive be field oriented.
      */
