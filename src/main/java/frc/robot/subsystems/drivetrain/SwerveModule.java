@@ -162,6 +162,11 @@ public class SwerveModule extends SubsystemBase {
                 ((encoder.getAbsolutePosition() - offset) * 2048) / SwerveConstants.ANGLE_REDUCTION);
     }
 
+    public void NeutralOutput(){
+        driveMotor.neutralOutput();
+        angleMotor.neutralOutput();
+    }
+
     @Override
     public void periodic() {
         loggerInputs.absolutePosition = encoder.getAbsolutePosition();

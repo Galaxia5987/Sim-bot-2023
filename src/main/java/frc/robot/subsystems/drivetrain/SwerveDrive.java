@@ -113,16 +113,20 @@ public class SwerveDrive extends SubsystemBase {
         loggerInputs.desiredSpeeds = Utils.chassisSpeedsToArray(chassisSpeeds);
 
 //        if (fieldOriented){
-            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    chassisSpeeds.vxMetersPerSecond,
-                    chassisSpeeds.vyMetersPerSecond,
-                    chassisSpeeds.omegaRadiansPerSecond,
-                    new Rotation2d(getYaw())
-            );
-            System.out.println("fieldOriented "+chassisSpeeds.toString());
+        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                chassisSpeeds.vxMetersPerSecond,
+                chassisSpeeds.vyMetersPerSecond,
+                chassisSpeeds.omegaRadiansPerSecond,
+                new Rotation2d(getYaw())
+        );
 //        }
 
-        System.out.println("robot oreiented "+chassisSpeeds.toString());
+        if (chassisSpeeds.equals(new ChassisSpeeds(0, 0, 0))) {
+            for (SwerveModule module : modules) {
+                module.NeutralOutput();
+            }
+        }
+
         setModuleStates(kinematics.toSwerveModuleStates(chassisSpeeds));
     }
 
