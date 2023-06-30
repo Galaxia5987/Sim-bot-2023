@@ -107,6 +107,8 @@ public class SwerveModule extends SubsystemBase {
      * @param speed Desired speed. [m/s]
      */
     public void setSpeed(double speed) {
+        var angleError = new Rotation2d(loggerInputs.angleSetpoint).minus(new Rotation2d(loggerInputs.angle));
+        speed *= angleError.getCos();
         loggerInputs.driveMotorVelocitySetpoint = speed;
         driveMotor.set(TalonFXControlMode.Velocity, ticksPerMeter.toTicks100ms(speed));
     }
