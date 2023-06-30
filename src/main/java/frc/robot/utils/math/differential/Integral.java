@@ -40,6 +40,10 @@ public class Integral {
         lastTimestamp = timestamp;
     }
 
+    public void override(double value) {
+        this.sum = value;
+    }
+
     public double get() {
         return sum;
     }

@@ -9,14 +9,18 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.drivetrain.Drive;
-import frc.robot.subsystems.drivetrain.commands.KeyboardDriveSim;
-import frc.robot.subsystems.drivetrain.commands.XboxDrive;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.drivetrain.SwerveDrive;
+import frc.robot.subsystems.drivetrain.SwerveModule;
+import frc.robot.subsystems.drivetrain.command.XboxDrive;
 
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
 
-    private final Drive drive = Drive.getInstance();
+    private final SwerveDrive swerveDrive = SwerveDrive.getInstance();
+
+    private final XboxController xboxController = new XboxController(0);
+    private final JoystickButton lb = new JoystickButton(xboxController, XboxController.Button.kLeftBumper.value);
 
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -34,12 +38,11 @@ public class RobotContainer {
     }
 
     private void configureDefaultCommands() {
-        drive.setDefaultCommand(
-                new KeyboardDriveSim()
-        );
+        swerveDrive.setDefaultCommand(new XboxDrive(swerveDrive, xboxController));
     }
 
     private void configureButtonBindings() {
+        lb.onTrue(new InstantCommand(swerveDrive::resetGyro));
     }
 
 
@@ -49,17 +52,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new InstantCommand(() -> drive.resetOdometry(new Pose2d(new Translation2d(1.93, 4.96), new Rotation2d()), 0))
-                .andThen(new PPSwerveControllerCommand(
-                        PathPlanner.loadPath("Test", 5, 3),
-                        drive::getCurrentPose,
-                        new PIDController(7, 0, 0),
-                        new PIDController(7, 0, 0),
-                        new PIDController(10, 0, 0),
-                        (speeds) -> drive.drive(speeds, false),
-                        false,
-                        drive
-                ));
+        return null;
     }
-
 }
