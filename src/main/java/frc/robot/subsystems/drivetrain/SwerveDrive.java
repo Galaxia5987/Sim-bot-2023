@@ -2,6 +2,7 @@ package frc.robot.subsystems.drivetrain;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -23,6 +24,9 @@ public class SwerveDrive extends SubsystemBase {
     private SwerveModuleState[] currentModuleStates = new SwerveModuleState[4];
     private SwerveModuleState[] desiredModuleStates = new SwerveModuleState[4];
 
+    private PIDController pidController = new PIDController(SwerveConstants.OMEGA_kP, SwerveConstants.OMEGA_kI, SwerveConstants.OMEGA_kD);
+    private boolean shouldKeepAngle = false;
+
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
             SwerveConstants.wheelPositions[0],
             SwerveConstants.wheelPositions[1],
@@ -36,6 +40,8 @@ public class SwerveDrive extends SubsystemBase {
             modules[i] = new SwerveModule(Ports.SwerveDrive.DRIVE_IDS[i], Ports.SwerveDrive.ANGLE_IDS[i],
                     Ports.SwerveDrive.ENCODER_IDS[i], SwerveConstants.motionMagicConfigs[i],i+1);
         }
+        pidController.enableContinuousInput(0, Math.PI*2);
+        pidController.setTolerance(Math.toRadians(3));
     }
 
     public static SwerveDrive getInstance(){
@@ -128,10 +134,27 @@ public class SwerveDrive extends SubsystemBase {
      * @param omegaOutput percentage of the omega speed
      */
     public void drive(double xOutput, double yOutput, double omegaOutput, boolean fieldOriented) {
+        double angleFF = 0;
+        if (Utils.epsilonEquals(omegaOutput, 0)) {
+            double angle = getRawYaw();
+            if (!shouldKeepAngle && Utils.epsilonEquals(loggerInputs.currentSpeeds[2], 0, 0.1)) {
+                pidController.setSetpoint(angle);
+                shouldKeepAngle = true;
+            }
+            else {
+                angleFF = pidController.calculate(angle);
+            }
+        }
+        else {
+            shouldKeepAngle = false;
+        }
+
+        loggerInputs.angleFF = angleFF;
+        loggerInputs.pidSetpoint = pidController.getSetpoint();
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(
                 SwerveConstants.MAX_X_Y_VELOCITY * xOutput,
                 SwerveConstants.MAX_X_Y_VELOCITY * yOutput,
-                SwerveConstants.MAX_OMEGA_VELOCITY * omegaOutput);
+                SwerveConstants.MAX_OMEGA_VELOCITY * omegaOutput + angleFF);
 
         drive(chassisSpeeds, fieldOriented);
     }
