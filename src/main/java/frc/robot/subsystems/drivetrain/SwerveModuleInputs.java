@@ -21,4 +21,6 @@ public class SwerveModuleInputs {
     public double angleMotorSupplyCurrentOverTime;
     public double angleMotorStatorCurrentOverTime;
     public double angleMotorPosition;
+
+    public double moduleDistance;
 }

@@ -199,7 +199,9 @@ public class SwerveModule extends SubsystemBase {
         loggerInputs.angleMotorPosition = angleMotor.getSelectedSensorPosition();
         loggerInputs.angleMotorVelocity = ticksPerMeter.toVelocity(angleMotor.getSelectedSensorVelocity());
 
-        loggerInputs.angle = normalize(ticksPerRad.toUnits(angleMotor.getSelectedSensorPosition()));
+        loggerInputs.angle = getAngle();
+
+        loggerInputs.moduleDistance = getModulePosition().distanceMeters;
 
         Logger.getInstance().processInputs("module_" + number, loggerInputs);
     }

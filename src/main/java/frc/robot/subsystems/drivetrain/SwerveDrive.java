@@ -167,20 +167,25 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void periodic() {
+
+        loggerInputs.botPose[0] = getBotPose().getX();
+        loggerInputs.botPose[1] = getBotPose().getY();
+        loggerInputs.botPose[2] = getBotPose().getRotation().getRadians();
+
         for (int i = 0; i < modules.length; i++) {
             currentModuleStates[i] = modules[i].getModuleState();
             loggerInputs.absolutePositions[i] = modules[i].getPosition();
         }
 
-        for (int i=0; i<3; i++) {
+        for (int i = 0; i < 3; i++) {
             loggerInputs.currentSpeeds[i] =
                     Utils.chassisSpeedsToArray(
-                    kinematics.toChassisSpeeds(
-                            currentModuleStates[0],
-                            currentModuleStates[1],
-                            currentModuleStates[2],
-                            currentModuleStates[3]
-                    ))[i];
+                            kinematics.toChassisSpeeds(
+                                    currentModuleStates[0],
+                                    currentModuleStates[1],
+                                    currentModuleStates[2],
+                                    currentModuleStates[3]
+                            ))[i];
         }
 
         loggerInputs.supplyCurrent =
