@@ -23,9 +23,9 @@ public class RobotState {
     public void update() {
         //drivePoseEstimator.update(swerveDrive.getCurrentAngle(), driveIOInputs.currentModuleStates); TODO: add to swerve
 
-        var measurement = vision.getEstimatedGlobal1_3d().toPose2d();
-        if (measurement != null) {
-            drivePoseEstimator.addVisionMeasurement(measurement, Timer.getFPGATimestamp());
-        }
+//        var measurement = vision.getEstimatedGlobal1_3d().toPose2d();
+//        if (measurement != null) {
+//            drivePoseEstimator.addVisionMeasurement(measurement, Timer.getFPGATimestamp());
+//        }
     }
 }

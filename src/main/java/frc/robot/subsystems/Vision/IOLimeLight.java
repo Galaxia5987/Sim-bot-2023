@@ -9,19 +9,11 @@ import edu.wpi.first.networktables.*;
 
 public class IOLimeLight implements VisionIO {
 
-    //private final DoubleSubscriber tx = table.getDoubleTopic("tx").subscribe(0.0);
-    //private final DoubleSubscriber ty = table.getDoubleTopic("ty").subscribe(0.0);
-    //private final IntegerSubscriber tv = table.getIntegerTopic("tv").subscribe(0);
-    //private final DoubleSubscriber ts = table.getDoubleTopic("ts").subscribe(0.0);
-    //private final IntegerSubscriber tid = table.getIntegerTopic("tid").subscribe(0);
-    //private final IntegerSubscriber getpipe = table.getIntegerTopic("getpipe").subscribe(0);
-    //private final DoubleArraySubscriber botPose = table.getDoubleArrayTopic("botpose_targetspace").subscribe(new double[6]);
-    //private final DoubleArraySubscriber botPoseFieldOriented = table.getDoubleArrayTopic("botpose").subscribe(new double[6]);
-    private AprilTagFieldLayout fieldLayout;
+    private final AprilTagFieldLayout fieldLayout;
     private final NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
-    public IOLimeLight() {
-        PortForwarder.add(5800, "photonvision.local", 5800);
+    public IOLimeLight(int ip) {
+        PortForwarder.add(5800, "10.59.87." + ip, 5800);
         try {
             fieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
         } catch (Throwable t) {
@@ -38,7 +30,7 @@ public class IOLimeLight implements VisionIO {
     }
 
     @Override
-    public void updateInputs(VisionInputsAutoLogged inputs) {
+    public void updateInputs(VisionInputs inputs) {
         inputs.yaw = table.getDoubleTopic("tx").getEntry(0.0).get();
 
         inputs.pitch = table.getDoubleTopic("ty").getEntry(0.0).get();
@@ -49,18 +41,28 @@ public class IOLimeLight implements VisionIO {
 
         inputs.targetID = (int) table.getDoubleTopic("tid").getEntry(0.0).get();
 
-        inputs.poseFieldOriented = table.getDoubleArrayTopic("botpose_targetspace").subscribe(new double[6]).get();
-
         if((table.getDoubleTopic("tv").subscribe(0.0).get()) == 1){inputs.hasTargets = true;}
         inputs.targetSkew = 0;
 
-        double[] poseFieldArray = table.getDoubleArrayTopic("botpose").getEntry(new double[6]).get();
-        var estimatedPoseField = new Pose3d(poseFieldArray[0], poseFieldArray[1], poseFieldArray[2],new Rotation3d(poseFieldArray[3], poseFieldArray[4], poseFieldArray[5]));
-        inputs.poseFieldOriented = new double[]{estimatedPoseField.getX(), estimatedPoseField.getY(), estimatedPoseField.getZ(), estimatedPoseField.getRotation().getQuaternion().getX(), estimatedPoseField.getRotation().getQuaternion().getY(), estimatedPoseField.getRotation().getQuaternion().getZ(), estimatedPoseField.getRotation().getQuaternion().getW()};
+        double[] targetRobotOriented = table.getDoubleArrayTopic("botpose_targetspace").getEntry(new double[6]).get();
+        inputs.poseTargetOriented3d = new Pose3d(targetRobotOriented[0], targetRobotOriented[1], targetRobotOriented[2], new Rotation3d(targetRobotOriented[3], targetRobotOriented[4], targetRobotOriented[5]));
+        inputs.poseFieldOriented3d = getEstimatedPoseFieldOriented(inputs.poseTargetOriented3d);
 
-        double[] poseTargetArray = table.getDoubleArrayTopic("botpose").getEntry(new double[6]).get();
-        var estimatedPoseTarget = new Pose3d(poseTargetArray[0], poseTargetArray[1], poseTargetArray[2],new Rotation3d(poseTargetArray[3], poseTargetArray[4], poseTargetArray[5]));
-        inputs.poseFieldOriented = new double[]{estimatedPoseTarget.getX(), estimatedPoseTarget.getY(), estimatedPoseTarget.getZ(), estimatedPoseTarget.getRotation().getQuaternion().getX(), estimatedPoseTarget.getRotation().getQuaternion().getY(), estimatedPoseTarget.getRotation().getQuaternion().getZ(), estimatedPoseTarget.getRotation().getQuaternion().getW()};
-
+        inputs.poseTargetOriented = new double[]{
+                inputs.poseTargetOriented3d.getX(),
+                inputs.poseTargetOriented3d.getY(),
+                inputs.poseTargetOriented3d.getZ(),
+                inputs.poseTargetOriented3d.getRotation().getQuaternion().getX(),
+                inputs.poseTargetOriented3d.getRotation().getQuaternion().getY(),
+                inputs.poseTargetOriented3d.getRotation().getQuaternion().getZ(),
+                inputs.poseTargetOriented3d.getRotation().getQuaternion().getW()};
+        inputs.poseFieldOriented = new double[]{
+                inputs.poseFieldOriented3d.getX(),
+                inputs.poseFieldOriented3d.getY(),
+                inputs.poseFieldOriented3d.getZ(),
+                inputs.poseFieldOriented3d.getRotation().getQuaternion().getX(),
+                inputs.poseFieldOriented3d.getRotation().getQuaternion().getY(),
+                inputs.poseFieldOriented3d.getRotation().getQuaternion().getZ(),
+                inputs.poseFieldOriented3d.getRotation().getQuaternion().getW()};
     }
 }

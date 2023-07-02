@@ -14,19 +14,19 @@ import java.io.IOException;
 public class IOPhotonVision implements VisionIO {
 
     private final PhotonCamera photonCamera;
-    PhotonPipelineResult result;
-    PhotonTrackedTarget target;
-    AprilTagFieldLayout fieldLayout;
-    PhotonPoseEstimator photonPoseEstimator;
+    private final PhotonPipelineResult result;
+    private final PhotonTrackedTarget target;
+    private final AprilTagFieldLayout fieldLayout;
+    private final PhotonPoseEstimator photonPoseEstimator;
 
     public IOPhotonVision(PhotonCamera camera) {
-        this.photonCamera = new PhotonCamera("PhotonVision");
-        result = camera.getLatestResult();
+        this.photonCamera = camera;
+        result = photonCamera.getLatestResult();
         target = result.getBestTarget();
         try {
             fieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
             photonPoseEstimator = new PhotonPoseEstimator(fieldLayout, PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY,  //TODO: check strategies
-                    camera, VisionConstants.ROBOT_TO_CAM);
+                    photonCamera, VisionConstants.ROBOT_TO_CAM);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -38,12 +38,6 @@ public class IOPhotonVision implements VisionIO {
         return estimatedPose.map(estimatedRobotPose -> estimatedRobotPose.estimatedPose).orElse(null);
     }
 
-    public Pose3d getEstimatedPoseFieldOriented() {
-        Transform3d transform3d = new Transform3d(getEstimatedPoseTargetOriented().getTranslation(), getEstimatedPoseTargetOriented().getRotation());
-        var estimatedPose = VisionConstants.TARGET_POSITION.plus(transform3d);// Todo: add position variation for all aprilTags ;)
-        return estimatedPose;
-    }
-
 // From Barel 😘:
 // code code code coding the code with some code to fix the code becasue i want code, code code code... all day long - just code!
 
@@ -52,7 +46,7 @@ public class IOPhotonVision implements VisionIO {
     }
 
     @Override
-    public void updateInputs(VisionInputsAutoLogged inputs) {
+    public void updateInputs(VisionInputs inputs) {
         inputs.targetID = target.getFiducialId();
         inputs.hasTargets = result.hasTargets();
         inputs.yaw = target.getYaw();
@@ -60,10 +54,24 @@ public class IOPhotonVision implements VisionIO {
         inputs.targetSkew = target.getSkew();
         inputs.area = target.getArea();
         inputs.latency = 0;
-        Pose3d targetOriented = getEstimatedPoseTargetOriented();
-        Pose3d robotOriented = getEstimatedPoseFieldOriented();
-        inputs.poseTargetOriented = new double[]{targetOriented.getX(), targetOriented.getY(), targetOriented.getZ(), targetOriented.getRotation().getQuaternion().getX(), targetOriented.getRotation().getQuaternion().getY(), targetOriented.getRotation().getQuaternion().getZ(), targetOriented.getRotation().getQuaternion().getW()};
-        inputs.poseFieldOriented = new double[]{robotOriented.getX(), robotOriented.getY(), robotOriented.getZ(), robotOriented.getRotation().getQuaternion().getX(), robotOriented.getRotation().getQuaternion().getY(), robotOriented.getRotation().getQuaternion().getZ(), robotOriented.getRotation().getQuaternion().getW()};
+        inputs.poseTargetOriented3d = getEstimatedPoseTargetOriented();
+        inputs.poseFieldOriented3d = getEstimatedPoseFieldOriented(inputs.poseTargetOriented3d);
+        inputs.poseTargetOriented = new double[]{
+                inputs.poseTargetOriented3d.getX(),
+                inputs.poseTargetOriented3d.getY(),
+                inputs.poseTargetOriented3d.getZ(),
+                inputs.poseTargetOriented3d.getRotation().getQuaternion().getX(),
+                inputs.poseTargetOriented3d.getRotation().getQuaternion().getY(),
+                inputs.poseTargetOriented3d.getRotation().getQuaternion().getZ(),
+                inputs.poseTargetOriented3d.getRotation().getQuaternion().getW()};
+        inputs.poseFieldOriented = new double[]{
+                inputs.poseFieldOriented3d.getX(),
+                inputs.poseFieldOriented3d.getY(),
+                inputs.poseFieldOriented3d.getZ(),
+                inputs.poseFieldOriented3d.getRotation().getQuaternion().getX(),
+                inputs.poseFieldOriented3d.getRotation().getQuaternion().getY(),
+                inputs.poseFieldOriented3d.getRotation().getQuaternion().getZ(),
+                inputs.poseFieldOriented3d.getRotation().getQuaternion().getW()};
 
     }
 }
