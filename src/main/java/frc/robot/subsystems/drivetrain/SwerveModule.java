@@ -139,6 +139,12 @@ public class SwerveModule extends SubsystemBase {
         angleMotor.set(TalonFXControlMode.MotionMagic, loggerInputs.angleMotorPosition + ticksPerRad.toTicks(error.getRadians()));
     }
 
+
+    /**
+     * Normalizes an angle to be between 0 and 2pi.
+     * @param angle Angle to normalize. [rad]
+     * @return Normalized angle. [rad]
+     */
     public static double normalize(double angle) {
         while (angle < 0) {
             angle += (Math.PI*2);
