@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -103,6 +104,17 @@ public class SwerveModule extends SubsystemBase {
     }
 
     /**
+     * Gets the position of the module.
+     * @return Position of the module.
+     */
+    public SwerveModulePosition getModulePosition(){
+        return new SwerveModulePosition(
+                ticksPerMeter.toUnits(driveMotor.getSelectedSensorPosition()),
+                new Rotation2d(getAngle())
+        );
+    }
+
+    /**
      * Sets the speed of the drive motor.
      * @param speed Desired speed. [m/s]
      */
@@ -117,9 +129,16 @@ public class SwerveModule extends SubsystemBase {
      * Gets the speed of the drive motor.
      * @return Speed of the drive motor. [m/s]
      */
-
     public double getSpeed(){
         return ticksPerMeter.toVelocity(driveMotor.getSelectedSensorVelocity());
+    }
+
+    /**
+     * Gets the angle of the angle motor.
+     * @return Angle of the angle motor. [rad]
+     */
+    public double getAngle(){
+        return normalize(ticksPerRad.toUnits(angleMotor.getSelectedSensorPosition()));
     }
 
     /**
@@ -132,6 +151,12 @@ public class SwerveModule extends SubsystemBase {
         angleMotor.set(TalonFXControlMode.MotionMagic, loggerInputs.angleMotorPosition + ticksPerRad.toTicks(error.getRadians()));
     }
 
+
+    /**
+     * Normalizes an angle to be between 0 and 2pi.
+     * @param angle Angle to normalize. [rad]
+     * @return Normalized angle. [rad]
+     */
     public static double normalize(double angle) {
         while (angle < 0) {
             angle += (Math.PI*2);
@@ -199,7 +224,9 @@ public class SwerveModule extends SubsystemBase {
         loggerInputs.angleMotorPosition = angleMotor.getSelectedSensorPosition();
         loggerInputs.angleMotorVelocity = ticksPerMeter.toVelocity(angleMotor.getSelectedSensorVelocity());
 
-        loggerInputs.angle = normalize(ticksPerRad.toUnits(angleMotor.getSelectedSensorPosition()));
+        loggerInputs.angle = getAngle();
+
+        loggerInputs.moduleDistance = getModulePosition().distanceMeters;
 
         Logger.getInstance().processInputs("module_" + number, loggerInputs);
     }

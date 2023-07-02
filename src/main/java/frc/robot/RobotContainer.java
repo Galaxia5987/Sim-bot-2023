@@ -21,6 +21,7 @@ public class RobotContainer {
 
     private final XboxController xboxController = new XboxController(0);
     private final JoystickButton lb = new JoystickButton(xboxController, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton rb = new JoystickButton(xboxController, XboxController.Button.kRightBumper.value);
 
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -43,6 +44,7 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         lb.onTrue(new InstantCommand(swerveDrive::resetGyro));
+        rb.onTrue(new InstantCommand(swerveDrive::resetPose));
     }
 
 
