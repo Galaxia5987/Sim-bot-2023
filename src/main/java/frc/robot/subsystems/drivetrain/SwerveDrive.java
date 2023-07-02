@@ -3,10 +3,9 @@ package frc.robot.subsystems.drivetrain;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -31,7 +30,12 @@ public class SwerveDrive extends SubsystemBase {
             SwerveConstants.wheelPositions[0],
             SwerveConstants.wheelPositions[1],
             SwerveConstants.wheelPositions[2],
-            SwerveConstants.wheelPositions[3]);
+            SwerveConstants.wheelPositions[3]
+    );
+
+    private SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
+
+    private final SwerveDriveOdometry odometry;
 
     private double gyroOffset = 0;
 
@@ -40,8 +44,14 @@ public class SwerveDrive extends SubsystemBase {
             modules[i] = new SwerveModule(Ports.SwerveDrive.DRIVE_IDS[i], Ports.SwerveDrive.ANGLE_IDS[i],
                     Ports.SwerveDrive.ENCODER_IDS[i], SwerveConstants.motionMagicConfigs[i], i + 1);
         }
-        pidController.enableContinuousInput(0, Math.PI*2);
+        pidController.enableContinuousInput(0, Math.PI * 2);
         pidController.setTolerance(Math.toRadians(3));
+
+        updateModulePositions();
+        odometry = new SwerveDriveOdometry(
+                kinematics, new Rotation2d(getYaw()),
+                modulePositions
+        );
     }
 
     public static SwerveDrive getInstance() {
@@ -106,6 +116,20 @@ public class SwerveDrive extends SubsystemBase {
         }
     }
 
+    public void updateModulePositions(){
+        for (int i=0; i< modulePositions.length; i++){
+            modulePositions[i] = modules[i].getModulePosition();
+        }
+    }
+
+    public Pose2d getBotPose(){
+        return odometry.getPoseMeters();
+    }
+
+    public void resetPose(){
+        odometry.resetPosition(new Rotation2d(getYaw()), modulePositions, new Pose2d());
+    }
+
     /**
      * Sets the correct module states from desired chassis speeds.
      *
@@ -147,12 +171,10 @@ public class SwerveDrive extends SubsystemBase {
             if (!shouldKeepAngle && Utils.epsilonEquals(loggerInputs.currentSpeeds[2], 0, 0.1)) {
                 pidController.setSetpoint(angle);
                 shouldKeepAngle = true;
-            }
-            else {
+            } else {
                 angleFF = pidController.calculate(angle);
             }
-        }
-        else {
+        } else {
             shouldKeepAngle = false;
         }
 
@@ -167,6 +189,8 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void periodic() {
+        updateModulePositions();
+        odometry.update(new Rotation2d(getYaw()), modulePositions);
 
         loggerInputs.botPose[0] = getBotPose().getX();
         loggerInputs.botPose[1] = getBotPose().getY();
