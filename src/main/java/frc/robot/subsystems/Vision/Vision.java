@@ -1,128 +1,36 @@
 package frc.robot.subsystems.Vision;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.net.PortForwarder;
+import edu.wpi.first.math.geometry.Quaternion;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.littletonrobotics.junction.AutoLog;
-import org.littletonrobotics.junction.Logger;
-import org.photonvision.EstimatedRobotPose;
-import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonPoseEstimator;
-import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
-
-import java.io.IOException;
-import java.util.Optional;
 
 public class Vision extends SubsystemBase {
-    private final PhotonCamera camera1;
-    private final PhotonCamera camera2;
-    private final PhotonPoseEstimator photonPoseEstimator1;
-    private final PhotonPoseEstimator photonPoseEstimator2;
-    PhotonPipelineResult result1;
-    PhotonPipelineResult result2;
-    PhotonTrackedTarget target1;
-    PhotonTrackedTarget target2;
-    double poseAmbiguity1;
-    double poseAmbiguity2;
-    Transform3d alternateCameraToTarget1;
-    Transform3d alternateCameraToTarget2;
-    private VisionInputsAutoLogged inputs;
+    private final VisionIO.VisionInputs[] visionInputs;
+    private final VisionIO[] io_s;
+    private final Pose3d[] estimatedPoses;
 
-    private Vision() {
-        camera1 = new PhotonCamera("PhotonVision_1");
-        camera2 = new PhotonCamera("PhotonVision_2");
-        PortForwarder.add(5800, "photonvision.local", 5800);
-        AprilTagFieldLayout fieldLayout;
-        try {
-            fieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
-            photonPoseEstimator1 = new PhotonPoseEstimator(fieldLayout,
-                    PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY,  //TODO: check strategies
-                    camera1,
-                    VisionConstants.ROBOT_TO_CAM
-            );
-            photonPoseEstimator2 = new PhotonPoseEstimator(fieldLayout,
-                    PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY,  //TODO: check strategies
-                    camera2,
-                    VisionConstants.ROBOT_TO_CAM
-            );
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    private Vision(VisionIO... io_s) {
+        this.visionInputs = new VisionIO.VisionInputs[io_s.length];
+        this.io_s = io_s;
+        this.estimatedPoses = new Pose3d[this.visionInputs.length];
+        for(int i = 0; i < this.io_s.length; i++){
+           this.estimatedPoses[i] = new Pose3d(new Translation3d(visionInputs[i].poseFieldOriented[0], visionInputs[i].poseFieldOriented[1], visionInputs[i].poseFieldOriented[2]),
+                   new Rotation3d(new Quaternion(visionInputs[i].poseFieldOriented[3], visionInputs[i].poseFieldOriented[4], visionInputs[i].poseFieldOriented[5],visionInputs[i].poseFieldOriented[6])));
         }
-
-        result1 = camera1.getLatestResult();
-        result2 = camera2.getLatestResult();
-        target1 = result1.getBestTarget();
-        target2 = result2.getBestTarget();
-        poseAmbiguity1 = target1.getPoseAmbiguity();
-        poseAmbiguity2 = target2.getPoseAmbiguity();
-        alternateCameraToTarget1 = target1.getAlternateCameraToTarget();
-        alternateCameraToTarget2 = target2.getAlternateCameraToTarget();
     }
 
-    public Optional<EstimatedRobotPose> getEstimatedGlobal1() {
-        return photonPoseEstimator1.update();
-    }
-    public Pose3d getEstimatedGlobal1_3d() {
-        if (getEstimatedGlobal1().isPresent()){
-            return photonPoseEstimator1.update().get().estimatedPose;
+    public void setPipeLine(int... pipeLine) {
+        for (int i = 0; i < this.io_s.length; i++) {
+            io_s[i].setPipeLine(pipeLine[i]);
         }
-        return new Pose3d();
     }
-    public Optional<EstimatedRobotPose> getEstimatedGlobal2() {
-        return photonPoseEstimator2.update();
-    }
-    public Pose3d getEstimatedGlobal2_3d() {
-        if (getEstimatedGlobal1().isPresent()){
-            return photonPoseEstimator1.update().get().estimatedPose;
+
+    @Override
+    public void periodic() {
+        for (int i = 0; i < this.visionInputs.length; i++) {
+            this.io_s[i].updateInputs(this.visionInputs[i]);
         }
-        return new Pose3d();
     }
-
-//    @Override
-//    public void periodic() {
-//        inputs.hasTargets1 = result1.hasTargets();
-//        inputs.hasTargets2 = result2.hasTargets();
-//        inputs.hasTargets1 = result1.hasTargets();
-//        inputs.hasTargets2 = result2.hasTargets();
-//        inputs.yaw1 = target1.getYaw();
-//        inputs.yaw2 = target2.getYaw();
-//        inputs.pitch1 = target1.getPitch();
-//        inputs.pitch2 = target2.getPitch();
-//        inputs.area1 = target1.getArea();
-//        inputs.area2 = target2.getArea();
-//        inputs.skew1 = target1.getSkew();
-//        inputs.skew2 = target2.getSkew();
-//        inputs.targetID_1 = target1.getFiducialId();
-//        inputs.targetID_2 = target2.getFiducialId();
-//        inputs.poseAmbiguity1 = target1.getPoseAmbiguity();
-//        inputs.poseAmbiguity2 = target2.getPoseAmbiguity();
-//        inputs.estimatedRobotPose_1 = photonPoseEstimator1.update().get();
-//        inputs.estimatedRobotPose_2 = photonPoseEstimator2.update().get();
-//    }
-
-//    @AutoLog
-//    public static class VisionInputs {
-//        boolean hasTargets1 = false;
-//        boolean hasTargets2 = false;
-//        double yaw1 = 0;
-//        double yaw2 = 0;
-//        double pitch1 = 0;
-//        double pitch2 = 0;
-//        double area1 = 0;
-//        double area2 = 0;
-//        double skew1 = 0;
-//        double skew2 = 0;
-//        int targetID_1 = 0;
-//        int targetID_2 = 0;
-//        double poseAmbiguity1 = 0;
-//        double poseAmbiguity2 = 0;
-//        EstimatedRobotPose estimatedRobotPose_1 = null;
-//        EstimatedRobotPose estimatedRobotPose_2 = null;
-//
-//    }
 }
