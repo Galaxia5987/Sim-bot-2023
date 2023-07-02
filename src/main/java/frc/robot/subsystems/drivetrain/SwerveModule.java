@@ -117,9 +117,16 @@ public class SwerveModule extends SubsystemBase {
      * Gets the speed of the drive motor.
      * @return Speed of the drive motor. [m/s]
      */
-
     public double getSpeed(){
         return ticksPerMeter.toVelocity(driveMotor.getSelectedSensorVelocity());
+    }
+
+    /**
+     * Gets the angle of the angle motor.
+     * @return Angle of the angle motor. [rad]
+     */
+    public double getAngle(){
+        return normalize(ticksPerRad.toUnits(angleMotor.getSelectedSensorPosition()));
     }
 
     /**
