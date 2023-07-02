@@ -1,6 +1,7 @@
 package frc.robot.subsystems.Vision;
 
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import org.littletonrobotics.junction.AutoLog;
 
 import java.util.Optional;
@@ -9,7 +10,12 @@ public interface VisionIO {
 
     void setPipeLine(int pipeLineIndex);
 
-    void updateInputs(VisionInputsAutoLogged inputs);
+    void updateInputs(VisionInputs inputs);
+
+    default Pose3d getEstimatedPoseFieldOriented(Pose3d poseTargetOriented) {
+        Transform3d transform3d = new Transform3d(poseTargetOriented.getTranslation(), poseTargetOriented.getRotation());
+        return VisionConstants.TARGET_POSITION.plus(transform3d);
+    }
 
     @AutoLog
     class VisionInputs {
@@ -22,7 +28,8 @@ public interface VisionIO {
         int targetID = 0;
         double[] poseTargetOriented = new double[7];
         double[] poseFieldOriented = new double[7];
-        double[] estimatedPose = new double[7];
+        Pose3d poseTargetOriented3d = new Pose3d();
+        Pose3d poseFieldOriented3d = new Pose3d();
 
     }
 }
