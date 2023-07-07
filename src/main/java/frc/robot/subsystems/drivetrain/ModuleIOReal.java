@@ -35,11 +35,11 @@ public class ModuleIOReal implements ModuleIO {
     private Integral angleSupplyChargeUsedCoulomb = new Integral(0, 0);
     private Integral angleStatorChargeUsedCoulomb = new Integral(0, 0);
 
-    public ModuleIOReal(int driveMotorID, int angleMotorId, int encoderID,
+    public ModuleIOReal(int driveMotorID, int angleMotorID, int encoderID,
                         double[] motionMagicConfigs, int number) {
 
         this.driveMotor = new TalonFX(driveMotorID);
-        this.angleMotor = new TalonFX(angleMotorId);
+        this.angleMotor = new TalonFX(angleMotorID);
 
         this.encoder = new DutyCycleEncoder(encoderID);
 
