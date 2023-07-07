@@ -18,6 +18,8 @@ public class SwerveConstants {
     public static final double WHEEL_DIAMETER = 0.1023679821; //[m]
     public static final double DRIVE_REDUCTION = (1 / 2.0) * (22.0 / 24.0) * (15.0 / 45.0);
     public static final double ANGLE_REDUCTION = (14.0 / 72.0) * 0.5;
+    public static final double DriveMotorMomentOfInertia = 0;
+    public static final double AngleMotorMomentOfInertia = 0;
 
     // kP, kI, kD, kF, sCurveStrength, cruiseVelocity, acceleration, allowableError,
     // maxIntegralAccum, peakOutput
