@@ -31,26 +31,26 @@ public interface ModuleIO {
 
     @AutoLog
     class SwerveModuleInputs {
-        public double driveMotorVelocity;
-        public double driveMotorVelocitySetpoint;
-        public double driveMotorSupplyCurrent;
-        public double driveMotorStatorCurrent;
-        public double driveMotorSupplyCurrentOverTime;
-        public double driveMotorStatorCurrentOverTime;
-        public double driveMotorPosition;
-        public double driveMotorAppliedVoltage;
+        public double driveMotorVelocity = 0;
+        public double driveMotorVelocitySetpoint = 0;
+        public double driveMotorSupplyCurrent = 0;
+        public double driveMotorStatorCurrent = 0;
+        public double driveMotorSupplyCurrentOverTime = 0;
+        public double driveMotorStatorCurrentOverTime = 0;
+        public double driveMotorPosition = 0;
+        public double driveMotorAppliedVoltage = 0;
 
-        public double angle;
-        public double angleSetpoint;
-        public double absolutePosition;
-        public double angleMotorVelocity;
-        public double angleMotorSupplyCurrent;
-        public double angleMotorStatorCurrent;
-        public double angleMotorSupplyCurrentOverTime;
-        public double angleMotorStatorCurrentOverTime;
-        public double angleMotorPosition;
-        public double angleMotorAppliedVoltage;
+        public double angle = 0;
+        public double angleSetpoint = 0;
+        public double absolutePosition = 0;
+        public double angleMotorVelocity = 0;
+        public double angleMotorSupplyCurrent = 0;
+        public double angleMotorStatorCurrent = 0;
+        public double angleMotorSupplyCurrentOverTime = 0;
+        public double angleMotorStatorCurrentOverTime = 0;
+        public double angleMotorPosition = 0;
+        public double angleMotorAppliedVoltage = 0;
 
-        public double moduleDistance;
+        public double moduleDistance = 0;
     }
 }
