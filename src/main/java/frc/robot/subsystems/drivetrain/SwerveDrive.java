@@ -22,7 +22,7 @@ public class SwerveDrive extends SubsystemBase {
     private SwerveModuleState[] currentModuleStates = new SwerveModuleState[4];
     private SwerveModuleState[] desiredModuleStates = new SwerveModuleState[4];
 
-    private PIDController pidController = new PIDController(SwerveConstants.OMEGA_kP, SwerveConstants.OMEGA_kI, SwerveConstants.OMEGA_kD);
+    private final PIDController pidController = new PIDController(SwerveConstants.OMEGA_kP, SwerveConstants.OMEGA_kI, SwerveConstants.OMEGA_kD);
     private boolean shouldKeepAngle = false;
 
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
@@ -113,6 +113,7 @@ public class SwerveDrive extends SubsystemBase {
      * @param desiredModuleStates The desired module states to set the modules to.
      */
     public void setModuleStates(SwerveModuleState[] desiredModuleStates) {
+        Logger.getInstance().recordOutput("SwerveDrive/desiredModuleStates", desiredModuleStates);
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredModuleStates, SwerveConstants.MAX_X_Y_VELOCITY);
         for (int i = 0; i < modules.length; i++) {
             modules[i].setModuleState(desiredModuleStates[i]);
@@ -214,6 +215,8 @@ public class SwerveDrive extends SubsystemBase {
             currentModuleStates[i] = modules[i].getModuleState();
             loggerInputs.absolutePositions[i] = modules[i].getPosition();
         }
+
+        Logger.getInstance().recordOutput("SwerveDrive/currentModuleSates", currentModuleStates);
 
         for (int i = 0; i < 3; i++) {
             loggerInputs.currentSpeeds[i] =
