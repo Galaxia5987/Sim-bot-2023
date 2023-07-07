@@ -5,6 +5,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import frc.robot.utils.math.AngleUtil;
 import frc.robot.utils.math.differential.Integral;
 
 public class ModuleIOSim implements ModuleIO{
@@ -53,7 +54,7 @@ public class ModuleIOSim implements ModuleIO{
         inputs.angleMotorAppliedVoltage = angleMotorAppliedVoltage;
         inputs.angleMotorVelocity = angleMotor.getAngularVelocityRadPerSec();
         inputs.angleSetpoint = angleSetpoint;
-        inputs.angle = currentAngle.get();
+        inputs.angle = AngleUtil.normalize(currentAngle.get());
 
         moduleDistance.update(inputs.driveMotorVelocity);
         inputs.moduleDistance = moduleDistance.get();
@@ -62,7 +63,7 @@ public class ModuleIOSim implements ModuleIO{
     @Override
     public void setAngle(double angle) {
         angleSetpoint = angle;
-        angleMotorAppliedVoltage = angleFeedback.calculate(currentAngle.get(), angle);
+        angleMotorAppliedVoltage = angleFeedback.calculate(AngleUtil.normalize(currentAngle.get()), angle);
         angleMotor.setInputVoltage(angleMotorAppliedVoltage);
     }
 
