@@ -26,8 +26,8 @@ public class SwerveModule extends SubsystemBase {
      * @param moduleState A module state to set the module to.
      */
     public void setModuleState(SwerveModuleState moduleState) {
-        currentModuleState = SwerveModuleState.optimize(moduleState, new Rotation2d(loggerInputs.angle));
-        io.setVelocity(currentModuleState.speedMetersPerSecond);
+        moduleState = SwerveModuleState.optimize(moduleState, new Rotation2d(loggerInputs.angle));
+        io.setVelocity(moduleState.speedMetersPerSecond);
         io.setAngle(moduleState.angle.getRadians());
     }
 
