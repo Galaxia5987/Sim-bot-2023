@@ -14,7 +14,7 @@ public class SwerveModule extends SubsystemBase {
 
     private final int number;
 
-    private SwerveModuleState currentModuleState;
+    private SwerveModuleState currentModuleState = new SwerveModuleState();
 
     public SwerveModule(ModuleIO io, int number) {
         this.io = io;
