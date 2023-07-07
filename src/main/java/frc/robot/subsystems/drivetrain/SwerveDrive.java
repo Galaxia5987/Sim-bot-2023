@@ -7,18 +7,17 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Ports;
+import frc.robot.Robot;
 import frc.robot.utils.Utils;
-import org.eclipse.jetty.util.MathUtils;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveDrive extends SubsystemBase {
     private static SwerveDrive INSTANCE = null;
     private SwerveDriveInputsAutoLogged loggerInputs = new SwerveDriveInputsAutoLogged();
 
-    private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+    private final GyroIO gyro;
     private final SwerveModule[] modules = new SwerveModule[4]; //FL, FR, RL, RR
     private SwerveModuleState[] currentModuleStates = new SwerveModuleState[4];
     private SwerveModuleState[] desiredModuleStates = new SwerveModuleState[4];
@@ -37,12 +36,28 @@ public class SwerveDrive extends SubsystemBase {
 
     private final SwerveDriveOdometry odometry;
 
-    private double gyroOffset = 0;
-
     private SwerveDrive() {
-        for (int i = 0; i < modules.length; i++) {
-            modules[i] = new SwerveModule(Ports.SwerveDrive.DRIVE_IDS[i], Ports.SwerveDrive.ANGLE_IDS[i],
-                    Ports.SwerveDrive.ENCODER_IDS[i], SwerveConstants.motionMagicConfigs[i], i + 1);
+        if (Robot.isReal()) {
+            for (int i = 0; i < modules.length; i++) {
+                ModuleIO io = new ModuleIOReal(
+                        Ports.SwerveDrive.DRIVE_IDS[i],
+                        Ports.SwerveDrive.ANGLE_IDS[i],
+                        Ports.SwerveDrive.ENCODER_IDS[i],
+                        SwerveConstants.motionMagicConfigs[i],
+                        i + 1);
+
+                modules[i] = new SwerveModule(io, i + 1);
+            }
+
+            gyro = new GyroIOReal();
+        }
+        else {
+            for (int i = 0; i < modules.length; i++) {
+                ModuleIO io = new ModuleIOSim();
+                modules[i] = new SwerveModule(io, i + 1);
+            }
+
+            gyro = new GyroIOSim();
         }
         pidController.enableContinuousInput(0, Math.PI * 2);
         pidController.setTolerance(Math.toRadians(3));
@@ -67,8 +82,7 @@ public class SwerveDrive extends SubsystemBase {
      * @param angle The desired angle. [rad]
      */
     public void resetGyro(double angle) {
-        gyroOffset = angle + getRawYaw();
-        loggerInputs.gyroOffset = gyroOffset;
+        gyro.resetGyro(angle);
     }
 
     public void resetGyro() {
@@ -81,7 +95,7 @@ public class SwerveDrive extends SubsystemBase {
      * @return Yaw angle reading from gyro. [rad]
      */
     public double getRawYaw() {
-        return -MathUtil.angleModulus(Math.toRadians(gyro.getAngle()));
+        return gyro.getRawYaw();
     }
 
     /**
@@ -90,7 +104,7 @@ public class SwerveDrive extends SubsystemBase {
      * @return Yaw angle with offset. [rad]
      */
     public double getYaw() {
-        return getRawYaw() - gyroOffset;
+       return gyro.getYaw();
     }
 
     /**
@@ -116,17 +130,17 @@ public class SwerveDrive extends SubsystemBase {
         }
     }
 
-    public void updateModulePositions(){
-        for (int i=0; i< modulePositions.length; i++){
+    public void updateModulePositions() {
+        for (int i = 0; i < modulePositions.length; i++) {
             modulePositions[i] = modules[i].getModulePosition();
         }
     }
 
-    public Pose2d getBotPose(){
+    public Pose2d getBotPose() {
         return odometry.getPoseMeters();
     }
 
-    public void resetPose(){
+    public void resetPose() {
         odometry.resetPosition(new Rotation2d(getYaw()), modulePositions, new Pose2d());
     }
 
@@ -150,7 +164,7 @@ public class SwerveDrive extends SubsystemBase {
 
         if (chassisSpeeds.equals(new ChassisSpeeds(0, 0, 0))) {
             for (SwerveModule module : modules) {
-                module.NeutralOutput();
+                module.neutralOutput();
             }
         }
 
@@ -220,6 +234,7 @@ public class SwerveDrive extends SubsystemBase {
 
         loggerInputs.rawYaw = getRawYaw();
         loggerInputs.yaw = getYaw();
+        gyro.updateInputs(loggerInputs);
 
         Logger.getInstance().processInputs("SwerveDrive", loggerInputs);
     }
