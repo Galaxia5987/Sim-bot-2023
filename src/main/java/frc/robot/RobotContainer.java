@@ -47,7 +47,6 @@ public class RobotContainer {
         rb.onTrue(new InstantCommand(swerveDrive::resetPose));
     }
 
-
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *

@@ -23,6 +23,7 @@ public class SwerveModule extends SubsystemBase {
 
     /**
      * Sets the module to a desired module state.
+     *
      * @param moduleState A module state to set the module to.
      */
     public void setModuleState(SwerveModuleState moduleState) {
@@ -33,6 +34,7 @@ public class SwerveModule extends SubsystemBase {
 
     /**
      * Gets the state of a module.
+     *
      * @return The state of a module.
      */
     public SwerveModuleState getModuleState() {
@@ -41,9 +43,10 @@ public class SwerveModule extends SubsystemBase {
 
     /**
      * Gets the position of the module.
+     *
      * @return Position of the module.
      */
-    public SwerveModulePosition getModulePosition(){
+    public SwerveModulePosition getModulePosition() {
         return new SwerveModulePosition(
                 loggerInputs.moduleDistance, new Rotation2d(loggerInputs.angle)
         );
@@ -51,6 +54,7 @@ public class SwerveModule extends SubsystemBase {
 
     /**
      * Gets the stator current of both motors combined.
+     *
      * @return Sum of the drive motor stator current and angle motor stator current. [amps]
      */
     public double getStatorCurrent() {
@@ -59,6 +63,7 @@ public class SwerveModule extends SubsystemBase {
 
     /**
      * Gets the supply current of both motors combined.
+     *
      * @return Sum of the drive motor supply current and angle motor supply current. [amps]
      */
     public double getSupplyCurrent() {
@@ -67,6 +72,7 @@ public class SwerveModule extends SubsystemBase {
 
     /**
      * Gets the position of the absolute encoder.
+     *
      * @return Position of the absolute encoder. [sensor ticks]
      */
     public double getPosition() {
@@ -75,13 +81,14 @@ public class SwerveModule extends SubsystemBase {
 
     /**
      * Updates the position of the angle motor with an offset and an absolute encoder.
+     *
      * @param offset The offset to update the angle motor's position. [sensor ticks]
      */
     public void updateOffset(double offset) {
         io.updateOffset(offset);
     }
 
-    public void neutralOutput(){
+    public void neutralOutput() {
         io.neutralOutput();
     }
 

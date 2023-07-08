@@ -1,5 +1,6 @@
 package frc.robot.subsystems.drivetrain;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -8,7 +9,7 @@ import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import frc.robot.utils.math.AngleUtil;
 import frc.robot.utils.math.differential.Integral;
 
-public class ModuleIOSim implements ModuleIO{
+public class ModuleIOSim implements ModuleIO {
     private final FlywheelSim driveMotor;
     private final FlywheelSim angleMotor;
 
@@ -16,8 +17,8 @@ public class ModuleIOSim implements ModuleIO{
     private final PIDController velocityFeedback;
 
     private double currentVelocity = 0;
-    private double angleMotorAppliedVoltage = 0;
     private double driveMotorAppliedVoltage = 0;
+    private double angleMotorAppliedVoltage = 0;
 
     private double velocitySetpoint = 0;
     private double angleSetpoint = 0;
@@ -25,15 +26,15 @@ public class ModuleIOSim implements ModuleIO{
     private Integral currentAngle = new Integral(0, 0);
     private Integral moduleDistance = new Integral(0, 0);
 
-    public ModuleIOSim(){
+    public ModuleIOSim() {
         driveMotor = new FlywheelSim(
                 DCMotor.getFalcon500(1),
-                1/SwerveConstants.DRIVE_REDUCTION,
+                1 / SwerveConstants.DRIVE_REDUCTION,
                 SwerveConstants.DriveMotorMomentOfInertia);
 
         angleMotor = new FlywheelSim(
                 DCMotor.getFalcon500(1),
-                1/SwerveConstants.ANGLE_REDUCTION,
+                1 / SwerveConstants.ANGLE_REDUCTION,
                 SwerveConstants.AngleMotorMomentOfInertia);
 
         angleFeedback = new PIDController(3.5, 0, 0, 0.02);

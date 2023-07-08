@@ -7,26 +7,26 @@ import org.littletonrobotics.junction.AutoLog;
 public interface ModuleIO {
     void updateInputs(SwerveModuleInputs inputs);
 
-    default double getAngle(){
+    default double getAngle() {
         return 0;
     }
 
     void setAngle(double angle);
 
-    default double getVelocity(){
+    default double getVelocity() {
         return 0;
     }
 
     void setVelocity(double velocity);
 
-    default SwerveModulePosition getModulePosition(){
+    default SwerveModulePosition getModulePosition() {
         return null;
     }
 
-    default void updateOffset(double offset){
+    default void updateOffset(double offset) {
     }
 
-    default void neutralOutput(){
+    default void neutralOutput() {
     }
 
 
@@ -53,6 +53,5 @@ public interface ModuleIO {
         public double angleMotorAppliedVoltage = 0;
 
         public double moduleDistance = 0;
-        public SwerveModuleState moduleState = new SwerveModuleState();
     }
 }

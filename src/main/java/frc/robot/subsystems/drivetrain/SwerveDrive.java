@@ -50,8 +50,7 @@ public class SwerveDrive extends SubsystemBase {
             }
 
             gyro = new GyroIOReal();
-        }
-        else {
+        } else {
             for (int i = 0; i < modules.length; i++) {
                 ModuleIO io = new ModuleIOSim();
                 modules[i] = new SwerveModule(io, i + 1);
@@ -104,7 +103,7 @@ public class SwerveDrive extends SubsystemBase {
      * @return Yaw angle with offset. [rad]
      */
     public double getYaw() {
-       return gyro.getYaw();
+        return gyro.getYaw();
     }
 
     /**
@@ -216,7 +215,6 @@ public class SwerveDrive extends SubsystemBase {
             loggerInputs.absolutePositions[i] = modules[i].getPosition();
         }
 
-        System.out.println(modules[0].getModuleState());
         Logger.getInstance().recordOutput("SwerveDrive/currentModuleSates", currentModuleStates);
 
         for (int i = 0; i < 3; i++) {
