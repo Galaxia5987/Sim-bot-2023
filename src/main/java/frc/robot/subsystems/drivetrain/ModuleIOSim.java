@@ -36,8 +36,8 @@ public class ModuleIOSim implements ModuleIO{
                 1/SwerveConstants.ANGLE_REDUCTION,
                 SwerveConstants.AngleMotorMomentOfInertia);
 
-        angleFeedback = new PIDController(0, 0, 0);
-        velocityFeedback = new PIDController(0, 0, 0);
+        angleFeedback = new PIDController(3.5, 0, 0, 0.02);
+        velocityFeedback = new PIDController(0.5, 0, 0.00, 0.02);
     }
 
     @Override
