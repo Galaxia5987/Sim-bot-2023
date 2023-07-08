@@ -216,6 +216,7 @@ public class SwerveDrive extends SubsystemBase {
             loggerInputs.absolutePositions[i] = modules[i].getPosition();
         }
 
+        System.out.println(modules[0].getModuleState());
         Logger.getInstance().recordOutput("SwerveDrive/currentModuleSates", currentModuleStates);
 
         for (int i = 0; i < 3; i++) {

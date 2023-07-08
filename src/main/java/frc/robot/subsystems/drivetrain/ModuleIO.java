@@ -1,6 +1,7 @@
 package frc.robot.subsystems.drivetrain;
 
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ModuleIO {
@@ -52,5 +53,6 @@ public interface ModuleIO {
         public double angleMotorAppliedVoltage = 0;
 
         public double moduleDistance = 0;
+        public SwerveModuleState moduleState = new SwerveModuleState();
     }
 }
