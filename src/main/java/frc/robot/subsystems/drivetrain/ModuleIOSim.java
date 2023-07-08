@@ -68,10 +68,20 @@ public class ModuleIOSim implements ModuleIO{
     }
 
     @Override
+    public double getAngle() {
+        return currentAngle.get();
+    }
+
+    @Override
     public void setVelocity(double velocity) {
         velocitySetpoint = velocity;
         currentVelocity = driveMotor.getAngularVelocityRadPerSec();
         driveMotorAppliedVoltage = velocityFeedback.calculate(currentVelocity, velocity);
         driveMotor.setInputVoltage(driveMotorAppliedVoltage);
+    }
+
+    @Override
+    public double getVelocity() {
+        return currentVelocity;
     }
 }
