@@ -87,7 +87,13 @@ public class SwerveModule extends SubsystemBase {
 
     @Override
     public void periodic() {
+        currentModuleState = new SwerveModuleState(
+                io.getVelocity(), new Rotation2d(io.getAngle())
+        );
+
         io.updateInputs(loggerInputs);
+
+        Logger.getInstance().recordOutput("SwerveDrive/currentModuleState" + number, currentModuleState);
 
         Logger.getInstance().processInputs("module_" + number, loggerInputs);
     }
