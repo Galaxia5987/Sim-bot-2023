@@ -63,7 +63,7 @@ public class ModuleIOSim implements ModuleIO{
     @Override
     public void setAngle(double angle) {
         angleSetpoint = angle;
-        angleMotorAppliedVoltage = angleFeedback.calculate(AngleUtil.normalize(currentAngle.get()), angle);
+        angleMotorAppliedVoltage = angleFeedback.calculate(MathUtil.angleModulus(currentAngle.get()), angle);
         angleMotor.setInputVoltage(angleMotorAppliedVoltage);
     }
 
