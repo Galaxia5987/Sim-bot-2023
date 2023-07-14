@@ -4,8 +4,6 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import org.littletonrobotics.junction.AutoLog;
 
-import java.util.Optional;
-
 public interface VisionIO {
 
     void setPipeLine(int pipeLineIndex);
