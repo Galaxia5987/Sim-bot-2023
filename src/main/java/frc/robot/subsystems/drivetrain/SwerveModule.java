@@ -53,7 +53,7 @@ public class SwerveModule extends SubsystemBase {
         driveMotor.setNeutralMode(NeutralMode.Brake);
         driveMotor.configSupplyCurrentLimit(SwerveConstants.SUPPLY_CURRENT_LIMIT);
         driveMotor.configStatorCurrentLimit(SwerveConstants.STATOR_CURRENT_LIMIT);
-        driveMotor.setInverted(SwerveConstants.CLOCKWISE);
+        driveMotor.setInverted(SwerveConstants.COUNTER_CLOCKWISE);
 
         angleMotor.enableVoltageCompensation(true);
         angleMotor.configVoltageCompSaturation(SwerveConstants.VOLT_COMP_SATURATION);
