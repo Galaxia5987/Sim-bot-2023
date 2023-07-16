@@ -2,6 +2,9 @@ package frc.robot.subsystems.Vision;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import org.photonvision.SimPhotonCamera;
+import org.photonvision.SimVisionSystem;
+import org.photonvision.SimVisionTarget;
 
 public class VisionConstants {
     public static final double CAMERA_HEIGHT = 0;
