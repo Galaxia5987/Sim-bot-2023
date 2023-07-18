@@ -4,6 +4,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.net.PortForwarder;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
@@ -16,17 +17,24 @@ public class IOPhotonVision implements VisionIO {
     private final PhotonCamera photonCamera;
     private final PhotonPipelineResult result;
     private final PhotonTrackedTarget target;
-    private final AprilTagFieldLayout fieldLayout;
+  //  private final AprilTagFieldLayout fieldLayout;
     private final PhotonPoseEstimator photonPoseEstimator;
+    private static IOPhotonVision INSTANCE;
 
-    public IOPhotonVision(PhotonCamera camera) {
-        this.photonCamera = camera;
+    public IOPhotonVision() {
+        PortForwarder.add(5800, "camera", 5800);
+        AprilTagFieldLayout fieldLayout;
+        photonCamera = new PhotonCamera("Microsoft_LifeCam_HD-3000");
         result = photonCamera.getLatestResult();
         target = result.getBestTarget();
+//        fieldLayout = photonCamera.
         try {
             fieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
-            photonPoseEstimator = new PhotonPoseEstimator(fieldLayout, PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY,  //TODO: check strategies
-                    photonCamera, VisionConstants.ROBOT_TO_CAM);
+            photonPoseEstimator = new PhotonPoseEstimator(fieldLayout,
+                    PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY,  //TODO: check strategies
+                    photonCamera,
+                    VisionConstants.ROBOT_TO_CAM
+            );
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -38,8 +46,13 @@ public class IOPhotonVision implements VisionIO {
         return estimatedPose.map(estimatedRobotPose -> estimatedRobotPose.estimatedPose).orElse(null);
     }
 
-// From Barel 😘:
-// code code code coding the code with some code to fix the code becasue i want code, code code code... all day long - just code!
+
+    public static IOPhotonVision getInstance(){
+        if (INSTANCE == null){
+            INSTANCE = new IOPhotonVision();
+        }
+        return INSTANCE;
+    }
 
     public void setPipeLine(int pipeLineIndex) {
         photonCamera.setPipelineIndex(pipeLineIndex);
