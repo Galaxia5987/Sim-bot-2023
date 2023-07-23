@@ -144,6 +144,14 @@ public class SwerveDrive extends SubsystemBase {
         odometry.resetPosition(new Rotation2d(getYaw()), modulePositions, new Pose2d());
     }
 
+    public boolean encodersConnected(){
+        boolean connected = true;
+        for (int i = 0; i < 4; i++) {
+            connected &= modules[i].encoderConnected();
+        }
+        return connected;
+    }
+
     /**
      * Sets the correct module states from desired chassis speeds.
      *

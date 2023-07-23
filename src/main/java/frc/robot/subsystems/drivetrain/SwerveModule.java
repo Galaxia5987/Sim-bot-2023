@@ -92,6 +92,10 @@ public class SwerveModule extends SubsystemBase {
         io.neutralOutput();
     }
 
+    public boolean encoderConnected(){
+        return io.encoderConnected();
+    }
+
     @Override
     public void periodic() {
         currentModuleState = new SwerveModuleState(

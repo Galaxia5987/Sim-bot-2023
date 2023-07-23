@@ -29,6 +29,9 @@ public interface ModuleIO {
     default void neutralOutput() {
     }
 
+    default boolean encoderConnected(){
+        return false;
+    }
 
     @AutoLog
     class SwerveModuleInputs {
