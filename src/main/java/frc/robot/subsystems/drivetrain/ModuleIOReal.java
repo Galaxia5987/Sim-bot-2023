@@ -24,7 +24,7 @@ public class ModuleIOReal implements ModuleIO {
     private final int number;
 
     private double angleSetpoint;
-    private double angle;
+    private double currentAngle;
     private double angleMotorPosition;
     private double driveMotorVelocitySetpoint;
 
@@ -105,7 +105,7 @@ public class ModuleIOReal implements ModuleIO {
         inputs.angleMotorVelocity = ticksPerMeter.toVelocity(angleMotor.getSelectedSensorVelocity());
 
         inputs.angle = getAngle();
-        angle = inputs.angle;
+        currentAngle = inputs.angle;
 
         inputs.angleSetpoint = angleSetpoint;
 
@@ -120,7 +120,7 @@ public class ModuleIOReal implements ModuleIO {
     @Override
     public void setAngle(double angle) {
         angleSetpoint = AngleUtil.normalize(angle);
-        Rotation2d error = new Rotation2d(angle).minus(new Rotation2d(angle));
+        Rotation2d error = new Rotation2d(angle).minus(new Rotation2d(currentAngle));
         angleMotor.set(TalonFXControlMode.MotionMagic, angleMotorPosition + ticksPerRad.toTicks(error.getRadians()));
     }
 
@@ -131,7 +131,7 @@ public class ModuleIOReal implements ModuleIO {
 
     @Override
     public void setVelocity(double velocity) {
-        var angleError = new Rotation2d(angleSetpoint).minus(new Rotation2d(angle));
+        var angleError = new Rotation2d(angleSetpoint).minus(new Rotation2d(currentAngle));
         velocity *= angleError.getCos();
         driveMotorVelocitySetpoint = velocity;
         driveMotor.set(TalonFXControlMode.Velocity, ticksPerMeter.toTicks100ms(velocity));
@@ -155,5 +155,10 @@ public class ModuleIOReal implements ModuleIO {
     public void neutralOutput() {
         driveMotor.neutralOutput();
         angleMotor.neutralOutput();
+    }
+
+    @Override
+    public boolean encoderConnected() {
+        return encoder.isConnected();
     }
 }
