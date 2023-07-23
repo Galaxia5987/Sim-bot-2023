@@ -54,7 +54,7 @@ public class SwerveModule extends SubsystemBase {
         driveMotor.setNeutralMode(NeutralMode.Brake);
         driveMotor.configSupplyCurrentLimit(SwerveConstants.SUPPLY_CURRENT_LIMIT, Constants.TALON_TIMEOUT);
         driveMotor.configStatorCurrentLimit(SwerveConstants.STATOR_CURRENT_LIMIT, Constants.TALON_TIMEOUT);
-        driveMotor.setInverted(SwerveConstants.COUNTER_CLOCKWISE);
+        driveMotor.setSensorPhase(false);
 
         angleMotor.enableVoltageCompensation(true);
         angleMotor.configVoltageCompSaturation(SwerveConstants.VOLT_COMP_SATURATION, Constants.TALON_TIMEOUT);
@@ -62,6 +62,7 @@ public class SwerveModule extends SubsystemBase {
         angleMotor.setNeutralMode(NeutralMode.Brake);
         angleMotor.configSupplyCurrentLimit(SwerveConstants.SUPPLY_CURRENT_LIMIT, Constants.TALON_TIMEOUT);
         angleMotor.configStatorCurrentLimit(SwerveConstants.STATOR_CURRENT_LIMIT, Constants.TALON_TIMEOUT);
+        angleMotor.setSensorPhase(false);
         angleMotor.setInverted(SwerveConstants.CLOCKWISE);
         configMotionMagic(motionMagicConfigs);
     }
