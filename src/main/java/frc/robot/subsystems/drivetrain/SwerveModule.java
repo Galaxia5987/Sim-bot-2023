@@ -55,6 +55,7 @@ public class SwerveModule extends SubsystemBase {
         driveMotor.configSupplyCurrentLimit(SwerveConstants.SUPPLY_CURRENT_LIMIT, Constants.TALON_TIMEOUT);
         driveMotor.configStatorCurrentLimit(SwerveConstants.STATOR_CURRENT_LIMIT, Constants.TALON_TIMEOUT);
         driveMotor.setSensorPhase(false);
+        driveMotor.setInverted(SwerveConstants.CLOCKWISE);
 
         angleMotor.enableVoltageCompensation(true);
         angleMotor.configVoltageCompSaturation(SwerveConstants.VOLT_COMP_SATURATION, Constants.TALON_TIMEOUT);
