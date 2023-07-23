@@ -106,6 +106,10 @@ public class SwerveModule extends SubsystemBase {
         );
     }
 
+    public boolean encoderConnected() {
+        return encoder.isConnected();
+    }
+
     /**
      * Gets the position of the module.
      * @return Position of the module.

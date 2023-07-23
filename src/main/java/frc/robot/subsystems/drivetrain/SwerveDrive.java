@@ -84,6 +84,14 @@ public class SwerveDrive extends SubsystemBase {
         return -MathUtil.angleModulus(Math.toRadians(gyro.getAngle()));
     }
 
+    public boolean encodersConnected() {
+        boolean connected = true;
+        for (int i = 0; i < 4; i++) {
+            connected &= modules[i].encoderConnected();
+        }
+        return connected;
+    }
+
     /**
      * Gets the yaw reading from the gyro with the calculated offset.
      *
