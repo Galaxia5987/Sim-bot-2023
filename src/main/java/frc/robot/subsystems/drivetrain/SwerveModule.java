@@ -49,19 +49,19 @@ public class SwerveModule extends SubsystemBase {
         driveMotor.config_kD(0, SwerveConstants.DRIVE_kD, Constants.TALON_TIMEOUT);
         driveMotor.config_kF(0, SwerveConstants.DRIVE_KF, Constants.TALON_TIMEOUT);
         driveMotor.enableVoltageCompensation(true);
-        driveMotor.configVoltageCompSaturation(SwerveConstants.VOLT_COMP_SATURATION);
+        driveMotor.configVoltageCompSaturation(SwerveConstants.VOLT_COMP_SATURATION, Constants.TALON_TIMEOUT);
 //        driveMotor.configNeutralDeadband(SwerveConstants.NEUTRAL_DEADBAND);
         driveMotor.setNeutralMode(NeutralMode.Brake);
-        driveMotor.configSupplyCurrentLimit(SwerveConstants.SUPPLY_CURRENT_LIMIT);
-        driveMotor.configStatorCurrentLimit(SwerveConstants.STATOR_CURRENT_LIMIT);
+        driveMotor.configSupplyCurrentLimit(SwerveConstants.SUPPLY_CURRENT_LIMIT, Constants.TALON_TIMEOUT);
+        driveMotor.configStatorCurrentLimit(SwerveConstants.STATOR_CURRENT_LIMIT, Constants.TALON_TIMEOUT);
         driveMotor.setInverted(SwerveConstants.COUNTER_CLOCKWISE);
 
         angleMotor.enableVoltageCompensation(true);
-        angleMotor.configVoltageCompSaturation(SwerveConstants.VOLT_COMP_SATURATION);
-        angleMotor.configNeutralDeadband(SwerveConstants.NEUTRAL_DEADBAND);
+        angleMotor.configVoltageCompSaturation(SwerveConstants.VOLT_COMP_SATURATION, Constants.TALON_TIMEOUT);
+        angleMotor.configNeutralDeadband(SwerveConstants.NEUTRAL_DEADBAND, Constants.TALON_TIMEOUT);
         angleMotor.setNeutralMode(NeutralMode.Brake);
-        angleMotor.configSupplyCurrentLimit(SwerveConstants.SUPPLY_CURRENT_LIMIT);
-        angleMotor.configStatorCurrentLimit(SwerveConstants.STATOR_CURRENT_LIMIT);
+        angleMotor.configSupplyCurrentLimit(SwerveConstants.SUPPLY_CURRENT_LIMIT, Constants.TALON_TIMEOUT);
+        angleMotor.configStatorCurrentLimit(SwerveConstants.STATOR_CURRENT_LIMIT, Constants.TALON_TIMEOUT);
         angleMotor.setInverted(SwerveConstants.CLOCKWISE);
         configMotionMagic(motionMagicConfigs);
     }
@@ -196,7 +196,6 @@ public class SwerveModule extends SubsystemBase {
     public void updateOffset(double offset) {
         angleMotor.setSelectedSensorPosition(
                 ((encoder.getAbsolutePosition() - offset) * 2048) / SwerveConstants.ANGLE_REDUCTION
-
         );
     }
 
