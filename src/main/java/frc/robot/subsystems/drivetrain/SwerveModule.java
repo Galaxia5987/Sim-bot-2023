@@ -141,7 +141,7 @@ public class SwerveModule extends SubsystemBase {
      * @return Angle of the angle motor. [rad]
      */
     public double getAngle(){
-        return MathUtil.angleModulus(ticksPerRad.toUnits(angleMotor.getSelectedSensorPosition()));
+        return normalize(ticksPerRad.toUnits(angleMotor.getSelectedSensorPosition()));
     }
 
     /**
@@ -149,7 +149,7 @@ public class SwerveModule extends SubsystemBase {
      * @param angle Desired angle to set the angle motor to. [rad]
      */
     public void setAngle(double angle){
-        loggerInputs.angleSetpoint = MathUtil.angleModulus(angle);
+        loggerInputs.angleSetpoint = normalize(angle);
         Rotation2d error = new Rotation2d(angle).minus(new Rotation2d(loggerInputs.angle));
         angleMotor.set(TalonFXControlMode.MotionMagic, loggerInputs.angleMotorPosition + ticksPerRad.toTicks(error.getRadians()));
     }
