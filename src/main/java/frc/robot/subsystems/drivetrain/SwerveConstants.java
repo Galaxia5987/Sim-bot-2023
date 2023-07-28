@@ -65,4 +65,20 @@ public class SwerveConstants {
             new Translation2d(robotLength/2, -robotWidth/2),   //FR
             new Translation2d(-robotLength/2, robotWidth/2),  //RL
             new Translation2d(-robotLength/2, -robotWidth/2)}; //RR
+
+    public static final double MAX_VELOCITY_AUTO = 4.0;
+    public static final double MAX_ACCELERATION_AUTO = 2.5;
+
+    public static double AUTO_X_Kp = 3.20;
+    public static double AUTO_X_Ki = 0.0;
+    public static double AUTO_X_Kd = 0.73;
+    public static double AUTO_X_Kf = 0.35;
+    public static double AUTO_Y_Kp = 3.20;
+    public static double AUTO_Y_Ki = 0.0;
+    public static double AUTO_Y_Kd = 0.6;
+    public static double AUTO_Y_Kf = 0.35;
+    public static double AUTO_ROTATION_Kp = 10;
+    public static double AUTO_ROTATION_Ki = 0.0;
+    public static double AUTO_ROTATION_Kd = 0.0;
+    public static double AUTO_ROTATION_Kf = 0.0;
 }
