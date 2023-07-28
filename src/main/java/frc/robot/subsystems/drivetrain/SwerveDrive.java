@@ -148,6 +148,10 @@ public class SwerveDrive extends SubsystemBase {
         odometry.resetPosition(new Rotation2d(getYaw()), modulePositions, new Pose2d());
     }
 
+    public void resetPose(Pose2d pose) {
+        odometry.resetPosition(new Rotation2d(getYaw()), modulePositions, pose);
+    }
+
     public boolean encodersConnected(){
         boolean connected = true;
         for (int i = 0; i < 4; i++) {
