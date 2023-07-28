@@ -8,7 +8,10 @@ import com.pathplanner.lib.server.PathPlannerServer;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Vision.IOPhotonVision;
@@ -19,9 +22,6 @@ import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
-import org.photonvision.EstimatedRobotPose;
-
-import java.util.Optional;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -134,10 +134,14 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        System.out.println(ioPhotonVision);
-        System.out.println(
-                "ok" +
-                ioPhotonVision.getEstimatedPoseTargetOriented());
+        Pose3d TARGET_POSITION = new Pose3d(1, 1.2, 1, new Rotation3d(0, 0, 0));
+
+//        System.out.println(ioPhotonVision);
+//        System.out.println(
+//                TARGET_POSITION
+//        );
+        System.out.println(ioPhotonVision.isResult());
+                ioPhotonVision.getEstimatedPoseTargetOriented();
     }
 
     /**
