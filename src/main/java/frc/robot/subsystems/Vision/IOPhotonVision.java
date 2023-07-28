@@ -3,6 +3,7 @@ package frc.robot.subsystems.Vision;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.net.PortForwarder;
 import org.photonvision.PhotonCamera;
@@ -20,6 +21,7 @@ public class IOPhotonVision implements VisionIO {
   //  private final AprilTagFieldLayout fieldLayout;
     private final PhotonPoseEstimator photonPoseEstimator;
     private static IOPhotonVision INSTANCE;
+
 
     public IOPhotonVision() {
         PortForwarder.add(5800, "camera", 5800);
@@ -40,10 +42,18 @@ public class IOPhotonVision implements VisionIO {
             throw new RuntimeException(e);
         }
     }
-
+//
     public Pose3d getEstimatedPoseTargetOriented() {
         var estimatedPose = photonPoseEstimator.update();
-        return estimatedPose.map(estimatedRobotPose -> estimatedRobotPose.estimatedPose).orElse(null);
+        if (estimatedPose.isPresent()) {
+            System.out.println("ok");
+            return estimatedPose.get().estimatedPose;
+        } else {
+            return null;
+        }
+    }
+    public boolean isResult(){
+        return result.hasTargets();
     }
 
 
