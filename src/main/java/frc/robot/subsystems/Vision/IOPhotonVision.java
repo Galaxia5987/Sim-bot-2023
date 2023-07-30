@@ -3,8 +3,6 @@ package frc.robot.subsystems.Vision;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.net.PortForwarder;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -18,7 +16,7 @@ public class IOPhotonVision implements VisionIO {
     private final PhotonCamera photonCamera;
     private final PhotonPipelineResult result;
     private final PhotonTrackedTarget target;
-  //  private final AprilTagFieldLayout fieldLayout;
+    //  private final AprilTagFieldLayout fieldLayout;
     private final PhotonPoseEstimator photonPoseEstimator;
     private static IOPhotonVision INSTANCE;
 
@@ -26,10 +24,9 @@ public class IOPhotonVision implements VisionIO {
     public IOPhotonVision() {
         PortForwarder.add(5800, "camera", 5800);
         AprilTagFieldLayout fieldLayout;
-        photonCamera = new PhotonCamera("Microsoft_LifeCam_HD-3000");
+        photonCamera = new PhotonCamera("Arducam_OV2311_USB_Camera");
         result = photonCamera.getLatestResult();
         target = result.getBestTarget();
-//        fieldLayout = photonCamera.
         try {
             fieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
             photonPoseEstimator = new PhotonPoseEstimator(fieldLayout,
@@ -37,14 +34,24 @@ public class IOPhotonVision implements VisionIO {
                     photonCamera,
                     VisionConstants.ROBOT_TO_CAM
             );
+            photonPoseEstimator.setReferencePose(VisionConstants.TARGET_POSITION);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-//
+
+    //    public Pose3d getEstimatedPoseTargetOriented() {
+//        var estimatedPose = photonPoseEstimator.update();
+//        if (estimatedPose.isPresent()) {
+//            System.out.println("ok");
+//            return estimatedPose.get().estimatedPose;
+//        } else {
+//            return null;
+//        }
+//    }
     public Pose3d getEstimatedPoseTargetOriented() {
-        var estimatedPose = photonPoseEstimator.update();
+        var estimatedPose = photonPoseEstimator.update(photonCamera.getLatestResult());
         if (estimatedPose.isPresent()) {
             System.out.println("ok");
             return estimatedPose.get().estimatedPose;
@@ -52,13 +59,34 @@ public class IOPhotonVision implements VisionIO {
             return null;
         }
     }
-    public boolean isResult(){
-        return result.hasTargets();
+
+    //    } public List<PhotonTrackedTarget> getEstimatedPoseTargetOriented() {
+//        var estimatedPose = photonPoseEstimator.update();
+//        if (estimatedPose.isPresent()) {
+//            System.out.println("ok");
+//            return estimatedPose.get().targetsUsed;
+//        } else {
+//            return null;
+//        }
+//    }
+    public void isResult() {
+        System.out.println("pose3d x: " + photonPoseEstimator.getRobotToCameraTransform().getX());
+        System.out.println("pose3d y: " + photonPoseEstimator.getRobotToCameraTransform().getY());
+        System.out.println("pose3d z: " + photonPoseEstimator.getRobotToCameraTransform().getZ());
+        System.out.println("pose3d rotation: " + photonPoseEstimator.getRobotToCameraTransform().getRotation());
+        System.out.println("field: " + photonPoseEstimator.getFieldTags());
+        System.out.println("strategy: " + photonPoseEstimator.getPrimaryStrategy());
+        System.out.println("referenced pose: " + photonPoseEstimator.getReferencePose());
     }
 
+// public PhotonPipelineResult isResult(){
+//        PhotonPipelineResult photonPipelineResult = photonCamera.getLatestResult();
+//        return photonPipelineResult;
+//    }
 
-    public static IOPhotonVision getInstance(){
-        if (INSTANCE == null){
+
+    public static IOPhotonVision getInstance() {
+        if (INSTANCE == null) {
             INSTANCE = new IOPhotonVision();
         }
         return INSTANCE;
@@ -77,7 +105,7 @@ public class IOPhotonVision implements VisionIO {
         inputs.targetSkew = target.getSkew();
         inputs.area = target.getArea();
         inputs.latency = 0;
-        inputs.poseTargetOriented3d = getEstimatedPoseTargetOriented();
+//        inputs.poseTargetOriented3d = getEstimatedPoseTargetOriented();
         inputs.poseFieldOriented3d = getEstimatedPoseFieldOriented(inputs.poseTargetOriented3d);
         inputs.poseTargetOriented = new double[]{
                 inputs.poseTargetOriented3d.getX(),
