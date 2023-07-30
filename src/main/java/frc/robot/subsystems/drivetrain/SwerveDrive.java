@@ -196,24 +196,24 @@ public class SwerveDrive extends SubsystemBase {
      */
     public void drive(double xOutput, double yOutput, double omegaOutput, boolean fieldOriented) {
         double angleFF = 0;
-        if (Utils.epsilonEquals(omegaOutput, 0)) {
-            double angle = getRawYaw();
-            if (!shouldKeepAngle && Utils.epsilonEquals(loggerInputs.currentSpeeds[2], 0, 0.1)) {
-                pidController.setSetpoint(angle);
-                shouldKeepAngle = true;
-            } else {
-                angleFF = pidController.calculate(angle);
-            }
-        } else {
-            shouldKeepAngle = false;
-        }
+//        if (Utils.epsilonEquals(omegaOutput, 0)) {
+//            double angle = getRawYaw();
+//            if (!shouldKeepAngle && Utils.epsilonEquals(loggerInputs.currentSpeeds[2], 0, 0.1)) {
+//                pidController.setSetpoint(angle);
+//                shouldKeepAngle = true;
+//            } else {
+//                angleFF = pidController.calculate(angle);
+//            }
+//        } else {
+//            shouldKeepAngle = false;
+//        }
 
         loggerInputs.angleFF = angleFF;
         loggerInputs.pidSetpoint = pidController.getSetpoint();
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(
                 SwerveConstants.MAX_X_Y_VELOCITY * xOutput,
                 SwerveConstants.MAX_X_Y_VELOCITY * yOutput,
-                SwerveConstants.MAX_OMEGA_VELOCITY * omegaOutput + angleFF);
+                SwerveConstants.MAX_OMEGA_VELOCITY * omegaOutput); //removed angleFF
 
         drive(chassisSpeeds, fieldOriented);
     }
