@@ -51,6 +51,7 @@ public class Robot extends LoggedRobot {
 
         if (isReal()) {
             Logger.getInstance().addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+            Logger.getInstance().addDataReceiver(new WPILOGWriter("home/lvuser")); // Publish data to NetworkTables
             new PowerDistribution(1, PowerDistribution.ModuleType.kRev); // Enables power distribution logging
         } else {
             Logger.getInstance().addDataReceiver(new NT4Publisher());
