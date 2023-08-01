@@ -14,6 +14,19 @@ public class Vision extends SubsystemBase {
     private final Pose3d[] estimatedPoses;
     private static Vision INSTANCE;
 
+    private Vision(VisionIO... io_s) {
+        this.visionInputs = new VisionIO.VisionInputs[io_s.length];
+        for (int i = 0; i < visionInputs.length; i++) {
+            visionInputs[i] = new VisionInputsAutoLogged();
+        }
+        this.io_s = io_s;
+        this.estimatedPoses = new Pose3d[this.visionInputs.length];
+        for(int i = 0; i < this.io_s.length; i++){
+            this.estimatedPoses[i] = new Pose3d(new Translation3d(visionInputs[i].poseFieldOriented[0], visionInputs[i].poseFieldOriented[1], visionInputs[i].poseFieldOriented[2]),
+                    new Rotation3d(new Quaternion(visionInputs[i].poseFieldOriented[3], visionInputs[i].poseFieldOriented[4], visionInputs[i].poseFieldOriented[5],visionInputs[i].poseFieldOriented[6])));
+        }
+    }
+
     public static Vision getINSTANCE(){
         if(INSTANCE == null) {
             if (Robot.isReal()) {
@@ -25,23 +38,14 @@ public class Vision extends SubsystemBase {
             }
             else{
                 INSTANCE = new Vision(
-                        new IOPhotonVision(new PhotonCamera("SimCamera_1")),
-                        new IOPhotonVision(new PhotonCamera("SimCamera_2"))
+                        new IOCameraSim("simCam_1"),
+                        new IOCameraSim("simCam_2")
                 );
             }
         }
         return INSTANCE;
     }
 
-    private Vision(VisionIO... io_s) {
-        this.visionInputs = new VisionIO.VisionInputs[io_s.length];
-        this.io_s = io_s;
-        this.estimatedPoses = new Pose3d[this.visionInputs.length];
-        for(int i = 0; i < this.io_s.length; i++){
-           this.estimatedPoses[i] = new Pose3d(new Translation3d(visionInputs[i].poseFieldOriented[0], visionInputs[i].poseFieldOriented[1], visionInputs[i].poseFieldOriented[2]),
-                   new Rotation3d(new Quaternion(visionInputs[i].poseFieldOriented[3], visionInputs[i].poseFieldOriented[4], visionInputs[i].poseFieldOriented[5],visionInputs[i].poseFieldOriented[6])));
-        }
-    }
 
     public void setPipeLine(int... pipeLine) {
         for (int i = 0; i < this.io_s.length; i++) {

@@ -9,6 +9,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.subsystems.Vision.IOCameraSim;
+import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.drivetrain.Drive;
 import frc.robot.subsystems.drivetrain.commands.KeyboardDriveSim;
 import frc.robot.subsystems.drivetrain.commands.XboxDrive;
@@ -16,6 +18,7 @@ public class RobotContainer {
     private static RobotContainer INSTANCE = null;
 
     private final Drive drive = Drive.getInstance();
+    private final Vision vision = Vision.getINSTANCE();
 
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
