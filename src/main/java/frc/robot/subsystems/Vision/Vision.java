@@ -13,6 +13,9 @@ public class Vision extends SubsystemBase {
 
     private Vision(VisionIO... io_s) {
         this.visionInputs = new VisionIO.VisionInputs[io_s.length];
+        for (int i = 0; i <visionInputs.length; i++) {
+            visionInputs[i] = new VisionInputsAutoLogged();
+        }
         this.io_s = io_s;
         this.estimatedPoses = new Pose3d[this.visionInputs.length];
         for(int i = 0; i < this.io_s.length; i++){
