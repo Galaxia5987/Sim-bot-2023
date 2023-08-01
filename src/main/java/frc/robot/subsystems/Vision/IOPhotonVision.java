@@ -51,11 +51,15 @@ public class IOPhotonVision implements VisionIO {
 //        }
 //    }
     public Pose3d getEstimatedPoseTargetOriented() {
-        var estimatedPose = photonPoseEstimator.update(photonCamera.getLatestResult());
-        if (estimatedPose.isPresent()) {
+        PhotonPipelineResult num = photonCamera.getLatestResult();
+        var estimatedPose = photonPoseEstimator.update();
+//        System.out.println("number " + num);
+        if (num.hasTargets()) {
+            System.out.println(num.targets.iterator());
             System.out.println("ok");
             return estimatedPose.get().estimatedPose;
         } else {
+            System.out.println("null");
             return null;
         }
     }
