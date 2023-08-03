@@ -61,6 +61,15 @@ public final class Ports {
         };
     }
 
+    public static class ArmPorts {
+        public static final int SHOULDER_MAIN_MOTOR = 14;
+        public static final int SHOULDER_AUX_MOTOR = 20;
+        public static final int ELBOW_MAIN_MOTOR = 12;
+        public static final int ELBOW_AUX_MOTOR = 10;
+        public static final int SHOULDER_ENCODER = 4;
+        public static final int ELBOW_ENCODER = 2;
+    }
+
     public static class UI {
         public static final int JOYSTICK_TRIGGER = 1;
         public static final int JOYSTICK_TOP_BOTTOM_BUTTON = 2;
