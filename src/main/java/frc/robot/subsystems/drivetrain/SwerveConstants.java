@@ -10,8 +10,8 @@ public class SwerveConstants {
             {0.010979025274475631,0.09040772726019318,0.3332016083300402,0.4627730365693259};
 
     public static final double VOLT_COMP_SATURATION = 12;
-    public static final SupplyCurrentLimitConfiguration SUPPLY_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(true, 50, 0, 0);
-    public static final StatorCurrentLimitConfiguration STATOR_CURRENT_LIMIT = new StatorCurrentLimitConfiguration(true, 50, 0, 0);
+    public static final SupplyCurrentLimitConfiguration SUPPLY_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(true, 35, 0, 0);
+    public static final StatorCurrentLimitConfiguration STATOR_CURRENT_LIMIT = new StatorCurrentLimitConfiguration(true, 35, 0, 0);
 
     public static final double robotWidth = 0.512; //[m]
     public static final double robotLength = 0.67; //[m]

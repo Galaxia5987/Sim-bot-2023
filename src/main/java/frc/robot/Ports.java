@@ -67,7 +67,18 @@ public final class Ports {
         public static final int ELBOW_MAIN_MOTOR = 12;
         public static final int ELBOW_AUX_MOTOR = 10;
         public static final int SHOULDER_ENCODER = 4;
-        public static final int ELBOW_ENCODER = 2;
+        public static final int ELBOW_ENCODER = 1;
+    }
+
+    public static class Gripper {
+        public static final int SOLENOID = 4;
+    }
+
+    public static class Intake {
+        public static final int INTAKE_MOTOR = 17;
+        public static final int ANGLE_MOTOR = 18;
+        public static final boolean POWER_INVERTED = false;
+        public static final boolean ANGLE_INVERTED = false;
     }
 
     public static class UI {
