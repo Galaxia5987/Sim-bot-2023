@@ -19,14 +19,14 @@ public class IOPhotonVision implements VisionIO {
     private final AprilTagFieldLayout fieldLayout;
     private final PhotonPoseEstimator photonPoseEstimator;
 
-    public IOPhotonVision(PhotonCamera camera) {
+    public IOPhotonVision(PhotonCamera camera, int camIndex) {
         this.photonCamera = camera;
         result = photonCamera.getLatestResult();
         target = result.getBestTarget();
         try {
             fieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
             photonPoseEstimator = new PhotonPoseEstimator(fieldLayout, PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY,  //TODO: check strategies
-                    photonCamera, VisionConstants.ROBOT_TO_CAM);
+                    photonCamera, VisionConstants.ROBOT_TO_CAM[camIndex]);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -55,7 +55,7 @@ public class IOPhotonVision implements VisionIO {
         inputs.area = target.getArea();
         inputs.latency = 0;
         inputs.poseTargetOriented3d = getEstimatedPoseTargetOriented();
-        inputs.poseFieldOriented3d = getEstimatedPoseFieldOriented(inputs.poseTargetOriented3d);
+        inputs.poseFieldOriented3d = getEstimatedPoseFieldOriented(inputs.poseTargetOriented3d, inputs.targetID);
         inputs.poseTargetOriented = new double[]{
                 inputs.poseTargetOriented3d.getX(),
                 inputs.poseTargetOriented3d.getY(),

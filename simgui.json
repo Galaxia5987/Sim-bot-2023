@@ -9,6 +9,12 @@
   "NetworkTables": {
     "transitory": {
       "AdvantageKit": {
+        "Vision_0": {
+          "open": true
+        },
+        "Vision_1": {
+          "open": true
+        },
         "open": true
       }
     }

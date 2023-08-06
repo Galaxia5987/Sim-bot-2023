@@ -6,16 +6,17 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.PhotonCamera;
 
 public class Vision extends SubsystemBase {
-    private final VisionIO.VisionInputs[] visionInputs;
+    private final VisionInputsAutoLogged[] visionInputs;
     private final VisionIO[] io_s;
     private final Pose3d[] estimatedPoses;
     private static Vision INSTANCE;
 
     private Vision(VisionIO... io_s) {
-        this.visionInputs = new VisionIO.VisionInputs[io_s.length];
+        this.visionInputs = new VisionInputsAutoLogged[io_s.length];
         for (int i = 0; i < visionInputs.length; i++) {
             visionInputs[i] = new VisionInputsAutoLogged();
         }
@@ -31,15 +32,15 @@ public class Vision extends SubsystemBase {
         if(INSTANCE == null) {
             if (Robot.isReal()) {
                 INSTANCE = new Vision(
-                        new IOPhotonVision(new PhotonCamera("camera_1")),
-                        new IOPhotonVision(new PhotonCamera("camera_2"))
+                        new IOPhotonVision(new PhotonCamera("camera_1"), 0),
+                        new IOPhotonVision(new PhotonCamera("camera_2"), 1)
                 );
 
             }
             else{
                 INSTANCE = new Vision(
-                        new IOCameraSim("simCam_1"),
-                        new IOCameraSim("simCam_2")
+                        new IOCameraSim(0 ,"simCam_1"),
+                        new IOCameraSim(1 , "simCam_2")
                 );
             }
         }
@@ -57,6 +58,7 @@ public class Vision extends SubsystemBase {
     public void periodic() {
         for (int i = 0; i < this.visionInputs.length; i++) {
             this.io_s[i].updateInputs(this.visionInputs[i]);
+            Logger.getInstance().processInputs("Vision_" + (i+1), visionInputs[i]);
         }
     }
 }
