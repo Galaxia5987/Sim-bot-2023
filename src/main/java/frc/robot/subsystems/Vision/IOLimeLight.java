@@ -12,8 +12,8 @@ public class IOLimeLight implements VisionIO {
     private final AprilTagFieldLayout fieldLayout;
     private final NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
-    public IOLimeLight(int ip) {
-        PortForwarder.add(5800, "10.59.87." + ip, 5800);
+    public IOLimeLight(int AprilID) {
+        PortForwarder.add(5800, "10.59.87." + AprilID, 5800);
         try {
             fieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
         } catch (Throwable t) {
@@ -26,7 +26,7 @@ public class IOLimeLight implements VisionIO {
 
     @Override
     public void setPipeLine(int pipeLineIndex) {
-
+        table.getEntry("pipeline").setNumber(pipeLineIndex);
     }
 
     @Override

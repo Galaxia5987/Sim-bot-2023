@@ -17,12 +17,12 @@ public interface VisionIO {
     default Pose3d AprilChooser(int aprilID){
         Pose3d[] poses;
         if (Robot.isReal()){
-            poses = new Pose3d[]{new Pose3d(new Translation3d( 7.24310, -2.93659, 0.46272), new Rotation3d(0,0,180)),new Pose3d(new Translation3d(7.24310, 1.26019, 0.46272), new Rotation3d(0,0,180)), new Pose3d(new Translation3d(7.24310, 0.41621, 0.41621), new Rotation3d(0,0,180)), new Pose3d(new Translation3d(7.90832, 2.74161, 0.695452), new Rotation3d(0,0,180)), new Pose3d(new Translation3d(-7.90832, 2.74161, 0.695452), new Rotation3d()), new Pose3d(new Translation3d(-7.24310, 0.41621, 0.46272), new Rotation3d()), new Pose3d(new Translation3d(-7.24310, 1.26019, 0.46272), new Rotation3d()), new Pose3d(new Translation3d(-7.24310, -2.93659, 0.46272), new Rotation3d()) }; // TODO: change for the tent's field
+            poses = new Pose3d[]{new Pose3d() ,new Pose3d(new Translation3d( 7.24310, -2.93659, 0.46272), new Rotation3d(0,0,180)),new Pose3d(new Translation3d(7.24310, 1.26019, 0.46272), new Rotation3d(0,0,180)), new Pose3d(new Translation3d(7.24310, 0.41621, 0.41621), new Rotation3d(0,0,180)), new Pose3d(new Translation3d(7.90832, 2.74161, 0.695452), new Rotation3d(0,0,180)), new Pose3d(new Translation3d(-7.90832, 2.74161, 0.695452), new Rotation3d()), new Pose3d(new Translation3d(-7.24310, 0.41621, 0.46272), new Rotation3d()), new Pose3d(new Translation3d(-7.24310, 1.26019, 0.46272), new Rotation3d()), new Pose3d(new Translation3d(-7.24310, -2.93659, 0.46272), new Rotation3d()) }; // TODO: change for the tent's field
         }
         else{
-            poses = new Pose3d[]{new Pose3d(new Translation3d( 7.24310, -2.93659, 0.46272), new Rotation3d(0,0,180)),new Pose3d(new Translation3d(7.24310, 1.26019, 0.46272), new Rotation3d(0,0,180)), new Pose3d(new Translation3d(7.24310, 0.41621, 0.41621), new Rotation3d(0,0,180)), new Pose3d(new Translation3d(7.90832, 2.74161, 0.695452), new Rotation3d(0,0,180)), new Pose3d(new Translation3d(-7.90832, 2.74161, 0.695452), new Rotation3d()), new Pose3d(new Translation3d(-7.24310, 0.41621, 0.46272), new Rotation3d()), new Pose3d(new Translation3d(-7.24310, 1.26019, 0.46272), new Rotation3d()), new Pose3d(new Translation3d(-7.24310, -2.93659, 0.46272), new Rotation3d()) };
+            poses = new Pose3d[]{new Pose3d() ,new Pose3d(new Translation3d( 7.24310, -2.93659, 0.46272), new Rotation3d(0,0,180)),new Pose3d(new Translation3d(7.24310, 1.26019, 0.46272), new Rotation3d(0,0,180)), new Pose3d(new Translation3d(7.24310, 0.41621, 0.41621), new Rotation3d(0,0,180)), new Pose3d(new Translation3d(7.90832, 2.74161, 0.695452), new Rotation3d(0,0,180)), new Pose3d(new Translation3d(-7.90832, 2.74161, 0.695452), new Rotation3d()), new Pose3d(new Translation3d(-7.24310, 0.41621, 0.46272), new Rotation3d()), new Pose3d(new Translation3d(-7.24310, 1.26019, 0.46272), new Rotation3d()), new Pose3d(new Translation3d(-7.24310, -2.93659, 0.46272), new Rotation3d()) };
         }
-        return poses[aprilID-1];
+        return poses[aprilID];
     }
 
     default Pose3d getEstimatedPoseFieldOriented(Pose3d poseTargetOriented, int aprilId) {

@@ -3,7 +3,9 @@ package frc.robot.subsystems.Vision;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
@@ -38,7 +40,18 @@ public class IOPhotonVision implements VisionIO {
         return estimatedPose.map(estimatedRobotPose -> estimatedRobotPose.estimatedPose).orElse(null);
     }
 
-// From Barel 😘:
+    @Override
+    public Pose3d getEstimatedPoseFieldOriented(Pose3d poseTargetOriented, int aprilId) {
+        Transform3d transform3d = new Transform3d(poseTargetOriented.getTranslation(), poseTargetOriented.getRotation());
+        return this.AprilChooser(aprilId).plus(transform3d);
+    }
+
+    @Override
+    public Pose3d AprilChooser(int aprilID) {
+        return VisionIO.super.AprilChooser(aprilID).plus(new Transform3d(new Translation3d((16.54)/2, (8.02)/2, 0 ), new Rotation3d()));
+    }
+
+    // From Barel 😘:
 // code code code coding the code with some code to fix the code becasue i want code, code code code... all day long - just code!
 
     public void setPipeLine(int pipeLineIndex) {
