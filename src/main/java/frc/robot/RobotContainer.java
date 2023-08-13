@@ -37,7 +37,7 @@ public class RobotContainer {
 
     private void configureDefaultCommands() {
         drive.setDefaultCommand(
-                new KeyboardDriveSim()
+                new XboxDrive(new XboxController(0))
         );
     }
 

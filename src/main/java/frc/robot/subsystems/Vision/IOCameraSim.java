@@ -2,6 +2,7 @@ package frc.robot.subsystems.Vision;
 
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.networktables.*;
+import frc.robot.subsystems.drivetrain.Drive;
 import org.photonvision.SimVisionSystem;
 
 public class IOCameraSim implements VisionIO {
@@ -16,25 +17,14 @@ public class IOCameraSim implements VisionIO {
     private final IntegerSubscriber targetID;
     private final BooleanSubscriber hasTarget;
     SimVisionSystem simVisionSystem;
-
-    private int camIndex;
+    private final Drive swerveDrive = Drive.getInstance();
 
     public IOCameraSim(int camIndex, String camName) {
-        this.camIndex = camIndex;
         table = NetworkTableInstance.getDefault().getTable("photonvision").getSubTable(camName);
 
         publisherInteger = table.getIntegerTopic("pipelineIndex").publish();
         publisherInteger.setDefault(0);
 
-        targetPose = table.getDoubleArrayTopic("targetPose").subscribe(new double[7]);
-        targetArea = table.getDoubleTopic("targetArea").subscribe(0);
-        latency = table.getDoubleTopic("latencyMillis").subscribe(0);
-        targetPitch = table.getDoubleTopic("targetPitch").subscribe(0);
-        targetYaw = table.getDoubleTopic("targetYaw").subscribe(0);
-        targetSkew = table.getDoubleTopic("targetSkew").subscribe(0);
-        targetID = table.getIntegerTopic("targetID").subscribe(0);
-        hasTarget = table.getBooleanTopic("hasTarget").subscribe(false);
-        this.camIndex = camIndex;
         simVisionSystem = new SimVisionSystem(
                 camName,
                 90.0,
@@ -44,6 +34,14 @@ public class IOCameraSim implements VisionIO {
                 1200,
                 0.0
         );
+        targetPose = table.getDoubleArrayTopic("targetPose").subscribe(new double[7]);
+        targetArea = table.getDoubleTopic("targetArea").subscribe(0);
+        latency = table.getDoubleTopic("latencyMillis").subscribe(0);
+        targetPitch = table.getDoubleTopic("targetPitch").subscribe(0);
+        targetYaw = table.getDoubleTopic("targetYaw").subscribe(0);
+        targetSkew = table.getDoubleTopic("targetSkew").subscribe(0);
+        targetID = table.getIntegerTopic("targetID").subscribe(0);
+        hasTarget = table.getBooleanTopic("hasTarget").subscribe(false);
     }
 
     @Override
@@ -64,8 +62,10 @@ public class IOCameraSim implements VisionIO {
 
     @Override
     public void updateInputs(VisionInputs inputs) {
+        simVisionSystem.processFrame(swerveDrive.getCurrentPose());
         var poseTargetOriented = targetPose.get();
-        var poseTargetOriented3d = new Pose3d(new Translation3d(poseTargetOriented[0], poseTargetOriented[1], poseTargetOriented[2]), new Rotation3d(new Quaternion(poseTargetOriented[3], poseTargetOriented[4], poseTargetOriented[5], poseTargetOriented[6])));
+        var poseTargetOriented3d = new Pose3d(new Translation3d(poseTargetOriented[0], poseTargetOriented[1], 0), new Rotation3d(0,0,poseTargetOriented[2]));
+        //var poseTargetOriented3d = new Pose3d(new Translation3d(poseTargetOriented[0], poseTargetOriented[1], poseTargetOriented[2]), new Rotation3d(new Quaternion(poseTargetOriented[3], poseTargetOriented[4], poseTargetOriented[5], poseTargetOriented[6])));
         var poseFieldOriented3d = getEstimatedPoseFieldOriented(poseTargetOriented3d, inputs.targetID);
         inputs.poseFieldOriented3d = poseFieldOriented3d;
         inputs.poseFieldOriented = new double[]{poseFieldOriented3d.getX(), poseFieldOriented3d.getY(), poseFieldOriented3d.getZ(), poseFieldOriented3d.getRotation().getQuaternion().getX(), poseFieldOriented3d.getRotation().getQuaternion().getY(), poseFieldOriented3d.getRotation().getQuaternion().getZ(), poseFieldOriented3d.getRotation().getQuaternion().getW()};
@@ -79,6 +79,4 @@ public class IOCameraSim implements VisionIO {
         inputs.targetID = (int) targetID.get(); //TODO: find real name for target ID in API
         inputs.hasTargets = hasTarget.get();
     }
-
-
 }
