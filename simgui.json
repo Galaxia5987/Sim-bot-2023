@@ -7,12 +7,21 @@
     }
   },
   "NetworkTables": {
+    "Persistent Values": {
+      "open": false
+    },
+    "Retained Values": {
+      "open": false
+    },
     "transitory": {
       "AdvantageKit": {
         "Vision_0": {
           "open": true
         },
         "Vision_1": {
+          "open": true
+        },
+        "Vision_2": {
           "open": true
         },
         "open": true
