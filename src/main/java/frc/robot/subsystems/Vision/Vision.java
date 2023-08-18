@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu*
 
 public class Vision extends SubsystemBase {
     private final VisionIO.VisionInputs[] visionInputs;
@@ -24,10 +25,16 @@ public class Vision extends SubsystemBase {
         }
     }
 
+
+
     public void setPipeLine(int... pipeLine) {
         for (int i = 0; i < this.io_s.length; i++) {
             io_s[i].setPipeLine(pipeLine[i]);
         }
+
+
+
+
     }
 
     @Override
