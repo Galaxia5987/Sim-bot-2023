@@ -141,7 +141,7 @@ public class Robot extends LoggedRobot {
 //                TARGET_POSITION
 //        );
        // ioPhotonVision.isResult();
-        ioPhotonVision.getEstimatedPoseTargetOriented();
+        ioPhotonVision.getEstimatedPoseTargetOriented().ifPresent(System.out::println);
 //        System.out.println(ioPhotonVision.getEstimatedPoseTargetOriented());
 
     }
