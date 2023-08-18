@@ -10,6 +10,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class IOPhotonVision implements VisionIO {
 
@@ -30,11 +31,11 @@ public class IOPhotonVision implements VisionIO {
         try {
             fieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
             photonPoseEstimator = new PhotonPoseEstimator(fieldLayout,
-                    PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY,  //TODO: check strategies
+                    PhotonPoseEstimator.PoseStrategy.AVERAGE_BEST_TARGETS,  //TODO: check strategies
                     photonCamera,
                     VisionConstants.ROBOT_TO_CAM
             );
-            photonPoseEstimator.setReferencePose(VisionConstants.TARGET_POSITION);
+//            photonPoseEstimator.setReferencePose(VisionConstants.TARGET_POSITION);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -50,18 +51,11 @@ public class IOPhotonVision implements VisionIO {
 //            return null;
 //        }
 //    }
-    public Pose3d getEstimatedPoseTargetOriented() {
+    public Optional<Pose3d> getEstimatedPoseTargetOriented() {
         PhotonPipelineResult num = photonCamera.getLatestResult();
-        var estimatedPose = photonPoseEstimator.update();
-//        System.out.println("number " + num);
-        if (num.hasTargets()) {
-            System.out.println(num.targets.iterator());
-            System.out.println("ok");
-            return estimatedPose.get().estimatedPose;
-        } else {
-            System.out.println("null");
-            return null;
-        }
+        System.out.println(num.targets.size());
+        num.getTargets().forEach(t -> System.out.println("Ambiguity: " + t.getPoseAmbiguity()));
+        return photonPoseEstimator.update(num).map(pose -> pose.estimatedPose);
     }
 
     //    } public List<PhotonTrackedTarget> getEstimatedPoseTargetOriented() {
