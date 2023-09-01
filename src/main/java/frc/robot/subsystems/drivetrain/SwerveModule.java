@@ -8,6 +8,8 @@ import org.littletonrobotics.junction.Logger;
 
 public class SwerveModule extends SubsystemBase {
 
+    public static SwerveModule INSTANCE = null;
+
     private final SwerveModuleInputsAutoLogged loggerInputs = new SwerveModuleInputsAutoLogged();
 
     private final ModuleIO io;
@@ -27,11 +29,18 @@ public class SwerveModule extends SubsystemBase {
      * @param moduleState A module state to set the module to.
      */
     public void setModuleState(SwerveModuleState moduleState) {
-        moduleState = SwerveModuleState.optimize(moduleState, new Rotation2d(loggerInputs.angle));
+//        moduleState = SwerveModuleState.optimize(moduleState, new Rotation2d(loggerInputs.angle));
         io.setVelocity(moduleState.speedMetersPerSecond);
         io.setAngle(moduleState.angle.getRadians());
     }
 
+
+//    public static SwerveModule getInstance(){
+//        if (INSTANCE == null){
+//            INSTANCE = new SwerveModule(INSTANCE.io, 1);
+//        }
+//        return INSTANCE;
+//    }
     /**
      * Gets the state of a module.
      *

@@ -19,7 +19,7 @@ public class SwerveDrive extends SubsystemBase {
 
     private final GyroIO gyro;
     private final SwerveModule[] modules = new SwerveModule[4]; //FL, FR, RL, RR
-    private SwerveModuleState[] currentModuleStates = new SwerveModuleState[4];
+    public SwerveModuleState[] currentModuleStates = new SwerveModuleState[4];
     private SwerveModuleState[] desiredModuleStates = new SwerveModuleState[4];
 
     private final PIDController pidController = new PIDController(SwerveConstants.OMEGA_kP, SwerveConstants.OMEGA_kI, SwerveConstants.OMEGA_kD);
@@ -187,6 +187,10 @@ public class SwerveDrive extends SubsystemBase {
         setModuleStates(kinematics.toSwerveModuleStates(chassisSpeeds));
     }
 
+    public SwerveModule getSwerveModule(int module){
+        return modules[module];
+    }
+
     /**
      * Sets the desired percentage of x, y and omega speeds for the swerve
      *
@@ -220,6 +224,7 @@ public class SwerveDrive extends SubsystemBase {
 
     public void periodic() {
         updateModulePositions();
+
         odometry.update(new Rotation2d(getYaw()), modulePositions);
 
         loggerInputs.botPose[0] = getBotPose().getX();

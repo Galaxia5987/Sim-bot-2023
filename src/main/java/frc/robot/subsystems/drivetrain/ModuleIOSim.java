@@ -82,6 +82,10 @@ public class ModuleIOSim implements ModuleIO {
     }
 
     @Override
+    public void updateOffset(double offset) {
+    }
+
+    @Override
     public double getVelocity() {
         return currentVelocity;
     }

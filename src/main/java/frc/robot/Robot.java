@@ -67,7 +67,7 @@ public class Robot extends LoggedRobot {
         Logger.getInstance().recordOutput("IntakePose", new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(Math.toRadians(-90), Math.toRadians(0), Math.toRadians(0))));
 
 //        while (!SwerveDrive.getInstance().encodersConnected()){ //TODO: change back to other method
-//        SwerveDrive.getInstance().updateOffsets(SwerveConstants.OFFSETS);}
+        SwerveDrive.getInstance().updateOffsets(SwerveConstants.OFFSETS);
     }
 
     /**
@@ -79,6 +79,10 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void robotPeriodic() {
+        if (encoderTrigger.triggered()) {
+            SwerveDrive.getInstance().updateOffsets(SwerveConstants.OFFSETS);
+        }
+
         TunableNumber.INSTANCES.forEach(TunableNumber::update);
         CommandScheduler.getInstance().run();
 

@@ -1,7 +1,6 @@
 package frc.robot.subsystems.drivetrain;
 
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ModuleIO {
@@ -19,11 +18,10 @@ public interface ModuleIO {
 
     void setVelocity(double velocity);
 
+    void updateOffset(double offset);
+
     default SwerveModulePosition getModulePosition() {
         return null;
-    }
-
-    default void updateOffset(double offset) {
     }
 
     default void neutralOutput() {
