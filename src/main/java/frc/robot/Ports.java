@@ -70,6 +70,10 @@ public final class Ports {
         public static final int ELBOW_ENCODER = 1;
     }
 
+    public static class Leds {
+        public static final int LED = 0;
+    }
+
     public static class Gripper {
         public static final int SOLENOID = 4;
     }

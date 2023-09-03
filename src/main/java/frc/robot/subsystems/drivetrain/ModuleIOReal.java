@@ -161,4 +161,10 @@ public class ModuleIOReal implements ModuleIO {
     public boolean encoderConnected() {
         return encoder.isConnected();
     }
+
+    @Override
+    public void checkModule() {
+        driveMotor.set(TalonFXControlMode.PercentOutput, 0.8);
+        angleMotor.set(TalonFXControlMode.PercentOutput, 0.2);
+    }
 }

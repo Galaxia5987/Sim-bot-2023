@@ -32,6 +32,9 @@ public interface ModuleIO {
         return false;
     }
 
+    default void checkModule(){
+    }
+
     @AutoLog
     class SwerveModuleInputs {
         public double driveMotorVelocity = 0;

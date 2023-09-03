@@ -169,6 +169,12 @@ public class SwerveDrive extends SubsystemBase {
         return connected;
     }
 
+    public void checkSwerve(){
+        for (int i = 0; i < 4; i++) {
+            modules[i].checkModule();
+        }
+    }
+
     /**
      * Sets the correct module states from desired chassis speeds.
      *

@@ -159,7 +159,7 @@ public class Arm extends LoggedSubsystem<ArmInputsAutoLogged> {
      * @param angle desired angle. [degrees]
      */
     public void setShoulderJointAngle(double angle, double ffMultiplier) {
-        angle = AngleUtil.normalize(angle);
+        angle = AngleUtil.normalize(Rotation2d.fromDegrees(angle)).getDegrees();
         double error = unitModelShoulder.toTicks(Math.toRadians(angle)) - unitModelShoulder.toTicks(getShoulderJointAngle().getRadians());
         if (shoulderEncoder.isConnected()) {
             shoulderMainMotor.set(TalonFXControlMode.Position, shoulderMainMotor.getSelectedSensorPosition() + error,
@@ -195,7 +195,7 @@ public class Arm extends LoggedSubsystem<ArmInputsAutoLogged> {
      * @param angle desired angle. [degrees]
      */
     public void setElbowJointAngle(double angle, double ffMultiplier) {
-        angle = AngleUtil.normalize(angle);
+        angle = AngleUtil.normalize(Rotation2d.fromDegrees(angle)).getDegrees();
         double error = unitModelElbow.toTicks(Math.toRadians(angle)) - unitModelElbow.toTicks(getElbowJointAngle().getRadians());
         if (elbowEncoder.isConnected()) {
             elbowMainMotor.set(TalonFXControlMode.Position, elbowMainMotor.getSelectedSensorPosition() + error,

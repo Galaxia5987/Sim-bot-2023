@@ -96,6 +96,8 @@ public class SwerveModule extends SubsystemBase {
         return io.encoderConnected();
     }
 
+    public void checkModule(){io.checkModule();}
+
     @Override
     public void periodic() {
         currentModuleState = new SwerveModuleState(
