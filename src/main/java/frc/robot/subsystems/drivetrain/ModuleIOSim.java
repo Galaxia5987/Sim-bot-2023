@@ -2,9 +2,7 @@ package frc.robot.subsystems.drivetrain;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import frc.robot.utils.math.AngleUtil;
 import frc.robot.utils.math.differential.Integral;
@@ -79,10 +77,6 @@ public class ModuleIOSim implements ModuleIO {
         currentVelocity = driveMotor.getAngularVelocityRadPerSec();
         driveMotorAppliedVoltage = velocityFeedback.calculate(currentVelocity, velocity);
         driveMotor.setInputVoltage(driveMotorAppliedVoltage);
-    }
-
-    @Override
-    public void updateOffset(double offset) {
     }
 
     @Override

@@ -18,10 +18,11 @@ public interface ModuleIO {
 
     void setVelocity(double velocity);
 
-    void updateOffset(double offset);
-
     default SwerveModulePosition getModulePosition() {
         return null;
+    }
+
+    default void updateOffset(double offset) {
     }
 
     default void neutralOutput() {

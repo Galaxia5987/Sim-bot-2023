@@ -1,6 +1,5 @@
 package frc.robot.subsystems.drivetrain;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.AutoLog;
 
 @AutoLog
@@ -11,6 +10,9 @@ public class SwerveDriveInputs {
     // x, y, omega
     public double[] currentSpeeds = {0, 0, 0};
     public double[] desiredSpeeds = {0, 0, 0};
+
+    public double linearVelocity = 0;
+    public double acceleration = 0;
 
     public double[] absolutePositions = new double[4];
 

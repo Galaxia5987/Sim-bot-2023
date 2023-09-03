@@ -36,6 +36,7 @@ public class Robot extends LoggedRobot {
     private RobotContainer robotContainer;
     private Command autonomousCommand;
     private BooleanTrigger encoderTrigger = new BooleanTrigger(false, false);
+    private boolean updated = false;
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -65,9 +66,6 @@ public class Robot extends LoggedRobot {
         Logger.getInstance().recordOutput("BottomArmPose", new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(Math.toRadians(0), Math.toRadians(0), Math.toRadians(0))));
         Logger.getInstance().recordOutput("TopArmPose", new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(Math.toRadians(0), Math.toRadians(0), Math.toRadians(0))));
         Logger.getInstance().recordOutput("IntakePose", new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(Math.toRadians(-90), Math.toRadians(0), Math.toRadians(0))));
-
-//        while (!SwerveDrive.getInstance().encodersConnected()){ //TODO: change back to other method
-        SwerveDrive.getInstance().updateOffsets(SwerveConstants.OFFSETS);
     }
 
     /**
@@ -79,14 +77,16 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void robotPeriodic() {
-        if (encoderTrigger.triggered()) {
-            SwerveDrive.getInstance().updateOffsets(SwerveConstants.OFFSETS);
-        }
-
         TunableNumber.INSTANCES.forEach(TunableNumber::update);
         CommandScheduler.getInstance().run();
 
         enabledTrigger.update(isEnabled());
+        encoderTrigger.update(SwerveDrive.getInstance().encodersConnected());
+
+        if (encoderTrigger.triggered()) {
+            SwerveDrive.getInstance().updateOffsets(SwerveConstants.OFFSETS);
+//            updated = true;
+        }
     }
 
     /**

@@ -16,20 +16,17 @@ public class ModuleIOReal implements ModuleIO {
     private final TalonFX driveMotor;
     private final TalonFX angleMotor;
 
-    private DutyCycleEncoder encoder;
+    private final DutyCycleEncoder encoder;
 
     private final double[] motionMagicConfigs;
     private final UnitModel ticksPerRad = new UnitModel(SwerveConstants.TICKS_PER_RADIAN);
     private final UnitModel ticksPerMeter = new UnitModel(SwerveConstants.TICKS_PER_METER);
     private final int number;
 
-
     private double angleSetpoint;
     private double currentAngle;
     private double angleMotorPosition;
     private double driveMotorVelocitySetpoint;
-    private double wheelOffset;
-
 
 
     private Integral driveSupplyChargeUsedCoulomb = new Integral(0, 0);
@@ -48,7 +45,6 @@ public class ModuleIOReal implements ModuleIO {
 
         this.motionMagicConfigs = motionMagicConfigs;
         this.number = number;
-        encoder.setDistancePerRotation(1);
 
         driveMotor.configFactoryDefault(Constants.TALON_TIMEOUT);
         angleMotor.configFactoryDefault(Constants.TALON_TIMEOUT);
@@ -70,8 +66,7 @@ public class ModuleIOReal implements ModuleIO {
         angleMotor.setNeutralMode(NeutralMode.Brake);
         angleMotor.configSupplyCurrentLimit(SwerveConstants.SUPPLY_CURRENT_LIMIT);
         angleMotor.configStatorCurrentLimit(SwerveConstants.STATOR_CURRENT_LIMIT);
-//        angleMotor.setInverted(SwerveConstants.CLOCKWISE);
-        angleMotor.setInverted(SwerveConstants.COUNTER_CLOCKWISE);
+        angleMotor.setInverted(SwerveConstants.CLOCKWISE);
 
         angleMotor.config_kP(0, motionMagicConfigs[0], Constants.TALON_TIMEOUT);
         angleMotor.config_kI(0, motionMagicConfigs[1], Constants.TALON_TIMEOUT);
@@ -89,8 +84,8 @@ public class ModuleIOReal implements ModuleIO {
     public void updateInputs(SwerveModuleInputs inputs) {
         inputs.absolutePosition = encoder.getAbsolutePosition();
 
-        inputs.driveMotorSupplyCurrent = encoder.isConnected() ? 8 : 0; // :)
-        inputs.driveMotorStatorCurrent = encoder.getPositionOffset();
+        inputs.driveMotorSupplyCurrent = driveMotor.getSupplyCurrent();
+        inputs.driveMotorStatorCurrent = driveMotor.getStatorCurrent();
         driveSupplyChargeUsedCoulomb.update(inputs.driveMotorSupplyCurrent);
         inputs.driveMotorSupplyCurrentOverTime = driveSupplyChargeUsedCoulomb.get();
         driveStatorChargeUsedCoulomb.update(inputs.driveMotorStatorCurrent);
@@ -107,9 +102,9 @@ public class ModuleIOReal implements ModuleIO {
         inputs.angleMotorStatorCurrentOverTime = angleStatorChargeUsedCoulomb.get();
         inputs.angleMotorPosition = angleMotor.getSelectedSensorPosition();
         angleMotorPosition = inputs.angleMotorPosition;
-        inputs.angleMotorVelocity = wheelOffset;
+        inputs.angleMotorVelocity = ticksPerMeter.toVelocity(angleMotor.getSelectedSensorVelocity());
 
-        inputs.angle = getAngle() - AngleUtil.normalize(ticksPerRad.toUnits(wheelOffset));
+        inputs.angle = getAngle();
         currentAngle = inputs.angle;
 
         inputs.angleSetpoint = angleSetpoint;
@@ -150,10 +145,10 @@ public class ModuleIOReal implements ModuleIO {
         );
     }
 
-
+    @Override
     public void updateOffset(double offset) {
-         wheelOffset = (((-encoder.getAbsolutePosition() - offset) * 2048) / SwerveConstants.ANGLE_REDUCTION);
-//         wheelOffset = (((encoder.getAbsolutePosition() - offset) * 2048) / SwerveConstants.ANGLE_REDUCTION);
+        angleMotor.setSelectedSensorPosition(
+                ((encoder.getAbsolutePosition() - offset) * 2048) / SwerveConstants.ANGLE_REDUCTION);
     }
 
     @Override

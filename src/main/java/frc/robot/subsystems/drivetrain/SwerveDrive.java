@@ -1,17 +1,17 @@
 package frc.robot.subsystems.drivetrain;
 
-import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.*;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Ports;
 import frc.robot.Robot;
 import frc.robot.utils.Utils;
+import frc.robot.utils.math.differential.Derivative;
 import org.littletonrobotics.junction.Logger;
+
 
 public class SwerveDrive extends SubsystemBase {
     private static SwerveDrive INSTANCE = null;
@@ -19,11 +19,16 @@ public class SwerveDrive extends SubsystemBase {
 
     private final GyroIO gyro;
     private final SwerveModule[] modules = new SwerveModule[4]; //FL, FR, RL, RR
-    public SwerveModuleState[] currentModuleStates = new SwerveModuleState[4];
+    private SwerveModuleState[] currentModuleStates = new SwerveModuleState[4];
     private SwerveModuleState[] desiredModuleStates = new SwerveModuleState[4];
 
     private final PIDController pidController = new PIDController(SwerveConstants.OMEGA_kP, SwerveConstants.OMEGA_kI, SwerveConstants.OMEGA_kD);
     private boolean shouldKeepAngle = false;
+
+    private Derivative acceleration = new Derivative(0, 0);
+    private final LinearFilter accelFilter = LinearFilter.movingAverage(15);
+
+    private double linearVelocity;
 
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
             SwerveConstants.wheelPositions[0],
@@ -140,8 +145,12 @@ public class SwerveDrive extends SubsystemBase {
         return odometry.getPoseMeters();
     }
 
-    public SwerveDriveKinematics getKinematics(){
+    public SwerveDriveKinematics getKinematics() {
         return kinematics;
+    }
+
+    public double getVelocity(){
+        return linearVelocity;
     }
 
     public void resetPose() {
@@ -152,7 +161,7 @@ public class SwerveDrive extends SubsystemBase {
         odometry.resetPosition(new Rotation2d(getYaw()), modulePositions, pose);
     }
 
-    public boolean encodersConnected(){
+    public boolean encodersConnected() {
         boolean connected = true;
         for (int i = 0; i < 4; i++) {
             connected &= modules[i].encoderConnected();
@@ -166,16 +175,19 @@ public class SwerveDrive extends SubsystemBase {
      * @param chassisSpeeds Desired chassis speeds.
      * @param fieldOriented Should the drive be field oriented.
      */
-    public void drive(ChassisSpeeds chassisSpeeds, boolean fieldOriented) {
+    public void drive(ChassisSpeeds chassisSpeeds, boolean fieldOriented) { //TODO: check if field oriented option works
         loggerInputs.desiredSpeeds = Utils.chassisSpeedsToArray(chassisSpeeds);
 
-//        if (fieldOriented){
-        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                chassisSpeeds.vxMetersPerSecond,
-                chassisSpeeds.vyMetersPerSecond,
-                chassisSpeeds.omegaRadiansPerSecond,
-                new Rotation2d(getYaw())
-        );
+//        if (!fieldOriented){
+//            chassisSpeeds = chassisSpeeds;
+//        }
+//        else {
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                    chassisSpeeds.vxMetersPerSecond,
+                    chassisSpeeds.vyMetersPerSecond,
+                    chassisSpeeds.omegaRadiansPerSecond,
+                    new Rotation2d(getYaw())
+            );
 //        }
 
         if (chassisSpeeds.equals(new ChassisSpeeds(0, 0, 0))) {
@@ -185,10 +197,6 @@ public class SwerveDrive extends SubsystemBase {
         }
 
         setModuleStates(kinematics.toSwerveModuleStates(chassisSpeeds));
-    }
-
-    public SwerveModule getSwerveModule(int module){
-        return modules[module];
     }
 
     /**
@@ -224,7 +232,6 @@ public class SwerveDrive extends SubsystemBase {
 
     public void periodic() {
         updateModulePositions();
-
         odometry.update(new Rotation2d(getYaw()), modulePositions);
 
         loggerInputs.botPose[0] = getBotPose().getX();
@@ -248,6 +255,12 @@ public class SwerveDrive extends SubsystemBase {
                                     currentModuleStates[3]
                             ))[i];
         }
+
+        loggerInputs.linearVelocity = Math.hypot(loggerInputs.currentSpeeds[0], loggerInputs.currentSpeeds[1]);
+        linearVelocity = loggerInputs.linearVelocity;
+
+        acceleration.update(loggerInputs.linearVelocity);
+        loggerInputs.acceleration = accelFilter.calculate(acceleration.get());
 
         loggerInputs.supplyCurrent =
                 modules[0].getSupplyCurrent() + modules[1].getSupplyCurrent() + modules[2].getSupplyCurrent() + modules[3].getStatorCurrent();
