@@ -14,19 +14,12 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.commands.ArmXboxControl;
-import frc.robot.subsystems.drivetrain.SwerveDrive;
-import frc.robot.subsystems.drivetrain.SwerveModule;
-import frc.robot.subsystems.drivetrain.command.XboxDrive;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.commands.HoldIntakeInPlace;
-import frc.robot.subsystems.intake.commands.PickUpCubeTeleop;
-import frc.robot.subsystems.intake.commands.ReturnIntake;
 
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
 
-    private final SwerveDrive swerveDrive = SwerveDrive.getInstance();
     private final Arm arm = Arm.getInstance();
     private final Gripper gripper = Gripper.getInstance();
     private final Intake intake = Intake.getInstance();
@@ -54,12 +47,10 @@ public class RobotContainer {
     }
 
     private void configureDefaultCommands() {
-        swerveDrive.setDefaultCommand(new XboxDrive(swerveDrive, driverController));
         arm.setDefaultCommand(new ArmXboxControl(operatorController));
     }
 
     private void configureButtonBindings() {
-        lb.onTrue(new InstantCommand(swerveDrive::resetGyro));
         rb.onTrue(new InstantCommand(gripper::toggle));
 
         rt.whileTrue(new FunctionalCommand(() -> {},
