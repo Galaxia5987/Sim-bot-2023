@@ -6,12 +6,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
 //import frc.robot.subsystems.drivetrain.command.JoystickDrive;
+import frc.robot.subsystems.drivetrain.SwerveModule;
 import frc.robot.subsystems.drivetrain.command.JoystickDrive;
+import frc.robot.subsystems.gripper.Gripper;
+import frc.robot.subsystems.intake.Intake;
 
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
+    private final SwerveDrive swerveDrive = SwerveDrive.getInstance();
 
     private final Arm arm = Arm.getInstance();
     private final Gripper gripper = Gripper.getInstance();
@@ -24,10 +30,6 @@ public class RobotContainer {
     private final JoystickButton lb = new JoystickButton(xboxController, XboxController.Button.kLeftBumper.value);
     private final JoystickButton rb = new JoystickButton(xboxController, XboxController.Button.kRightBumper.value);
     private final JoystickButton leftJoystickTrigger = new JoystickButton(leftJoystick, Joystick.ButtonType.kTrigger.value);
-
-    private final JoystickButton lb = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton rb = new JoystickButton(operatorController, XboxController.Button.kRightBumper.value);
-    private final Trigger rt = new Trigger(() -> operatorController.getRightTriggerAxis() > 0.2);
 
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
