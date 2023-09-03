@@ -1,48 +1,59 @@
 package frc.robot.subsystems.drivetrain;
 
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ModuleIO {
+    void updateInputs(SwerveModuleInputs inputs);
 
-    default void updateInputs(ModuleInputs inputs) {
+    default double getAngle() {
+        return 0;
     }
 
-    default void setAngle(double angleRads) {
+    void setAngle(double angle);
+
+    default double getVelocity() {
+        return 0;
     }
 
-    default void setDriveVoltage(double voltage) {
+    void setVelocity(double velocity);
+
+    default SwerveModulePosition getModulePosition() {
+        return null;
     }
 
-    default void configMotionMagic(double[] motionMagicConfigs) {
+    default void updateOffset(double offset) {
     }
 
-    default boolean encoderJustConnected() {
+    default void neutralOutput() {
+    }
+
+    default boolean encoderConnected(){
         return false;
-    }
-
-    default boolean initializedAngleFalcon() {
-        return false;
-    }
-
-    default void resetAngle() {
     }
 
     @AutoLog
-    class ModuleInputs {
-        public double angleRads = 0;
-        public double setpointAngleRads = 0;
-        public double encoderAngleRads = 0;
-        public boolean encoderConnected = false;
-        public double appliedAngleVoltage = 0;
-        public double appliedAngleCurrent = 0;
+    class SwerveModuleInputs {
+        public double driveMotorVelocity = 0;
+        public double driveMotorVelocitySetpoint = 0;
+        public double driveMotorSupplyCurrent = 0;
+        public double driveMotorStatorCurrent = 0;
+        public double driveMotorSupplyCurrentOverTime = 0;
+        public double driveMotorStatorCurrentOverTime = 0;
+        public double driveMotorPosition = 0;
+        public double driveMotorAppliedVoltage = 0;
 
-        public double velocityMetersPerSecond = 0;
-        public double setpointVelocityMetersPerSecond = 0;
-        public double setpointDriveVoltage = 0;
-        public double moduleDistanceMeters = 0;
-        public double appliedDriveVoltage = 0;
-        public double appliedDriveCurrent = 0;
+        public double angle = 0;
+        public double angleSetpoint = 0;
+        public double absolutePosition = 0;
+        public double angleMotorVelocity = 0;
+        public double angleMotorSupplyCurrent = 0;
+        public double angleMotorStatorCurrent = 0;
+        public double angleMotorSupplyCurrentOverTime = 0;
+        public double angleMotorStatorCurrentOverTime = 0;
+        public double angleMotorPosition = 0;
+        public double angleMotorAppliedVoltage = 0;
 
-        public double totalCurrentDrawCoulombs = 0;
+        public double moduleDistance = 0;
     }
 }

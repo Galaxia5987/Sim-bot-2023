@@ -11,6 +11,8 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.drivetrain.SwerveConstants;
+import frc.robot.subsystems.drivetrain.SwerveDrive;
 import frc.robot.utils.TunableNumber;
 import frc.robot.utils.math.differential.BooleanTrigger;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -33,6 +35,8 @@ public class Robot extends LoggedRobot {
     private final Timer timer = new Timer();
     private RobotContainer robotContainer;
     private Command autonomousCommand;
+    private BooleanTrigger encoderTrigger = new BooleanTrigger(false, false);
+    private boolean updated = false;
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -47,8 +51,8 @@ public class Robot extends LoggedRobot {
         Logger.getInstance().recordMetadata("ProjectName", "Sim-bot-2023"); // Set a metadata value
 
         if (isReal()) {
-            Logger.getInstance().addDataReceiver(new WPILOGWriter("/home/lvuser")); // Log to a USB stick
             Logger.getInstance().addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+            Logger.getInstance().addDataReceiver(new WPILOGWriter("home/lvuser")); // Publish data to NetworkTables
             new PowerDistribution(1, PowerDistribution.ModuleType.kRev); // Enables power distribution logging
         } else {
             Logger.getInstance().addDataReceiver(new NT4Publisher());
@@ -77,6 +81,12 @@ public class Robot extends LoggedRobot {
         CommandScheduler.getInstance().run();
 
         enabledTrigger.update(isEnabled());
+        encoderTrigger.update(SwerveDrive.getInstance().encodersConnected());
+
+        if (encoderTrigger.triggered()) {
+            SwerveDrive.getInstance().updateOffsets(SwerveConstants.OFFSETS);
+//            updated = true;
+        }
     }
 
     /**
