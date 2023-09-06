@@ -120,15 +120,15 @@ public class Leds extends SubsystemBase {
         }
         if (isRainbow){
             mode = Mode.ELSE;
-            System.out.println("before loop statement");
+//            System.out.println("before loop statement");
             for (int i = 0; i < ledBuffer.getLength(); i++) {
                 ledBuffer.setHSV(i, rainbowHue, 255, 180);
                 rainbowHue += (180 / ledBuffer.getLength());
                 leds.setData(ledBuffer);
-                System.out.println("in-loop check statement");
+//                System.out.println("in-loop check statement");
             rainbowHue%=180;
             }
-            System.out.println("after loop statement");
+//            System.out.println("after loop statement");
         }
     }
 
