@@ -77,6 +77,7 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void robotPeriodic() {
+
         robotState.update();
         TunableNumber.INSTANCES.forEach(TunableNumber::update);
         CommandScheduler.getInstance().run();

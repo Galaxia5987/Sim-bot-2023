@@ -134,7 +134,11 @@ public class Drive extends SubsystemBase {
     }
 
     public Rotation2d getCurrentAngle(){
-        return new Rotation2d();
+        return getCurrentPose().getRotation();
+    }
+
+    public SwerveModulePosition[] getCurrentModulePositions() {
+        return currentModulePositions;
     }
 
     public SwerveDriveKinematics getKinematics() {

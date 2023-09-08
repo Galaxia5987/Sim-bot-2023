@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.networktables.*;
 import frc.robot.subsystems.drivetrain.Drive;
 import org.photonvision.SimVisionSystem;
+import org.photonvision.SimVisionTarget;
 
 public class IOCameraSim implements VisionIO {
     private final NetworkTable table;
@@ -29,11 +30,14 @@ public class IOCameraSim implements VisionIO {
                 camName,
                 90.0,
                 VisionConstants.ROBOT_TO_CAM[camIndex],
-                7,
+                10000,
                 1600,
                 1200,
                 0.0
         );
+        for (int i = 0; i < 8; i++) {
+            simVisionSystem.addSimVisionTarget(new SimVisionTarget(aprilChooser(i+1), VisionConstants.TARGET_WIDTH, VisionConstants.TARGET_LENGTH, i+1));
+        }
         targetPose = table.getDoubleArrayTopic("targetPose").subscribe(new double[7]);
         targetArea = table.getDoubleTopic("targetArea").subscribe(0);
         latency = table.getDoubleTopic("latencyMillis").subscribe(0);
@@ -45,14 +49,14 @@ public class IOCameraSim implements VisionIO {
     }
 
     @Override
-    public Pose3d AprilChooser(int aprilID) {
-        return VisionIO.super.AprilChooser(aprilID).plus(VisionConstants.PHOTON_OFFSET);
+    public Pose3d aprilChooser(int aprilID) {
+        return VisionIO.super.aprilChooser(aprilID);
     }
 
     @Override
     public Pose3d getEstimatedPoseFieldOriented(Pose3d poseTargetOriented, int aprilID) {
         Transform3d transform3d = new Transform3d(poseTargetOriented.getTranslation(), poseTargetOriented.getRotation());
-        return this.AprilChooser(aprilID).plus(transform3d);
+        return this.aprilChooser(aprilID).plus(transform3d);
     }
 
     @Override

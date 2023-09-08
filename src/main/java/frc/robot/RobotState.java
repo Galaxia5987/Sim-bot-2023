@@ -21,11 +21,18 @@ public class RobotState {
     }
 
     public void update() {
-        //drivePoseEstimator.update(swerveDrive.getCurrentAngle(), driveIOInputs.currentModuleStates); TODO: add to swerve
+        var measurements = vision.getEstimatedPoses();
+        for (int i = 0; i <= measurements.length; i++) {
+            drivePoseEstimator.update(swerveDrive.getCurrentAngle(), swerveDrive.getCurrentModulePositions());
 
-//        var measurement = vision.getEstimatedGlobal1_3d().toPose2d();
-//        if (measurement != null) {
-//            drivePoseEstimator.addVisionMeasurement(measurement, Timer.getFPGATimestamp());
-//        }
+            if (measurements != null) {
+                drivePoseEstimator.addVisionMeasurement(measurements[i].toPose2d(), Timer.getFPGATimestamp());
+            }
+
+            if (i > measurements.length) {
+            }
+        }
+
     }
+
 }
