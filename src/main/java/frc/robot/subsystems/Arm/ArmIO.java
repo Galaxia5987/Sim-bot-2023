@@ -8,7 +8,7 @@ public interface ArmIO {
     default void setElbowPower(double power){}
     default void setShoulderAngle(double angleRads){}
     default void setElbowAngle(double angleRads){}
-    default void setArmTipIntoPosition(Translation2d position){}
+    default void setTipPosition(Translation2d position){}
 
     @AutoLog
     class ArmInputs{

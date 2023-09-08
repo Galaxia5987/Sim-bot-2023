@@ -1,6 +1,7 @@
 package frc.robot.subsystems.Arm;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
@@ -38,9 +39,13 @@ public class ArmIOSim implements ArmIO {
         elbow.setInputVoltage(angleVoltage);
     }
 
+    @Override
+    public void setTipPosition(Pose2d tIpPosition) {
+
+    }
 
     @Override
-    public void setArmTipIntoPosition(Translation2d position) {
-        ArmIO.super.setArmTipIntoPosition(position);
+    public void setTipPosition(Translation2d position) {
+        ArmIO.super.setTipPosition(position);
     }
 }
