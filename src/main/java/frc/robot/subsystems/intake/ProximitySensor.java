@@ -7,7 +7,7 @@ import frc.robot.subsystems.LoggedSubsystem;
 
 public class ProximitySensor extends LoggedSubsystem<ProximitySensorLoggedInputs> {
     private static ProximitySensor INSTANCE;
-    private final DigitalInput beam = new DigitalInput(Ports.Intake.BEAM_BREAKER_SENSOR);
+    private final DigitalInput beam = new DigitalInput(9);
 
     private ProximitySensor() {
         super(new ProximitySensorLoggedInputs());

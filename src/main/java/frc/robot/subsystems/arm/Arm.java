@@ -299,6 +299,12 @@ public class Arm extends LoggedSubsystem<ArmInputsAutoLogged> {
         shoulderMainMotor.neutralOutput();
         elbowMainMotor.neutralOutput();
     }
+    private Command lastCommand = null;
+    private Command currentCommand = null;
+    private boolean changedToDefaultCommand = false;
+    public boolean changedToDefaultCommand() {
+        return changedToDefaultCommand;
+    }
 
     @Override
     public String getSubsystemName() {
@@ -307,7 +313,7 @@ public class Arm extends LoggedSubsystem<ArmInputsAutoLogged> {
 
     @Override
     public void periodic() {
-        var currentCommand = getCurrentCommand();
+        currentCommand = getCurrentCommand();
 
         if (currentCommand != null) {
             Logger.getInstance().recordOutput("ArmCommand", currentCommand.getName());
@@ -324,6 +330,9 @@ public class Arm extends LoggedSubsystem<ArmInputsAutoLogged> {
                         .minus(Rotation2d.fromDegrees(180))
                         .getCos() * ArmConstants.ELBOW_ARM_LENGTH;
 
+        changedToDefaultCommand = !(lastCommand instanceof ArmXboxControl) && (currentCommand instanceof ArmXboxControl);
+
+        lastCommand = currentCommand;
 
     }
 
