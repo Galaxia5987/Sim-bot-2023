@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commandgroups.*;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmConstants;
+import frc.robot.subsystems.arm.commands.ArmAxisControl;
 import frc.robot.subsystems.arm.commands.ArmXboxControl;
 import frc.robot.subsystems.arm.commands.SetArmsPositionAngular;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
@@ -19,11 +20,14 @@ import frc.robot.subsystems.drivetrain.command.JoystickDrive;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.commands.HoldIntakeInPlace;
+import frc.robot.subsystems.intake.commands.ProximitySensorDefaultCommand;
+import frc.robot.subsystems.leds.Leds;
 import frc.robot.utils.Utils;
 
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
     private final Arm arm = Arm.getInstance();
+    private final Leds leds = Leds.getInstance();
     private final SwerveDrive swerveDrive = SwerveDrive.getInstance();
     private final Intake intake = Intake.getInstance();
     private final Gripper gripper = Gripper.getInstance();
@@ -75,6 +79,7 @@ public class RobotContainer {
         );
         arm.setDefaultCommand(new ArmXboxControl(xboxController));
         intake.setDefaultCommand(new HoldIntakeInPlace());
+//        leds.setDefaultCommand(new ProximitySensorDefaultCommand()); //TODO: fix proximity sensor and check this
     }
 
     private void configureButtonBindings() {
@@ -86,9 +91,23 @@ public class RobotContainer {
         a.whileTrue(new SetArmsPositionAngular(() -> ArmConstants.OUT_ROBOT2));
         lb.onTrue(new InstantCommand(gripper::toggle));
 
+
+        start.onTrue(new InstantCommand(leds::toggle));
+
+        leftJoystickTopBottom.onTrue(new InstantCommand(leds::toggleRainbow));
+
         xboxLeftTrigger.whileTrue(new PickUpCubeTeleop())
                 .onFalse(new ReturnIntake());
         xboxRightTrigger.whileTrue(new ReturnIntake());
+
+        //TODO: check the arm axis control and the rb command
+        rb.whileTrue(new ArmAxisControl(1, 0.02, 0)
+                .until(() -> gripper.getDistance() < ArmConstants.FEEDER_DISTANCE));
+
+        leftPOV.whileTrue(new ArmAxisControl(0.33, 0.02, 0, 0, 0));
+        rightPOV.whileTrue(new ArmAxisControl(0.33, -0.02, 0, 0, 0));
+        upPOV.whileTrue(new ArmAxisControl(0.33, 0, 0.02, 0, 0));
+        downPOV.whileTrue(new ArmAxisControl(0.33, 0, -0.02, 0, 0));
 
 //        lb.onTrue(new InstantCommand(swerveDrive::resetGyro));
 //        rb.onTrue(new InstantCommand(swerveDrive::resetPose));
