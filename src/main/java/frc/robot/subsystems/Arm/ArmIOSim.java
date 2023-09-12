@@ -10,6 +10,7 @@ public class ArmIOSim implements ArmIO {
     private final SingleJointedArmSim elbow;
     private final SingleJointedArmSim shoulder;
     private final PIDController angleController;
+    private final ArmKinematics armKinematics;
 
     private ArmIOSim() {
         angleController = new PIDController(0, 0, 0, 0.02);
