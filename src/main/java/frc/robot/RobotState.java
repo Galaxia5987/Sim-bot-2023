@@ -22,17 +22,13 @@ public class RobotState {
 
     public void update() {
         var measurements = vision.getEstimatedPoses();
-        for (int i = 0; i <= measurements.length; i++) {
+        for (int i = 0; i < measurements.length; i++) {
             drivePoseEstimator.update(swerveDrive.getCurrentAngle(), swerveDrive.getCurrentModulePositions());
 
             if (measurements != null) {
                 drivePoseEstimator.addVisionMeasurement(measurements[i].toPose2d(), Timer.getFPGATimestamp());
             }
-
-            if (i > measurements.length) {
-            }
         }
-
     }
 
 }
