@@ -23,6 +23,11 @@ public class GyroIOReal implements GyroIO {
     }
 
     @Override
+    public double getPitch() {
+        return Math.toRadians(gyro.getPitch());
+    }
+
+    @Override
     public void resetGyro(double angle) {
         gyroOffset = angle + getRawYaw();
     }

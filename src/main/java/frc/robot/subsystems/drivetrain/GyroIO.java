@@ -9,5 +9,9 @@ public interface GyroIO {
         return 0;
     }
 
+    default double getPitch(){
+        return 0;
+    }
+
     void resetGyro(double angle);
 }

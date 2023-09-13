@@ -111,6 +111,10 @@ public class SwerveDrive extends SubsystemBase {
         return gyro.getYaw();
     }
 
+    public double getPitch(){
+        return gyro.getPitch();
+    }
+
     /**
      * Sets the module states to the desired module states.
      *
@@ -173,6 +177,13 @@ public class SwerveDrive extends SubsystemBase {
         for (int i = 0; i < 4; i++) {
             modules[i].checkModule();
         }
+    }
+
+    public void lock() {
+        modules[0].setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+        modules[1].setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(135)));
+        modules[2].setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(315)));
+        modules[3].setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(225)));
     }
 
     /**
