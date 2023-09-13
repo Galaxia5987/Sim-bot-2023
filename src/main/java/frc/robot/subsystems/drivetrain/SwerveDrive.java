@@ -195,17 +195,12 @@ public class SwerveDrive extends SubsystemBase {
     public void drive(ChassisSpeeds chassisSpeeds, boolean fieldOriented) { //TODO: check if field oriented option works
         loggerInputs.desiredSpeeds = Utils.chassisSpeedsToArray(chassisSpeeds);
 
-//        if (!fieldOriented){
-//            chassisSpeeds = chassisSpeeds;
-//        }
-//        else {
-            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    chassisSpeeds.vxMetersPerSecond,
-                    chassisSpeeds.vyMetersPerSecond,
-                    chassisSpeeds.omegaRadiansPerSecond,
-                    new Rotation2d(getYaw())
-            );
-//        }
+        ChassisSpeeds fieldOrientedChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                chassisSpeeds.vxMetersPerSecond,
+                chassisSpeeds.vyMetersPerSecond,
+                chassisSpeeds.omegaRadiansPerSecond,
+                new Rotation2d(getYaw())
+        );
 
         if (chassisSpeeds.equals(new ChassisSpeeds(0, 0, 0))) {
             for (SwerveModule module : modules) {
@@ -213,7 +208,12 @@ public class SwerveDrive extends SubsystemBase {
             }
         }
 
-        setModuleStates(kinematics.toSwerveModuleStates(chassisSpeeds));
+        if (fieldOriented){
+            setModuleStates(kinematics.toSwerveModuleStates(fieldOrientedChassisSpeeds));
+        }
+        else {
+            setModuleStates(kinematics.toSwerveModuleStates(chassisSpeeds));
+        }
     }
 
     /**
