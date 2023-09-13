@@ -52,7 +52,7 @@ public class MiddleConeHighCubeEngage extends SequentialCommandGroup {
                                 1.5,
                                 0,
                                 yawController.calculate(swerveDrive.getYaw(), 0),
-                                true
+                                false
                 ), swerveDrive)
                         .alongWith(new PickUpCube())
                         .withTimeout(1.9),

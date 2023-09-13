@@ -25,7 +25,7 @@ public class DriveTillPitch extends CommandBase {
                 xVelocity,
                 0,
                 yawController.calculate(swerveDrive.getYaw(), 0),
-                true
+                false //TODO: check if should be field or robot oriented
         );
     }
 

@@ -24,7 +24,7 @@ public class Engage extends SequentialCommandGroup {
                         1.5 * direction(forwards),
                         0,
                         yawController.calculate(swerveDrive.getYaw(), 0),
-                        true
+                        false
 
                 ), swerveDrive).alongWith(new GetArmIntoRobot()).withTimeout(
                         forwards ?
