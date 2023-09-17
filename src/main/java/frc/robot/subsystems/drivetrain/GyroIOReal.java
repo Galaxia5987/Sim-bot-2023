@@ -29,7 +29,7 @@ public class GyroIOReal implements GyroIO {
 
     @Override
     public void resetGyro(double angle) {
-        gyroOffset = angle + getRawYaw();
+        gyroOffset = -angle + getRawYaw();
     }
 
     @Override
