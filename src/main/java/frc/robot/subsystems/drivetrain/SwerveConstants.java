@@ -72,15 +72,12 @@ public class SwerveConstants {
     public static double AUTO_X_Kp = 3.20;
     public static double AUTO_X_Ki = 0.0;
     public static double AUTO_X_Kd = 0.73;
-    public static double AUTO_X_Kf = 0.35;
     public static double AUTO_Y_Kp = 3.20;
     public static double AUTO_Y_Ki = 0.0;
     public static double AUTO_Y_Kd = 0.6;
-    public static double AUTO_Y_Kf = 0.35;
     public static double AUTO_ROTATION_Kp = 10;
     public static double AUTO_ROTATION_Ki = 0.0;
     public static double AUTO_ROTATION_Kd = 0.0;
-    public static double AUTO_ROTATION_Kf = 0.0;
 
     public static double FORWARD_BALANCE_TIME = 1.3;
     public static double BACKWARD_BALANCE_TIME = 1.1;
