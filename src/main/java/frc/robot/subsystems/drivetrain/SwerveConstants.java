@@ -7,7 +7,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 
 public class SwerveConstants {
     public static final double[] OFFSETS =
-            {0.569,0.2636,0.932,0.542};
+            {0.5709977142749428,0.26230635655765894,0.9328634483215862,0.5489868137246704};
 
     public static final double VOLT_COMP_SATURATION = 12;
     public static final SupplyCurrentLimitConfiguration SUPPLY_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(true, 50, 0, 0);
