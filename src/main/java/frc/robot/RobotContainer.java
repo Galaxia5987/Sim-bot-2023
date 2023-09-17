@@ -84,6 +84,7 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         leftJoystickTrigger.onTrue(new InstantCommand(swerveDrive::resetGyro));
+        rightJoystickTrigger.onTrue(new InstantCommand(swerveDrive::resetPose));
         b.whileTrue(new FeederPosition());
         y.whileTrue(new UpperScoring());
         x.whileTrue(new MidScoring());
