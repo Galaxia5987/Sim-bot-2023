@@ -153,8 +153,8 @@ public class FollowPath extends CommandBase {
     public static Function<PathPlannerTrajectory, Command> resetCommand(SwerveDrive swerveDrive) {
         return (p) ->
                 new InstantCommand(() -> {
-                    swerveDrive.resetPose(p.getInitialPose());
                     swerveDrive.resetGyro(p.getInitialHolonomicPose().getRotation().getRadians());
+                    swerveDrive.resetPose(p.getInitialPose());
                 });
     }
 
@@ -166,8 +166,8 @@ public class FollowPath extends CommandBase {
             logActiveTrajectory.accept(transformedTrajectory);
         }
 
-        timer.reset();
         timer.start();
+        timer.reset();
 
         PathPlannerServer.sendActivePath(transformedTrajectory.getStates());
     }
@@ -184,9 +184,6 @@ public class FollowPath extends CommandBase {
                 currentPose);
 
         ChassisSpeeds targetChassisSpeeds = this.controller.calculate(currentPose, desiredState);
-        targetChassisSpeeds.vxMetersPerSecond += targetChassisSpeeds.vxMetersPerSecond * SwerveConstants.AUTO_X_Kf;
-        targetChassisSpeeds.vyMetersPerSecond += targetChassisSpeeds.vyMetersPerSecond * SwerveConstants.AUTO_Y_Kf;
-        targetChassisSpeeds.omegaRadiansPerSecond -= SwerveConstants.AUTO_ROTATION_Kf;
 
         if (this.useKinematics) {
             SwerveModuleState[] targetModuleStates =
