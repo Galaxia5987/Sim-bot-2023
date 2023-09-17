@@ -3,7 +3,9 @@ package frc.robot.subsystems.drivetrain;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.math.differential.BooleanTrigger;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveModule extends SubsystemBase {
@@ -16,9 +18,15 @@ public class SwerveModule extends SubsystemBase {
 
     private SwerveModuleState currentModuleState = new SwerveModuleState();
 
+    private final BooleanTrigger encoderTrigger = new BooleanTrigger(false, false);
+    private final Timer timer = new Timer();
+
     public SwerveModule(ModuleIO io, int number) {
         this.io = io;
         this.number = number;
+
+        timer.start();
+        timer.reset();
     }
 
     /**
@@ -109,5 +117,12 @@ public class SwerveModule extends SubsystemBase {
         Logger.getInstance().recordOutput("SwerveDrive/currentModuleState" + number, currentModuleState);
 
         Logger.getInstance().processInputs("module_" + number, loggerInputs);
+
+        encoderTrigger.update(io.encoderConnected());
+
+        if (timer.hasElapsed(1)) {
+            io.updateOffset(SwerveConstants.OFFSETS[number - 1]);
+            timer.reset();
+        }
     }
 }
