@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.autonomous.paths.BumperConeCubeHighCube;
 import frc.robot.commandgroups.*;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmConstants;
@@ -120,6 +121,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return null;
+        return new BumperConeCubeHighCube();
     }
 }
