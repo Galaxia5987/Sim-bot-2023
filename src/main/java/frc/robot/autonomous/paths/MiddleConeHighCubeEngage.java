@@ -17,7 +17,7 @@ import frc.robot.utils.controllers.DieterController;
 public class MiddleConeHighCubeEngage extends AutoFunctions {
     private final DieterController yawController = new DieterController(3, 0, 0, 0);
 
-    public MiddleConeHighCubeEngage() {
+    public MiddleConeHighCubeEngage() { //TODO: check if it works
         SwerveDrive swerveDrive = SwerveDrive.getInstance();
         Gripper gripper = Gripper.getInstance();
         PathPlannerTrajectory trajectory = PathPlanner.loadPath("MiddleConeHighCubeEngage 1", new PathConstraints(SwerveConstants.MAX_VELOCITY_AUTO, SwerveConstants.MAX_ACCELERATION_AUTO));
