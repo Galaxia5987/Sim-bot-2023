@@ -15,10 +15,9 @@ public class Arm extends SubsystemBase {
     private ArmIO io;
 
     private Arm() {
-        if (Robot.isReal()){
-           // io = new ArmIOReal(5, 6);
-        }
-        else{
+        if (Robot.isReal()) {
+            // io = new ArmIOReal();
+        } else {
             io = new ArmIOSim();
         }
     }
@@ -28,6 +27,16 @@ public class Arm extends SubsystemBase {
             INSTANCE = new Arm();
         }
         return INSTANCE;
+    }
+
+    public void setShoulderPower(double power) {
+        io.setShoulderPower(power);
+        inputs.elbowVoltage = power * 12;
+    }
+
+    public void setElbowPower(double power) {
+        io.setElbowPower(power);
+        inputs.elbowVoltage = power * 12;
     }
 
     public void setShoulderAngle(double angle) {
@@ -45,6 +54,7 @@ public class Arm extends SubsystemBase {
         setShoulderAngle(solution.shoulderAngle);
         setElbowAngle(solution.elbowAngle);
     }
+
     @Override
     public void periodic() {
         io.updateInputs(inputs);
@@ -52,15 +62,13 @@ public class Arm extends SubsystemBase {
 
         if (elbowControlMode == ControlMode.Position) {
             io.setElbowAngle(inputs.elbowAngleAbsolute);
-        }
-        else if (elbowControlMode == ControlMode.PercentOutput){
+        } else if (elbowControlMode == ControlMode.PercentOutput) {
             io.setElbowPower(inputs.elbowVoltage);
         }
 
         if (shoulderControlMode == ControlMode.Position) {
             io.setShoulderAngle(inputs.shoulderAngle);
-        }
-        else if (shoulderControlMode == ControlMode.PercentOutput){
+        } else if (shoulderControlMode == ControlMode.PercentOutput) {
             io.setShoulderPower(inputs.shoulderVoltage);
         }
     }
