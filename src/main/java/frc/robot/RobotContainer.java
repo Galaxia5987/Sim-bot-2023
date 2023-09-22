@@ -3,11 +3,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.autonomous.paths.BumperConeCubeHighCube;
+import frc.robot.autonomous.paths.FeederConeCubeHighCube;
 import frc.robot.commandgroups.*;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmConstants;
@@ -16,12 +16,10 @@ import frc.robot.subsystems.arm.commands.ArmXboxControl;
 import frc.robot.subsystems.arm.commands.SetArmsPositionAngular;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
 //import frc.robot.subsystems.drivetrain.command.JoystickDrive;
-import frc.robot.subsystems.drivetrain.SwerveModule;
-import frc.robot.subsystems.drivetrain.command.JoystickDrive;
+import frc.robot.subsystems.drivetrain.commands.JoystickDrive;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.commands.HoldIntakeInPlace;
-import frc.robot.subsystems.intake.commands.ProximitySensorDefaultCommand;
 import frc.robot.subsystems.leds.Leds;
 import frc.robot.utils.Utils;
 
@@ -121,6 +119,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new BumperConeCubeHighCube();
+        return new FeederConeCubeHighCube();
     }
 }

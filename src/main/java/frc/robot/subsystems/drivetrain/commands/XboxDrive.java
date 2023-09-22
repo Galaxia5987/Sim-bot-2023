@@ -1,4 +1,4 @@
-package frc.robot.subsystems.drivetrain.command;
+package frc.robot.subsystems.drivetrain.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
