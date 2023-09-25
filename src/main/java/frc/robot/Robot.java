@@ -35,7 +35,6 @@ public class Robot extends LoggedRobot {
     private final Timer timer = new Timer();
     private RobotContainer robotContainer;
     private Command autonomousCommand;
-    private Vision vision;
     private RobotState robotState = RobotState.getINSTANCE();
 
     /**

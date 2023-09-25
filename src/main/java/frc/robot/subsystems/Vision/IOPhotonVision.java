@@ -4,6 +4,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import frc.robot.subsystems.drivetrain.SwerveConstants;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
@@ -41,12 +42,7 @@ public class IOPhotonVision implements VisionIO {
     @Override
     public Pose3d getEstimatedPoseFieldOriented(Pose3d poseTargetOriented, int aprilId) {
         Transform3d transform3d = new Transform3d(poseTargetOriented.getTranslation(), poseTargetOriented.getRotation());
-        return this.aprilChooser(aprilId).plus(transform3d);
-    }
-
-    @Override
-    public Pose3d aprilChooser(int aprilID) {
-        return VisionIO.super.aprilChooser(aprilID).plus(VisionConstants.PHOTON_OFFSET);
+        return VisionConstants.TARGET_POSITION_REAL[aprilId].plus(transform3d);
     }
 
     // From Barel 😘:

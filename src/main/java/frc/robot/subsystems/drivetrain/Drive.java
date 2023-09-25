@@ -26,7 +26,6 @@ public class Drive extends SubsystemBase {
     private final Module rearRight;
 
     private final SwerveDriveKinematics kinematics;
-    public Rotation2d Angle;
     private ChassisSpeeds desiredSpeeds = new ChassisSpeeds();
     private SwerveModuleState[] desiredModuleStates;
 

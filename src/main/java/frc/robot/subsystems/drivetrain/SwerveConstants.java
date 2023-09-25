@@ -2,6 +2,9 @@ package frc.robot.subsystems.drivetrain;
 
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 
 public class SwerveConstants {
         public static final double TICKS_PER_ROTATION = 2048;
@@ -15,6 +18,7 @@ public class SwerveConstants {
         public static final double DRIVE_MOMENT_OF_INERTIA = 0.025;
         public static final double ANGLE_MOMENT_OF_INERTIA = 0.004;
         public static final double WHEEL_DIAMETER = 0.1023679821;
+        public static final Translation2d[] WHEELS_POSITION_RELATIVE_TO_CENTER = new Translation2d[]{};
 
         public static final StatorCurrentLimitConfiguration STATOR_CURRENT_LIMIT_CONFIG = new StatorCurrentLimitConfiguration(
                         true, 50, 2, 0.02);

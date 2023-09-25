@@ -37,11 +37,12 @@ public class IOLimeLight implements VisionIO {
 
         inputs.area = table.getDoubleTopic("ta").getEntry(0.0).get();
 
-        inputs.latency = table.getDoubleTopic("tl").subscribe(0.0).get(); //Todo: add latency to IOPhoton
+        inputs.latency = table.getDoubleTopic("tl").getEntry(0.0).get(); //Todo: add latency to IOPhoton
 
         inputs.targetID = (int) table.getDoubleTopic("tid").getEntry(0.0).get();
 
         if((table.getDoubleTopic("tv").subscribe(0.0).get()) == 1){inputs.hasTargets = true;}
+        else {inputs.hasTargets = false;}
         inputs.targetSkew = 0;
 
         double[] targetRobotOriented = table.getDoubleArrayTopic("botpose_targetspace").getEntry(new double[6]).get();

@@ -36,7 +36,7 @@ public class IOCameraSim implements VisionIO {
                 0.0
         );
         for (int i = 0; i < 8; i++) {
-            simVisionSystem.addSimVisionTarget(new SimVisionTarget(aprilChooser(i+1), VisionConstants.TARGET_WIDTH, VisionConstants.TARGET_LENGTH, i+1));
+            simVisionSystem.addSimVisionTarget(new SimVisionTarget(VisionConstants.TARGET_POSITION_SIM[i+1], VisionConstants.TARGET_WIDTH, VisionConstants.TARGET_LENGTH, i+1));
         }
         targetPose = table.getDoubleArrayTopic("targetPose").subscribe(new double[7]);
         targetArea = table.getDoubleTopic("targetArea").subscribe(0);
@@ -48,15 +48,11 @@ public class IOCameraSim implements VisionIO {
         hasTarget = table.getBooleanTopic("hasTarget").subscribe(false);
     }
 
-    @Override
-    public Pose3d aprilChooser(int aprilID) {
-        return VisionIO.super.aprilChooser(aprilID);
-    }
 
     @Override
     public Pose3d getEstimatedPoseFieldOriented(Pose3d poseTargetOriented, int aprilID) {
         Transform3d transform3d = new Transform3d(poseTargetOriented.getTranslation(), poseTargetOriented.getRotation());
-        return this.aprilChooser(aprilID).plus(transform3d);
+        return VisionConstants.TARGET_POSITION_SIM[aprilID].plus(transform3d);
     }
 
     @Override
