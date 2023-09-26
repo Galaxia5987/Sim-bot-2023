@@ -41,7 +41,7 @@ public class ArmWithStateMachine extends CommandBase {
         elbowProfile = new TrapezoidProfile(
                 new TrapezoidProfile.Constraints(360, 2080),
                 new TrapezoidProfile.State(Math.toDegrees(angles.elbowAngle), 0),
-                new TrapezoidProfile.State(arm.getShoulderJointAngle().getDegrees(), arm.getElbowMotorVelocity())
+                new TrapezoidProfile.State(arm.getElbowJointAngle().getDegrees(), arm.getElbowMotorVelocity())
         );
 
         timer.start();
