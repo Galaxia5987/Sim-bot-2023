@@ -1,8 +1,10 @@
 package frc.robot.commandgroups;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Robot;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmConstants;
 import frc.robot.subsystems.arm.ArmPosition;
@@ -16,9 +18,13 @@ public class UpperScoring extends SequentialCommandGroup {
         Arm arm = Arm.getInstance();
         addCommands(
                 new ConditionalCommand(
+                        new ConditionalCommand(
+                                new SetArmsPositionAngular(()-> ArmConstants.UPPER_CONE_SCORING, 0.1),
+                                new SetArmsPositionAngular(()-> ArmConstants.UPPER_CUBE_SCORING, 0.1),
+                                Leds.getInstance()::inConeMode
+                        ),
                         new ArmWithStateMachine(ArmPosition.TOP_SCORING),
-                        new ArmWithStateMachine(ArmPosition.TOP_SCORING),
-                        Leds.getInstance()::inConeMode
+                        DriverStation::isAutonomous
                 ),
                 new RunCommand(() -> arm.setShoulderJointPower(-0.05), arm).withTimeout(0.5)
         );
