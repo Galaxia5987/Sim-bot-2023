@@ -69,7 +69,7 @@ public class AutoFunctions extends SequentialCommandGroup {
         return new SequentialCommandGroup(
                 FollowPath.resetCommand(swerveDrive).apply(trajectory).alongWith(
                         new InstantCommand(gripper::close, gripper)),
-                new Retract(DOWN).withTimeout(0.35),
+                new Retract(DOWN).withTimeout(0.5),
                 autoUpperScoring(true),
                 new InstantCommand(gripper::open, gripper),
                 new ReturnArm().withTimeout(0.65),
