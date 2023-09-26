@@ -25,31 +25,33 @@ public enum ArmPosition implements SystemState<ArmPosition, ArmInputs> {
     public ArmPosition nextState(ArmInputs armInputs) {
         switch (armInputs.desiredArmPosition) {
             case FEEDER:
-                if (armInputs.armPosition[1] < 0 && armInputs.armPosition[0] < 0) {
+                if (armInputs.armPosition[1] < 0.2 && armInputs.armPosition[0] < 0) {
                     return NEUTRAL;
                 }
                 return FEEDER;
             case PICKUP:
-                if (armInputs.armPosition[0] < 0 && armInputs.armPosition[1] < 0.6) {
+                if (armInputs.armPosition[0] < 0 && armInputs.armPosition[1] < 0.4) {
                     return PICKUP;
                 }
                 return NEUTRAL;
 
             case TOP_SCORING:
-                if (armInputs.armPosition[1] < 0 && armInputs.armPosition[0] < 0) {
+                if (armInputs.armPosition[1] < 0.2 && armInputs.armPosition[0] < 0) {
                     return NEUTRAL;
                 }
                 return TOP_SCORING;
             case MIDDLE_SCORING:
-                if (armInputs.armPosition[0] < 0) {
-                    return FEEDER;
+                if (armInputs.armPosition[1] < 0.2 && armInputs.armPosition[0] < 0) {
+                    return NEUTRAL;
                 }
                 return MIDDLE_SCORING;
             case BOTTOM_SCORING:
-                if (armInputs.armPosition[1] < 0 && armInputs.armPosition[0] < 0) {
+                if (armInputs.armPosition[1] < 0.2 && armInputs.armPosition[0] < 0) {
                     return NEUTRAL;
                 }
                 return BOTTOM_SCORING;
+            case NEUTRAL:
+                return NEUTRAL;
             default:
                 return NEUTRAL;
         }
