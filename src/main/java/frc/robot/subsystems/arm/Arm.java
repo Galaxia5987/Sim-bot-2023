@@ -8,7 +8,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Ports;
@@ -41,6 +40,10 @@ public class Arm extends LoggedSubsystem<ArmInputsAutoLogged> {
     private double elbowFeedforward;
 
     private double ySetpoint = 0;
+
+    private Command lastCommand = null;
+    private Command currentCommand = null;
+    private boolean changedToDefaultCommand = false;
 
     private Arm() {
         super(new ArmInputsAutoLogged());
@@ -207,6 +210,14 @@ public class Arm extends LoggedSubsystem<ArmInputsAutoLogged> {
         loggerInputs.elbowError = error;
     }
 
+    public ArmInputs getInputs() {
+        return loggerInputs;
+    }
+
+    public void setDesiredPosition(ArmPosition position) {
+        loggerInputs.desiredArmPosition = position;
+    }
+
     /**
      * Calculates the position of the end of the arm.
      *
@@ -299,9 +310,7 @@ public class Arm extends LoggedSubsystem<ArmInputsAutoLogged> {
         shoulderMainMotor.neutralOutput();
         elbowMainMotor.neutralOutput();
     }
-    private Command lastCommand = null;
-    private Command currentCommand = null;
-    private boolean changedToDefaultCommand = false;
+
     public boolean changedToDefaultCommand() {
         return changedToDefaultCommand;
     }

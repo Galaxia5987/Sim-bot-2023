@@ -11,7 +11,9 @@ import frc.robot.autonomous.paths.FeederConeCubeHighCube;
 import frc.robot.commandgroups.*;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmConstants;
+import frc.robot.subsystems.arm.ArmPosition;
 import frc.robot.subsystems.arm.commands.ArmAxisControl;
+import frc.robot.subsystems.arm.commands.ArmWithStateMachine;
 import frc.robot.subsystems.arm.commands.ArmXboxControl;
 import frc.robot.subsystems.arm.commands.SetArmsPositionAngular;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
@@ -84,11 +86,11 @@ public class RobotContainer {
     private void configureButtonBindings() {
         leftJoystickTrigger.onTrue(new InstantCommand(swerveDrive::resetGyro));
         rightJoystickTrigger.onTrue(new InstantCommand(swerveDrive::resetPose));
-        b.whileTrue(new FeederPosition());
-        y.whileTrue(new UpperScoring());
-        x.whileTrue(new MidScoring());
+        b.whileTrue(new ArmWithStateMachine(ArmPosition.FEEDER));
+        y.whileTrue(new ArmWithStateMachine(ArmPosition.TOP_SCORING));
+        x.whileTrue(new ArmWithStateMachine(ArmPosition.MIDDLE_SCORING));
 
-        a.whileTrue(new SetArmsPositionAngular(() -> ArmConstants.OUT_ROBOT2));
+        a.whileTrue(new ArmWithStateMachine(ArmPosition.NEUTRAL));
         lb.onTrue(new InstantCommand(gripper::toggle));
 
 
