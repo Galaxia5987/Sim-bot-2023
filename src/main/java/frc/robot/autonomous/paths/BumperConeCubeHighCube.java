@@ -31,7 +31,7 @@ public class BumperConeCubeHighCube extends AutoFunctions {
                 autoUpperScoring(false),
 
                 FollowPath.loadTrajectory("BumperConeCubeHigh 3")
-                        .alongWith(new PickUpCubeAuto().withTimeout(5))
+                        .alongWith(new PickUpCubeAuto().withTimeout(3.3))
         );
     }
 }
