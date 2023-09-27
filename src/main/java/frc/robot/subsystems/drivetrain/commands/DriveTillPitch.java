@@ -44,4 +44,9 @@ public class DriveTillPitch extends CommandBase {
         }
 //         return Math.abs(gyroscope.getPitch().getDegrees()) >= Math.abs(desiredPitch);
     }
+
+    @Override
+    public void end(boolean interrupted) {
+        swerveDrive.stop();
+    }
 }
