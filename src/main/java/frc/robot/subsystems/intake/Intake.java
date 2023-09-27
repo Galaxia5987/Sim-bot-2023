@@ -44,6 +44,9 @@ public class Intake extends LoggedSubsystem<IntakeLoggedInputs> {
         angleMotor.config_kI(0, IntakeConstants.kI);
         angleMotor.config_kD(0, IntakeConstants.kD);
         angleMotor.config_kF(0, IntakeConstants.kF);
+        angleMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(
+                true, 25, 0, 0
+        ));
     }
 
     /**
