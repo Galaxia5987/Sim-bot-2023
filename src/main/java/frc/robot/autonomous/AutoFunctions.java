@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commandgroups.*;
+import frc.robot.subsystems.arm.ArmPosition;
+import frc.robot.subsystems.arm.commands.ArmWithStateMachine;
 import frc.robot.subsystems.drivetrain.SwerveConstants;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
 import frc.robot.subsystems.drivetrain.commands.DriveTillPitch;
@@ -64,12 +66,7 @@ public class AutoFunctions extends SequentialCommandGroup {
         return new SequentialCommandGroup(
                 isCone ? new YellowLed() :
                         new PurpleLed(),
-                isCone ? new MidScoring().withTimeout(1.3) :
-                        new MidScoring().withTimeout(1.1),
-
-                new InstantCommand(gripper::open, gripper),
-
-                new ReturnArm().withTimeout(0.65)
+                new ArmWithStateMachine(ArmPosition.MIDDLE_SCORING)
         );
     }
 
