@@ -1,21 +1,13 @@
 package frc.robot.subsystems.drivetrain;
 
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.*;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Ports;
 import frc.robot.Robot;
-import frc.robot.subsystems.vision.Limelight;
-import frc.robot.subsystems.vision.LimelightHelpers;
 import frc.robot.utils.Utils;
 import frc.robot.utils.math.differential.Derivative;
 import org.littletonrobotics.junction.Logger;
@@ -38,7 +30,6 @@ public class SwerveDrive extends SubsystemBase {
 
     private double linearVelocity;
 
-
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
             SwerveConstants.wheelPositions[0],
             SwerveConstants.wheelPositions[1],
@@ -49,15 +40,6 @@ public class SwerveDrive extends SubsystemBase {
     private SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
 
     private final SwerveDriveOdometry odometry;
-
-    private final SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
-            kinematics,
-            new Rotation2d(),
-            modulePositions,
-            new Pose2d(),
-            VecBuilder.fill(0.1, 0.1, 0.1),
-            VecBuilder.fill(2.0, 2.0, 2.0)
-    );
 
     private SwerveDrive() {
         if (Robot.isReal()) {
@@ -167,10 +149,6 @@ public class SwerveDrive extends SubsystemBase {
         return odometry.getPoseMeters();
     }
 
-    public Pose2d getEstimatedPose() {
-        return poseEstimator.getEstimatedPosition();
-    }
-
     public SwerveDriveKinematics getKinematics() {
         return kinematics;
     }
@@ -181,12 +159,10 @@ public class SwerveDrive extends SubsystemBase {
 
     public void resetPose() {
         odometry.resetPosition(new Rotation2d(getYaw()), modulePositions, new Pose2d());
-        poseEstimator.resetPosition(new Rotation2d(getYaw()), modulePositions, new Pose2d());
     }
 
     public void resetPose(Pose2d pose) {
         odometry.resetPosition(new Rotation2d(getYaw()), modulePositions, pose);
-        poseEstimator.resetPosition(new Rotation2d(getYaw()), modulePositions, pose);
     }
 
     public boolean encodersConnected() {
@@ -319,13 +295,6 @@ public class SwerveDrive extends SubsystemBase {
         loggerInputs.rawYaw = getRawYaw();
         loggerInputs.yaw = getYaw();
         gyro.updateInputs(loggerInputs);
-
-        poseEstimator.update(new Rotation2d(getYaw()), modulePositions);
-        var measurement = Limelight.getInstance().getBotPoseFieldOriented();
-        measurement.ifPresent(pose2d -> poseEstimator.addVisionMeasurement(pose2d,
-                Timer.getFPGATimestamp()
-                        - LimelightHelpers.getLatency_Capture("limelight")
-                        - LimelightHelpers.getLatency_Pipeline("limelight")));
 
         Logger.getInstance().processInputs("SwerveDrive", loggerInputs);
     }
