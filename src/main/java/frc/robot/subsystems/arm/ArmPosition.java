@@ -7,7 +7,7 @@ public enum ArmPosition implements SystemState<ArmPosition, ArmInputs> {
 
     PICKUP(new Translation2d(-0.34, -0.13), new Translation2d(-0.34, -0.13)),
     FEEDER(new Translation2d(0.2, 0.775), new Translation2d(0.2, 0.775)),
-    NEUTRAL(new Translation2d(-0.4508, 0.3976), new Translation2d(-0.4508, 0.3976)),
+    NEUTRAL(new Translation2d(-0.3508, 0.3976), new Translation2d(-0.4508, 0.3976)),
 
     TOP_SCORING(new Translation2d(1.195, 0.741), new Translation2d(1.13, 0.92)),
     MIDDLE_SCORING(new Translation2d(0.8, 0.481), new Translation2d(0.929, 0.59)),
@@ -30,7 +30,7 @@ public enum ArmPosition implements SystemState<ArmPosition, ArmInputs> {
                 }
                 return FEEDER;
             case PICKUP:
-                if (armInputs.armPosition[0] < 0 && armInputs.armPosition[1] < 0.4) {
+                if (armInputs.armPosition[0] < 0 && armInputs.armPosition[1] < 0.5) {
                     return PICKUP;
                 }
                 return NEUTRAL;

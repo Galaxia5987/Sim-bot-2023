@@ -6,7 +6,7 @@ import frc.robot.autonomous.AutonUpperScoring;
 import frc.robot.autonomous.Engage;
 import frc.robot.autonomous.FollowPath;
 import frc.robot.autonomous.ResetAuto;
-import frc.robot.commandgroups.PickUpCube;
+import frc.robot.commandgroups.PickUpCubeAuto;
 import frc.robot.commandgroups.ReturnArm;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
 import frc.robot.subsystems.gripper.Gripper;
@@ -35,7 +35,7 @@ public class BumperConeHighTakeCubeEngage extends SequentialCommandGroup {
 
                 FollowPath.loadTrajectory("BumperConeCubeHigh 1", FollowPath.resetCommand(swerveDrive))
                         .alongWith(
-                                new PickUpCube().withTimeout(3.5)),
+                                new PickUpCubeAuto().withTimeout(3.5)),
 
                 FollowPath.loadTrajectory("BumperConeHighTakeCube engage"),
 

@@ -2,12 +2,15 @@ package frc.robot.subsystems.intake;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Ports;
 import frc.robot.subsystems.LoggedSubsystem;
@@ -44,6 +47,9 @@ public class Intake extends LoggedSubsystem<IntakeLoggedInputs> {
         angleMotor.config_kI(0, IntakeConstants.kI);
         angleMotor.config_kD(0, IntakeConstants.kD);
         angleMotor.config_kF(0, IntakeConstants.kF);
+        angleMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(
+                true, 25, 0, 0
+        ));
     }
 
     /**
@@ -97,6 +103,11 @@ public class Intake extends LoggedSubsystem<IntakeLoggedInputs> {
      */
     public void setAngle(double angle) {
         angleMotor.set(ControlMode.Position, unitModel.toTicks(angle));
+    }
+
+    public Command lowerIntake() {
+        return new InstantCommand(() -> resetEncoder(-5.5), this)
+                .andThen(new RunCommand(() -> setAngle(-40), this));
     }
 
     public void resetEncoder(double angle) {

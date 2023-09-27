@@ -6,9 +6,11 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.autonomous.AutoFunctions;
 import frc.robot.autonomous.FollowPath;
-import frc.robot.commandgroups.PickUpCube;
+import frc.robot.commandgroups.PickUpCubeAuto;
 import frc.robot.commandgroups.ReturnArm;
 import frc.robot.commandgroups.ReturnIntake;
+import frc.robot.subsystems.arm.ArmPosition;
+import frc.robot.subsystems.arm.commands.ArmWithStateMachine;
 import frc.robot.subsystems.drivetrain.SwerveConstants;
 import frc.robot.subsystems.gripper.Gripper;
 
@@ -28,11 +30,13 @@ public class FeederConeCubeHighCube extends AutoFunctions {
 
                 feederTakeCube(),
 
-                FollowPath.loadTrajectory("FeederConeCubeHigh 2").alongWith(new ReturnIntake().andThen(new InstantCommand(gripper::close, gripper)).andThen(new ReturnArm().withTimeout(0.65))),
+                FollowPath.loadTrajectory("FeederConeCubeHigh 2")
+                        .alongWith(new ReturnIntake().andThen(new InstantCommand(gripper::close, gripper))
+                                .andThen(new ArmWithStateMachine(ArmPosition.FEEDER).withTimeout(1.0))),
 
                 autoUpperScoring(false),
 
-                FollowPath.loadTrajectory("FeederConeCubeHigh 3").alongWith(new PickUpCube().withTimeout(5))
-                );
+                FollowPath.loadTrajectory("FeederConeCubeHigh 3").alongWith(new PickUpCubeAuto().withTimeout(5))
+        );
     }
 }

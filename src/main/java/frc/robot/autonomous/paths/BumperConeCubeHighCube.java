@@ -6,7 +6,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.autonomous.AutoFunctions;
 import frc.robot.autonomous.FollowPath;
-import frc.robot.commandgroups.PickUpCube;
+import frc.robot.commandgroups.PickUpCubeAuto;
 import frc.robot.commandgroups.ReturnArm;
 import frc.robot.commandgroups.ReturnIntake;
 import frc.robot.subsystems.drivetrain.SwerveConstants;
@@ -31,7 +31,7 @@ public class BumperConeCubeHighCube extends AutoFunctions {
                 autoUpperScoring(false),
 
                 FollowPath.loadTrajectory("BumperConeCubeHigh 3")
-                        .alongWith(new PickUpCube().withTimeout(5))
+                        .alongWith(new PickUpCubeAuto().withTimeout(5))
         );
     }
 }
