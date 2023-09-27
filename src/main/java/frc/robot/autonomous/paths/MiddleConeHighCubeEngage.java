@@ -6,7 +6,9 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.autonomous.AutoFunctions;
+import frc.robot.commandgroups.GetArmIntoRobot;
 import frc.robot.commandgroups.PickUpCubeAuto;
+import frc.robot.commandgroups.ReturnArm;
 import frc.robot.commandgroups.ReturnIntake;
 import frc.robot.subsystems.drivetrain.SwerveConstants;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
@@ -24,6 +26,8 @@ public class MiddleConeHighCubeEngage extends AutoFunctions {
 
         addCommands(
                 autoBegin(trajectory),
+
+                new ReturnArm().withTimeout(1),
 
                 new DriveTillPitch(8.5, 1.5),
 
