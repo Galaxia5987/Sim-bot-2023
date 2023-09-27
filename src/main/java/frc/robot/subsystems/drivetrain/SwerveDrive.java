@@ -192,7 +192,7 @@ public class SwerveDrive extends SubsystemBase {
      * @param chassisSpeeds Desired chassis speeds.
      * @param fieldOriented Should the drive be field oriented.
      */
-    public void drive(ChassisSpeeds chassisSpeeds, boolean fieldOriented) { //TODO: check if field oriented option works
+    public void drive(ChassisSpeeds chassisSpeeds, boolean fieldOriented) {
         loggerInputs.desiredSpeeds = Utils.chassisSpeedsToArray(chassisSpeeds);
 
         ChassisSpeeds fieldOrientedChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
