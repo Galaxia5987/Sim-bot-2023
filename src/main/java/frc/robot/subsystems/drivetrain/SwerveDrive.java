@@ -179,6 +179,12 @@ public class SwerveDrive extends SubsystemBase {
         }
     }
 
+    public void stop(){
+        for (int i = 0; i < 4; i++) {
+            modules[i].setModuleState(new SwerveModuleState(0, modules[i].getModuleState().angle));
+        }
+    }
+
     public void lock() {
         modules[0].setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
         modules[1].setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(135)));
