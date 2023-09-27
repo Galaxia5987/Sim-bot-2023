@@ -6,24 +6,24 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commandgroups.GetArmIntoRobot;
-import frc.robot.commandgroups.PickUpCube;
+import frc.robot.commandgroups.PickUpCubeAuto;
 import frc.robot.commandgroups.ReturnArm;
 import frc.robot.commandgroups.UpperScoring;
 import frc.robot.subsystems.drivetrain.SwerveConstants;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
 import frc.robot.subsystems.drivetrain.commands.DriveTillPitch;
 import frc.robot.subsystems.gripper.Gripper;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.commands.Retract;
 import frc.robot.subsystems.leds.command.PurpleLed;
 import frc.robot.subsystems.leds.command.YellowLed;
 import frc.robot.utils.controllers.DieterController;
 
-import static frc.robot.subsystems.intake.commands.Retract.Mode.DOWN;
-
 public class AutoFunctions extends SequentialCommandGroup {
     protected final Gripper gripper = Gripper.getInstance();
     protected final DieterController yawController = new DieterController(3, 0, 0, 0);
     protected final SwerveDrive swerveDrive = SwerveDrive.getInstance();
+    protected final Intake intake = Intake.getInstance();
 
 
     protected CommandBase engage(boolean forwards, boolean returnArm) {
@@ -59,9 +59,7 @@ public class AutoFunctions extends SequentialCommandGroup {
                 isCone ? new UpperScoring().withTimeout(1.5) :
                         new UpperScoring().withTimeout(1.2),
 
-                new InstantCommand(gripper::open, gripper),
-
-                new ReturnArm().withTimeout(0.65)
+                new InstantCommand(gripper::open, gripper)
         );
     }
 
@@ -69,23 +67,22 @@ public class AutoFunctions extends SequentialCommandGroup {
         return new SequentialCommandGroup(
                 FollowPath.resetCommand(swerveDrive).apply(trajectory).alongWith(
                         new InstantCommand(gripper::close, gripper)),
-                new Retract(DOWN).withTimeout(0.5),
-                autoUpperScoring(true),
+                intake.lowerIntake().withTimeout(0.2),
+                autoUpperScoring(true).alongWith(new Retract(Retract.Mode.DOWN)),
                 new InstantCommand(gripper::open, gripper),
-                new ReturnArm().withTimeout(0.65),
                 new PurpleLed());
     }
 
     protected CommandBase bumperTakeCube() {
         return FollowPath.loadTrajectory("BumperConeCubeHigh 1", FollowPath.resetCommand(swerveDrive))
                 .alongWith(
-                        new PickUpCube().withTimeout(3.5));
+                        new PickUpCubeAuto().withTimeout(3.5));
     }
 
     protected CommandBase feederTakeCube(){
         return FollowPath.loadTrajectory("FeederConeCubeHigh 1", FollowPath.resetCommand(swerveDrive))
                 .alongWith(
-                        new PickUpCube().withTimeout(3.5));
+                        new PickUpCubeAuto().withTimeout(3.3));
     }
 }
 
