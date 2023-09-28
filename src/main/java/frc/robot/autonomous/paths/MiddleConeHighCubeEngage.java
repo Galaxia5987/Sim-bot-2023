@@ -3,6 +3,7 @@ package frc.robot.autonomous.paths;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.autonomous.AutoFunctions;
@@ -29,12 +30,14 @@ public class MiddleConeHighCubeEngage extends AutoFunctions {
 
                 new ReturnArm().withTimeout(1),
 
-                new DriveTillPitch(8.5, 1.5),
+                new DriveTillPitch(-10.5, 1.5),
 
                 new RunCommand(() -> swerveDrive.drive(
+                        new ChassisSpeeds(
                         1.5,
                         0,
-                        yawController.calculate(swerveDrive.getYaw(), 0),
+                        yawController.calculate(swerveDrive.getYaw(), 0)
+                        ),
                         true
                 ), swerveDrive)
                         .alongWith(new PickUpCubeAuto())

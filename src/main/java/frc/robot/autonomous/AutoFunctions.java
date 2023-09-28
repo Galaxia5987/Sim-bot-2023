@@ -1,6 +1,7 @@
 package frc.robot.autonomous;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -31,9 +32,11 @@ public class AutoFunctions extends SequentialCommandGroup {
                         .alongWith(returnArm ? new ReturnArm().withTimeout(0.65) : new InstantCommand()),
 
                 new RunCommand(() -> swerveDrive.drive(
+                        new ChassisSpeeds(
                         1.5 * direction(forwards),
                         0,
-                        yawController.calculate(swerveDrive.getYaw(), 0),
+                        yawController.calculate(swerveDrive.getYaw(), 0)
+                        ),
                         true
 
                 ), swerveDrive).alongWith(new GetArmIntoRobot()).withTimeout(
