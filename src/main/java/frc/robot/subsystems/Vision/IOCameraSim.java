@@ -51,8 +51,9 @@ public class IOCameraSim implements VisionIO {
 
     @Override
     public Pose3d getEstimatedPoseFieldOriented(Pose3d poseTargetOriented, int aprilID) {
-        Transform3d transform3d = new Transform3d(poseTargetOriented.getTranslation(), poseTargetOriented.getRotation());
-        return VisionConstants.TARGET_POSITION_SIM[aprilID].plus(transform3d);
+//        Transform3d transform3d = new Transform3d(poseTargetOriented.getTranslation(), poseTargetOriented.getRotation());
+//        return VisionConstants.TARGET_POSITION_SIM[aprilID].plus(transform3d);
+        return VisionIO.super.getEstimatedPoseFieldOriented(poseTargetOriented, aprilID);
     }
 
     @Override
