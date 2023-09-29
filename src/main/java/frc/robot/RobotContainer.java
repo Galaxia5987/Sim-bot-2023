@@ -96,7 +96,10 @@ public class RobotContainer {
 
         start.onTrue(new InstantCommand(leds::toggle));
 
-        leftJoystickTopBottom.onTrue(new InstantCommand(leds::toggleRainbow));
+        leftJoystickTopBottom.onTrue(
+                new InstantCommand(leds::toggleRainbow)
+                        .alongWith(new InstantCommand(swerveDrive::lock))
+        );
 
         xboxLeftTrigger.whileTrue(new PickUpCubeTeleop())
                 .onFalse(new ReturnIntake());
