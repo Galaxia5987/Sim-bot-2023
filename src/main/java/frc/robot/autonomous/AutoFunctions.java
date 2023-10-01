@@ -6,11 +6,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commandgroups.GetArmIntoRobot;
-import frc.robot.commandgroups.PickUpCubeAuto;
-import frc.robot.commandgroups.ReturnArm;
-import frc.robot.commandgroups.UpperScoring;
+import frc.robot.commandgroups.*;
 import frc.robot.subsystems.arm.ArmPosition;
+import frc.robot.subsystems.arm.commands.ArmWithSpline;
 import frc.robot.subsystems.arm.commands.ArmWithStateMachine;
 import frc.robot.subsystems.drivetrain.SwerveConstants;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
@@ -72,7 +70,7 @@ public class AutoFunctions extends SequentialCommandGroup {
         return new SequentialCommandGroup(
                 isCone ? new YellowLed() :
                         new PurpleLed(),
-                new ArmWithStateMachine(ArmPosition.MIDDLE_SCORING)
+                new MidScoring()
         );
     }
 
