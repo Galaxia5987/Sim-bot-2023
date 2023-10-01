@@ -10,7 +10,6 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Ports;
 import frc.robot.subsystems.LoggedSubsystem;
@@ -48,8 +47,9 @@ public class Intake extends LoggedSubsystem<IntakeLoggedInputs> {
         angleMotor.config_kD(0, IntakeConstants.kD);
         angleMotor.config_kF(0, IntakeConstants.kF);
         angleMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(
-                true, 25, 0, 0
+                true, 30, 0, 0
         ));
+        angleMotor.configClosedLoopPeakOutput(0, 0.4);
     }
 
     /**
@@ -106,7 +106,7 @@ public class Intake extends LoggedSubsystem<IntakeLoggedInputs> {
     }
 
     public Command lowerIntake() {
-        return new InstantCommand(() -> resetEncoder(-5.5), this)
+        return new InstantCommand(() -> resetEncoder(IntakeConstants.ANGLE_UP), this)
                 .andThen(new RunCommand(() -> setAngle(-40), this));
     }
 
