@@ -26,7 +26,7 @@ public class ArmWithStateMachine extends CommandBase {
     public void initialize() {
         arm.setDesiredPosition(desiredPosition);
 
-        nextPosition = desiredPosition.nextState(arm.getInputs());
+        nextPosition = desiredPosition.nextState(arm.getInputs(), desiredPosition);
         lastPosition = nextPosition;
         var pose = Leds.getInstance().inConeMode() ? nextPosition.conePose : nextPosition.cubePose;
         var angles = arm.getKinematics().inverseKinematics(pose);
@@ -51,7 +51,7 @@ public class ArmWithStateMachine extends CommandBase {
      */
     @Override
     public void execute() {
-        nextPosition = desiredPosition.nextState(arm.getInputs());
+        nextPosition = desiredPosition.nextState(arm.getInputs(), desiredPosition);
 
         if (nextPosition != lastPosition) {
             updateTrapezoidProfiles();

@@ -13,6 +13,7 @@ import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmConstants;
 import frc.robot.subsystems.arm.ArmPosition;
 import frc.robot.subsystems.arm.commands.ArmAxisControl;
+import frc.robot.subsystems.arm.commands.ArmWithSpline;
 import frc.robot.subsystems.arm.commands.ArmWithStateMachine;
 import frc.robot.subsystems.arm.commands.ArmXboxControl;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
@@ -83,10 +84,10 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         leftJoystickTrigger.onTrue(new InstantCommand(swerveDrive::resetGyro));
-        y.whileTrue(new ArmWithStateMachine(ArmPosition.TOP_SCORING));
-        x.whileTrue(new ArmWithStateMachine(ArmPosition.MIDDLE_SCORING));
-        b.whileTrue(new ArmWithStateMachine(ArmPosition.FEEDER));
-        a.whileTrue(new ArmWithStateMachine(ArmPosition.NEUTRAL));
+        y.whileTrue(new ArmWithSpline(ArmPosition.TOP_SCORING));
+        x.whileTrue(new ArmWithSpline(ArmPosition.MIDDLE_SCORING));
+        b.whileTrue(new ArmWithSpline(ArmPosition.FEEDER));
+        a.whileTrue(new ArmWithSpline(ArmPosition.NEUTRAL));
 
         lb.onTrue(new InstantCommand(gripper::toggle));
 
