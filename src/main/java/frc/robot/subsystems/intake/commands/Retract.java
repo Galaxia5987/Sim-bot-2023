@@ -5,6 +5,8 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeConstants;
 
 public class Retract extends CommandBase {
+    private static boolean hasReset = false;
+
     private final Intake intake = Intake.getInstance();
     private final Mode mode;
 
@@ -29,10 +31,13 @@ public class Retract extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        if (mode == Mode.UP) {
-            intake.resetEncoder(0);
-        } else if (mode == Mode.DOWN) {
-            intake.resetEncoder(-110.3);
+        if (!hasReset) {
+            hasReset = true;
+            if (mode == Mode.UP) {
+                intake.resetEncoder(0);
+            } else {
+                intake.resetEncoder(-110.3);
+            }
         }
         intake.setAnglePower(0);
     }
