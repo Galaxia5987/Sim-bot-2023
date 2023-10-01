@@ -20,5 +20,5 @@ public class IntakeConstants {
     public static final double INTAKE_ANGLE_MAX_ACCELERATION = INTAKE_ANGLE_VELOCITY / 0.5; //[RPM/s]
     public static final double MAX_CURRENT = 8;
 
-    public static final double ANGLE_MOTOR_POWER = 0.23;
+    public static final double ANGLE_MOTOR_POWER = 0.3;
 }

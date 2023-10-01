@@ -22,6 +22,7 @@ import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.commands.HoldIntakeInPlace;
 import frc.robot.subsystems.intake.commands.ProximitySensorDefaultCommand;
+import frc.robot.subsystems.intake.commands.Retract;
 import frc.robot.subsystems.leds.Leds;
 import frc.robot.utils.Utils;
 
@@ -98,7 +99,8 @@ public class RobotContainer {
                         .alongWith(new InstantCommand(swerveDrive::lock))
         );
 
-        xboxLeftTrigger.whileTrue(new PickUpCubeTeleop());
+        xboxLeftTrigger.whileTrue(new PickUpCubeTeleop())
+                .onFalse(new Retract(Retract.Mode.UP).andThen(new InstantCommand(() -> intake.setPower(0))));
 
         rb.whileTrue(new ArmAxisControl(1, 0.02, 0)
                 .until(() -> gripper.getDistance() < ArmConstants.FEEDER_DISTANCE));
