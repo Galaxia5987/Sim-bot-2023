@@ -6,7 +6,7 @@ import frc.robot.subsystems.SystemState;
 public enum ArmPosition implements SystemState<ArmPosition, ArmInputs> {
 
     PICKUP(new Translation2d(-0.34, -0.13), new Translation2d(-0.34, -0.13)),
-    FEEDER(new Translation2d(0.2, 0.775), new Translation2d(0.2, 0.775)),
+    FEEDER(new Translation2d(0.2, 0.745), new Translation2d(0.2, 0.775)),
     NEUTRAL(new Translation2d(-0.3508, 0.3976), new Translation2d(-0.4508, 0.3976)),
 
     TOP_SCORING(new Translation2d(1.195, 0.741), new Translation2d(1.13, 0.92)),
