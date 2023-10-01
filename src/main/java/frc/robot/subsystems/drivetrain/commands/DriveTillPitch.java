@@ -1,7 +1,6 @@
 package frc.robot.subsystems.drivetrain.commands;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
 import frc.robot.utils.Utils;
@@ -28,8 +27,8 @@ public class DriveTillPitch extends CommandBase {
                         xVelocity,
                         0,
                         yawController.calculate(swerveDrive.getYaw(), 0)
-                        ),
-                false //TODO: check if should be field or robot oriented
+                ),
+                true
         );
     }
 
