@@ -67,15 +67,6 @@ public class Arm extends LoggedSubsystem<ArmInputsAutoLogged> {
                 ArmConstants.elbowD);
         configureAuxMotor(elbowAuxMotor, elbowMainMotor);
 
-//        shoulderMainMotor.config_IntegralZone(0, 0.0001);
-//        shoulderMainMotor.setIntegralAccumulator(1 / 3.0 * ArmConstants.SHOULDER_FALCON_TICKS_PER_REVOLUTION / 360.0);
-//
-//        elbowMainMotor.config_IntegralZone(0, 0.0001);
-//        elbowMainMotor.setIntegralAccumulator(2 / 3.0 * ArmConstants.ELBOW_FALCON_TICKS_PER_REVOLUTION / 360.0);
-
-//        shoulderMainMotor.configClosedLoopPeakOutput(0, 0.5);
-//        elbowMainMotor.configClosedLoopPeakOutput(0, 0.5);
-
         for (int i = 1; i <= 17; i++) {
             shoulderAuxMotor.setStatusFramePeriod(i, 500);
             elbowAuxMotor.setStatusFramePeriod(i, 500);

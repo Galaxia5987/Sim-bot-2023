@@ -6,7 +6,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commandgroups.*;
+import frc.robot.commandgroups.GetArmIntoRobot;
+import frc.robot.commandgroups.PickUpCubeAuto;
+import frc.robot.commandgroups.ReturnArm;
+import frc.robot.commandgroups.UpperScoring;
 import frc.robot.subsystems.arm.ArmPosition;
 import frc.robot.subsystems.arm.commands.ArmWithStateMachine;
 import frc.robot.subsystems.drivetrain.SwerveConstants;
@@ -33,9 +36,9 @@ public class AutoFunctions extends SequentialCommandGroup {
 
                 new RunCommand(() -> swerveDrive.drive(
                         new ChassisSpeeds(
-                        1.5 * direction(forwards),
-                        0,
-                        yawController.calculate(swerveDrive.getYaw(), 0)
+                                1.5 * direction(forwards),
+                                0,
+                                yawController.calculate(swerveDrive.getYaw(), 0)
                         ),
                         true
 
@@ -89,7 +92,7 @@ public class AutoFunctions extends SequentialCommandGroup {
                         new PickUpCubeAuto().withTimeout(3.5));
     }
 
-    protected CommandBase feederTakeCube(){
+    protected CommandBase feederTakeCube() {
         return FollowPath.loadTrajectory("FeederConeCubeHigh 1", FollowPath.resetCommand(swerveDrive))
                 .alongWith(
                         new PickUpCubeAuto().withTimeout(3.3));

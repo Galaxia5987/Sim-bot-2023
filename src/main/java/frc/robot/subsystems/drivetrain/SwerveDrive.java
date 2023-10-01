@@ -1,6 +1,5 @@
 package frc.robot.subsystems.drivetrain;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,31 +14,22 @@ import org.littletonrobotics.junction.Logger;
 
 public class SwerveDrive extends SubsystemBase {
     private static SwerveDrive INSTANCE = null;
-    private SwerveDriveInputsAutoLogged loggerInputs = new SwerveDriveInputsAutoLogged();
-
     private final GyroIO gyro;
     private final SwerveModule[] modules = new SwerveModule[4]; //FL, FR, RL, RR
-    private SwerveModuleState[] currentModuleStates = new SwerveModuleState[4];
-    private SwerveModuleState[] desiredModuleStates = new SwerveModuleState[4];
-
-    private final PIDController pidController = new PIDController(SwerveConstants.OMEGA_kP, SwerveConstants.OMEGA_kI, SwerveConstants.OMEGA_kD);
-    private boolean shouldKeepAngle = false;
-
-    private Derivative acceleration = new Derivative(0, 0);
     private final LinearFilter accelFilter = LinearFilter.movingAverage(15);
-
-    private double linearVelocity;
-
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
             SwerveConstants.wheelPositions[0],
             SwerveConstants.wheelPositions[1],
             SwerveConstants.wheelPositions[2],
             SwerveConstants.wheelPositions[3]
     );
-
-    private SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
-
     private final SwerveDriveOdometry odometry;
+    private final SwerveDriveInputsAutoLogged loggerInputs = new SwerveDriveInputsAutoLogged();
+    private final SwerveModuleState[] currentModuleStates = new SwerveModuleState[4];
+    private final SwerveModuleState[] desiredModuleStates = new SwerveModuleState[4];
+    private final Derivative acceleration = new Derivative(0, 0);
+    private double linearVelocity;
+    private final SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
 
     private SwerveDrive() {
         if (Robot.isReal()) {
@@ -63,8 +53,6 @@ public class SwerveDrive extends SubsystemBase {
 
             gyro = new GyroIOSim();
         }
-        pidController.enableContinuousInput(0, Math.PI * 2);
-        pidController.setTolerance(Math.toRadians(3));
 
         updateModulePositions();
         odometry = new SwerveDriveOdometry(
@@ -111,7 +99,7 @@ public class SwerveDrive extends SubsystemBase {
         return gyro.getYaw();
     }
 
-    public double getPitch(){
+    public double getPitch() {
         return gyro.getPitch();
     }
 
@@ -153,7 +141,7 @@ public class SwerveDrive extends SubsystemBase {
         return kinematics;
     }
 
-    public double getVelocity(){
+    public double getVelocity() {
         return linearVelocity;
     }
 
@@ -173,13 +161,13 @@ public class SwerveDrive extends SubsystemBase {
         return connected;
     }
 
-    public void checkSwerve(){
+    public void checkSwerve() {
         for (int i = 0; i < 4; i++) {
             modules[i].checkModule();
         }
     }
 
-    public void stop(){
+    public void stop() {
         for (int i = 0; i < 4; i++) {
             modules[i].setModuleState(new SwerveModuleState(0, modules[i].getModuleState().angle));
         }
@@ -214,10 +202,9 @@ public class SwerveDrive extends SubsystemBase {
             }
         }
 
-        if (fieldOriented){
+        if (fieldOriented) {
             setModuleStates(kinematics.toSwerveModuleStates(fieldOrientedChassisSpeeds));
-        }
-        else {
+        } else {
             setModuleStates(kinematics.toSwerveModuleStates(chassisSpeeds));
         }
     }
@@ -230,21 +217,6 @@ public class SwerveDrive extends SubsystemBase {
      * @param omegaOutput percentage of the omega speed
      */
     public void drive(double xOutput, double yOutput, double omegaOutput, boolean fieldOriented) {
-        double angleFF = 0;
-//        if (Utils.epsilonEquals(omegaOutput, 0)) {
-//            double angle = getRawYaw();
-//            if (!shouldKeepAngle && Utils.epsilonEquals(loggerInputs.currentSpeeds[2], 0, 0.1)) {
-//                pidController.setSetpoint(angle);
-//                shouldKeepAngle = true;
-//            } else {
-//                angleFF = pidController.calculate(angle);
-//            }
-//        } else {
-//            shouldKeepAngle = false;
-//        }
-
-        loggerInputs.angleFF = angleFF;
-        loggerInputs.pidSetpoint = pidController.getSetpoint();
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(
                 SwerveConstants.MAX_X_Y_VELOCITY * xOutput,
                 SwerveConstants.MAX_X_Y_VELOCITY * yOutput,

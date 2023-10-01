@@ -15,11 +15,9 @@ public class SwerveModule extends SubsystemBase {
     private final ModuleIO io;
 
     private final int number;
-
-    private SwerveModuleState currentModuleState = new SwerveModuleState();
-
     private final BooleanTrigger encoderTrigger = new BooleanTrigger(false, false);
     private final Timer timer = new Timer();
+    private SwerveModuleState currentModuleState = new SwerveModuleState();
 
     public SwerveModule(ModuleIO io, int number) {
         this.io = io;
@@ -27,6 +25,15 @@ public class SwerveModule extends SubsystemBase {
 
         timer.start();
         timer.reset();
+    }
+
+    /**
+     * Gets the state of a module.
+     *
+     * @return The state of a module.
+     */
+    public SwerveModuleState getModuleState() {
+        return currentModuleState;
     }
 
     /**
@@ -38,15 +45,6 @@ public class SwerveModule extends SubsystemBase {
         moduleState = SwerveModuleState.optimize(moduleState, new Rotation2d(loggerInputs.angle));
         io.setVelocity(moduleState.speedMetersPerSecond);
         io.setAngle(moduleState.angle.getRadians());
-    }
-
-    /**
-     * Gets the state of a module.
-     *
-     * @return The state of a module.
-     */
-    public SwerveModuleState getModuleState() {
-        return currentModuleState;
     }
 
     /**
@@ -100,11 +98,13 @@ public class SwerveModule extends SubsystemBase {
         io.neutralOutput();
     }
 
-    public boolean encoderConnected(){
+    public boolean encoderConnected() {
         return io.encoderConnected();
     }
 
-    public void checkModule(){io.checkModule();}
+    public void checkModule() {
+        io.checkModule();
+    }
 
     @Override
     public void periodic() {

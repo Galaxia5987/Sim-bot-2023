@@ -11,13 +11,11 @@ public class ArmWithStateMachine extends CommandBase {
     private final Arm arm = Arm.getInstance();
 
     private final frc.robot.subsystems.arm.ArmPosition desiredPosition;
+    private final Timer timer = new Timer();
     private frc.robot.subsystems.arm.ArmPosition nextPosition;
     private frc.robot.subsystems.arm.ArmPosition lastPosition;
-
     private TrapezoidProfile shoulderProfile;
     private TrapezoidProfile elbowProfile;
-
-    private final Timer timer = new Timer();
 
     public ArmWithStateMachine(frc.robot.subsystems.arm.ArmPosition desiredPosition) {
         this.desiredPosition = desiredPosition;

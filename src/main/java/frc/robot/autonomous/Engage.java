@@ -30,9 +30,6 @@ public class Engage extends SequentialCommandGroup {
                         forwards ?
                                 SwerveConstants.FORWARD_BALANCE_TIME :
                                 SwerveConstants.BACKWARD_BALANCE_TIME),
-//
-//                new Balance(1.5 * direction(forwards), 0.75 * direction(forwards), -10.5 * direction(forwards))
-//                        .alongWith(new GetArmIntoRobot()), TODO: Check engage
 
                 new InstantCommand(swerveDrive::lock)
         );

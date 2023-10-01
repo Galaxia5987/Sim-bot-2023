@@ -7,7 +7,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 
 public class SwerveConstants {
     public static final double[] OFFSETS =
-            {0.5709977142749428,0.26230635655765894,0.9328634483215862,0.5489868137246704};
+            {0.5709977142749428, 0.26230635655765894, 0.9328634483215862, 0.5489868137246704};
 
     public static final double VOLT_COMP_SATURATION = 12;
     public static final SupplyCurrentLimitConfiguration SUPPLY_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(true, 50, 0, 0);
@@ -47,8 +47,8 @@ public class SwerveConstants {
             DRIVE_REDUCTION *
             WHEEL_DIAMETER * Math.PI;
 
-    public static final double MAX_OMEGA_VELOCITY = MAX_X_Y_VELOCITY/ //[m/s]
-            Math.sqrt((robotLength/2)*(robotLength/2)+(robotWidth/2)*(robotWidth/2));
+    public static final double MAX_OMEGA_VELOCITY = MAX_X_Y_VELOCITY / //[m/s]
+            Math.sqrt((robotLength / 2) * (robotLength / 2) + (robotWidth / 2) * (robotWidth / 2));
 
     public static final TalonFXInvertType CLOCKWISE = TalonFXInvertType.Clockwise;
     public static final TalonFXInvertType COUNTER_CLOCKWISE = TalonFXInvertType.CounterClockwise;
@@ -57,14 +57,14 @@ public class SwerveConstants {
     public static final double XBOX_DEADBAND = 0.15;
 
 
-    public static final double TICKS_PER_RADIAN = 2048/ANGLE_REDUCTION/(Math.PI*2);
-    public static final double TICKS_PER_METER = (2048/DRIVE_REDUCTION)/(Math.PI*WHEEL_DIAMETER);
+    public static final double TICKS_PER_RADIAN = 2048 / ANGLE_REDUCTION / (Math.PI * 2);
+    public static final double TICKS_PER_METER = (2048 / DRIVE_REDUCTION) / (Math.PI * WHEEL_DIAMETER);
 
     public static final Translation2d[] wheelPositions = {
-            new Translation2d(robotLength/2, robotWidth/2),   //FL
-            new Translation2d(robotLength/2, -robotWidth/2),   //FR
-            new Translation2d(-robotLength/2, robotWidth/2),  //RL
-            new Translation2d(-robotLength/2, -robotWidth/2)}; //RR
+            new Translation2d(robotLength / 2, robotWidth / 2),   //FL
+            new Translation2d(robotLength / 2, -robotWidth / 2),   //FR
+            new Translation2d(-robotLength / 2, robotWidth / 2),  //RL
+            new Translation2d(-robotLength / 2, -robotWidth / 2)}; //RR
 
     public static final double MAX_VELOCITY_AUTO = 4.0;
     public static final double MAX_ACCELERATION_AUTO = 2.5;

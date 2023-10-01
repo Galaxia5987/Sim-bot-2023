@@ -21,8 +21,8 @@ public class ModuleIOSim implements ModuleIO {
     private double velocitySetpoint = 0;
     private double angleSetpoint = 0;
 
-    private Integral currentAngle = new Integral(0, 0);
-    private Integral moduleDistance = new Integral(0, 0);
+    private final Integral currentAngle = new Integral(0, 0);
+    private final Integral moduleDistance = new Integral(0, 0);
 
     public ModuleIOSim() {
         driveMotor = new FlywheelSim(
@@ -60,6 +60,11 @@ public class ModuleIOSim implements ModuleIO {
     }
 
     @Override
+    public double getAngle() {
+        return currentAngle.get();
+    }
+
+    @Override
     public void setAngle(double angle) {
         angleSetpoint = angle;
         angleMotorAppliedVoltage = angleFeedback.calculate(MathUtil.angleModulus(currentAngle.get()), angle);
@@ -67,8 +72,8 @@ public class ModuleIOSim implements ModuleIO {
     }
 
     @Override
-    public double getAngle() {
-        return currentAngle.get();
+    public double getVelocity() {
+        return currentVelocity;
     }
 
     @Override
@@ -77,10 +82,5 @@ public class ModuleIOSim implements ModuleIO {
         currentVelocity = driveMotor.getAngularVelocityRadPerSec();
         driveMotorAppliedVoltage = velocityFeedback.calculate(currentVelocity, velocity);
         driveMotor.setInputVoltage(driveMotorAppliedVoltage);
-    }
-
-    @Override
-    public double getVelocity() {
-        return currentVelocity;
     }
 }

@@ -24,7 +24,7 @@ public class GyroIOReal implements GyroIO {
 
     @Override
     public double getPitch() {
-        return gyro.getPitch()-2.95;
+        return gyro.getPitch() - 2.95;
     }
 
     @Override

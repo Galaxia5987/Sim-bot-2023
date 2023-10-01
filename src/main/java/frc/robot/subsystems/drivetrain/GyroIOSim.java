@@ -2,8 +2,8 @@ package frc.robot.subsystems.drivetrain;
 
 import frc.robot.utils.math.differential.Integral;
 
-public class GyroIOSim implements GyroIO{
-    private Integral yaw = new Integral(0, 0);
+public class GyroIOSim implements GyroIO {
+    private final Integral yaw = new Integral(0, 0);
 
     @Override
     public double getYaw() {

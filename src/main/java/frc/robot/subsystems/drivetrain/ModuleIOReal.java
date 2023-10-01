@@ -29,11 +29,11 @@ public class ModuleIOReal implements ModuleIO {
     private double driveMotorVelocitySetpoint;
 
 
-    private Integral driveSupplyChargeUsedCoulomb = new Integral(0, 0);
-    private Integral driveStatorChargeUsedCoulomb = new Integral(0, 0);
+    private final Integral driveSupplyChargeUsedCoulomb = new Integral(0, 0);
+    private final Integral driveStatorChargeUsedCoulomb = new Integral(0, 0);
 
-    private Integral angleSupplyChargeUsedCoulomb = new Integral(0, 0);
-    private Integral angleStatorChargeUsedCoulomb = new Integral(0, 0);
+    private final Integral angleSupplyChargeUsedCoulomb = new Integral(0, 0);
+    private final Integral angleStatorChargeUsedCoulomb = new Integral(0, 0);
 
     public ModuleIOReal(int driveMotorID, int angleMotorID, int encoderID,
                         double[] motionMagicConfigs, int number) {

@@ -8,19 +8,18 @@ import com.pathplanner.lib.server.PathPlannerServer;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.LoggedSubsystem;
-import frc.robot.subsystems.drivetrain.SwerveConstants;
-import frc.robot.subsystems.drivetrain.SwerveDrive;
 import frc.robot.utils.TunableNumber;
 import frc.robot.utils.math.differential.BooleanTrigger;
-import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
-import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 /**
@@ -30,13 +29,17 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  * project.
  */
 public class Robot extends LoggedRobot {
-    public static boolean debug = false;
     private static final BooleanTrigger enabledTrigger = new BooleanTrigger(false, false);
+    public static boolean debug = false;
     private final Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
     private final Timer timer = new Timer();
     private RobotContainer robotContainer;
     private Command autonomousCommand;
-    private BooleanTrigger encoderTrigger = new BooleanTrigger(false, false);
+    private final BooleanTrigger encoderTrigger = new BooleanTrigger(false, false);
+
+    public static boolean justEnabled() {
+        return enabledTrigger.triggered();
+    }
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -162,9 +165,5 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void testPeriodic() {
-    }
-
-    public static boolean justEnabled() {
-        return enabledTrigger.triggered();
     }
 }

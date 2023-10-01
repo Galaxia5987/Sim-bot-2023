@@ -6,22 +6,21 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.autonomous.paths.BumperCone2Cubes;
 import frc.robot.autonomous.paths.BumperConeCubeHighCube;
-import frc.robot.autonomous.paths.FeederConeCubeHighCube;
-import frc.robot.commandgroups.*;
+import frc.robot.commandgroups.PickUpCubeTeleop;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmConstants;
 import frc.robot.subsystems.arm.ArmPosition;
 import frc.robot.subsystems.arm.commands.ArmAxisControl;
 import frc.robot.subsystems.arm.commands.ArmWithStateMachine;
 import frc.robot.subsystems.arm.commands.ArmXboxControl;
-import frc.robot.subsystems.arm.commands.SetArmsPositionAngular;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
-//import frc.robot.subsystems.drivetrain.command.JoystickDrive;
 import frc.robot.subsystems.drivetrain.commands.JoystickDrive;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.commands.HoldIntakeInPlace;
+import frc.robot.subsystems.intake.commands.ProximitySensorDefaultCommand;
 import frc.robot.subsystems.leds.Leds;
 import frc.robot.utils.Utils;
 
@@ -74,25 +73,22 @@ public class RobotContainer {
     }
 
     private void configureDefaultCommands() {
-//        swerveDrive.setDefaultCommand(new XboxDrive(swerveDrive, xboxController));
         swerveDrive.setDefaultCommand(
                 new JoystickDrive(swerveDrive, leftJoystick, rightJoystick)
         );
         arm.setDefaultCommand(new ArmXboxControl(xboxController));
         intake.setDefaultCommand(new HoldIntakeInPlace());
-//        leds.setDefaultCommand(new ProximitySensorDefaultCommand()); //TODO: fix proximity sensor and check this
+        leds.setDefaultCommand(new ProximitySensorDefaultCommand());
     }
 
     private void configureButtonBindings() {
         leftJoystickTrigger.onTrue(new InstantCommand(swerveDrive::resetGyro));
-        rightJoystickTrigger.onTrue(new InstantCommand(swerveDrive::resetPose));
-        b.whileTrue(new ArmWithStateMachine(ArmPosition.FEEDER));
         y.whileTrue(new ArmWithStateMachine(ArmPosition.TOP_SCORING));
         x.whileTrue(new ArmWithStateMachine(ArmPosition.MIDDLE_SCORING));
-
+        b.whileTrue(new ArmWithStateMachine(ArmPosition.FEEDER));
         a.whileTrue(new ArmWithStateMachine(ArmPosition.NEUTRAL));
-        lb.onTrue(new InstantCommand(gripper::toggle));
 
+        lb.onTrue(new InstantCommand(gripper::toggle));
 
         start.onTrue(new InstantCommand(leds::toggle));
 
@@ -101,11 +97,8 @@ public class RobotContainer {
                         .alongWith(new InstantCommand(swerveDrive::lock))
         );
 
-        xboxLeftTrigger.whileTrue(new PickUpCubeTeleop())
-                .onFalse(new ReturnIntake());
-        xboxRightTrigger.whileTrue(new ReturnIntake());
+        xboxLeftTrigger.whileTrue(new PickUpCubeTeleop());
 
-        //TODO: check the arm axis control and the rb command
         rb.whileTrue(new ArmAxisControl(1, 0.02, 0)
                 .until(() -> gripper.getDistance() < ArmConstants.FEEDER_DISTANCE));
 
@@ -113,9 +106,6 @@ public class RobotContainer {
         rightPOV.whileTrue(new ArmAxisControl(0.33, -0.02, 0, 0, 0));
         upPOV.whileTrue(new ArmAxisControl(0.33, 0, 0.02, 0, 0));
         downPOV.whileTrue(new ArmAxisControl(0.33, 0, -0.02, 0, 0));
-
-//        lb.onTrue(new InstantCommand(swerveDrive::resetGyro));
-//        rb.onTrue(new InstantCommand(swerveDrive::resetPose));
     }
 
     /**
@@ -124,6 +114,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new BumperConeCubeHighCube();
+        return new BumperCone2Cubes();
     }
 }

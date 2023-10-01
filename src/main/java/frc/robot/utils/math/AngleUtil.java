@@ -29,9 +29,9 @@ public class AngleUtil {
 
     public static double normalize(double angle) {
         while (angle < 0) {
-            angle += (Math.PI*2);
+            angle += (Math.PI * 2);
         }
-        return angle % (Math.PI*2);
+        return angle % (Math.PI * 2);
     }
 
     public static Rotation2d normalize(Rotation2d angle) {

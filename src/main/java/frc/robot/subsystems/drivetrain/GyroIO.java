@@ -5,11 +5,11 @@ public interface GyroIO {
 
     double getYaw();
 
-    default double getRawYaw(){
+    default double getRawYaw() {
         return 0;
     }
 
-    default double getPitch(){
+    default double getPitch() {
         return 0;
     }
 

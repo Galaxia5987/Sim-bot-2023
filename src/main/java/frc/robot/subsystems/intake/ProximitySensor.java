@@ -1,7 +1,6 @@
 package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import frc.robot.Ports;
 import frc.robot.subsystems.LoggedSubsystem;
 
 

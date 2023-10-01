@@ -102,7 +102,7 @@ public class Leds extends SubsystemBase {
                 }
                 timer.reset();
             }
-        } else if(mode != Mode.ELSE){
+        } else if (mode != Mode.ELSE) {
             mode = Mode.PRIMARY_COLOR;
         }
 
@@ -118,17 +118,14 @@ public class Leds extends SubsystemBase {
             }
             leds.setData(ledBuffer);
         }
-        if (isRainbow){
+        if (isRainbow) {
             mode = Mode.ELSE;
-//            System.out.println("before loop statement");
             for (int i = 0; i < ledBuffer.getLength(); i++) {
                 ledBuffer.setHSV(i, rainbowHue, 255, 180);
                 rainbowHue += (180 / ledBuffer.getLength());
                 leds.setData(ledBuffer);
-//                System.out.println("in-loop check statement");
-            rainbowHue%=180;
+                rainbowHue %= 180;
             }
-//            System.out.println("after loop statement");
         }
     }
 

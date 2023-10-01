@@ -28,11 +28,11 @@ public interface ModuleIO {
     default void neutralOutput() {
     }
 
-    default boolean encoderConnected(){
+    default boolean encoderConnected() {
         return false;
     }
 
-    default void checkModule(){
+    default void checkModule() {
     }
 
     @AutoLog

@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.autonomous.AutoFunctions;
 import frc.robot.autonomous.FollowPath;
 import frc.robot.commandgroups.PickUpCubeAuto;
-import frc.robot.commandgroups.ReturnArm;
 import frc.robot.commandgroups.ReturnIntake;
 import frc.robot.subsystems.arm.ArmPosition;
 import frc.robot.subsystems.arm.commands.ArmWithStateMachine;
