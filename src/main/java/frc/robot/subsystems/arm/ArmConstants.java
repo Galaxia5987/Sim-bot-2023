@@ -70,7 +70,7 @@ public class ArmConstants {
     public static final Translation2d UPPER_CUBE_SCORING = new Translation2d(1.195, 0.741);
     public static final Translation2d MIDDLE_CUBE_SCORING = new Translation2d(0.8, 0.481);
     public static final Translation2d OUT_ROBOT1 = new Translation2d(-0.392, 0.0);
-    public static final Translation2d IN_ROBOT1 = new Translation2d(-0.32, 0.0101);
+    public static final Translation2d IN_ROBOT1 = new Translation2d(-0.01, 0.8);
     public static final Translation2d IN_ROBOT2 = new Translation2d(-0.34, -0.13);
     public static final Translation2d OUT_ROBOT2 = new Translation2d(-0.4508, 0.3976);
     public static final Translation2d FLOOR_SCORING = new Translation2d();
