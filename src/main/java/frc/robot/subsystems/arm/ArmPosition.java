@@ -14,7 +14,9 @@ public enum ArmPosition {
 
     TOP_SCORING(new Translation2d(1.195, 0.741), new Translation2d(1.13, 0.92)),
     MIDDLE_SCORING(new Translation2d(0.8, 0.481), new Translation2d(0.929, 0.59)),
-    BOTTOM_SCORING(new Translation2d(0.2, 0.775), new Translation2d(0.2, 0.775));
+    BOTTOM_SCORING(new Translation2d(0.2, 0.775), new Translation2d(0.2, 0.775)),
+
+    FEEDER_CONE(new Translation2d(0.53, 0.75), new Translation2d(0.53, 0.65));
 
     public final Translation2d cubePose;
     public final Translation2d conePose;
@@ -52,6 +54,11 @@ public enum ArmPosition {
                     return NEUTRAL;
                 }
                 return BOTTOM_SCORING;
+            case FEEDER_CONE:
+                if (armInputs.armPosition[1] < 0.2 && armInputs.armPosition[0] < 0) {
+                    return NEUTRAL;
+                }
+                return FEEDER_CONE;
             default:
                 return NEUTRAL;
         }
