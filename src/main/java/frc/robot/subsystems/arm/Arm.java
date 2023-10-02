@@ -113,6 +113,10 @@ public class Arm extends LoggedSubsystem<ArmInputsAutoLogged> {
         mainMotor.config_kD(0, kD);
     }
 
+    public void setElbowP(double kP){
+        elbowMainMotor.config_kP(0, kP);
+    }
+
     /**
      * Sets the power of the shoulder motors.
      *
