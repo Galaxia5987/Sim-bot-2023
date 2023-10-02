@@ -31,6 +31,7 @@ public class ArmAxisControl extends CommandBase {
 
     @Override
     public void initialize() {
+        arm.setElbowP(0.02);
         position = arm.getEndPosition();
     }
 
@@ -44,5 +45,8 @@ public class ArmAxisControl extends CommandBase {
         }
     }
 
-
+    @Override
+    public void end(boolean interrupted) {
+        arm.setElbowP(ArmConstants.elbowP);
+    }
 }
