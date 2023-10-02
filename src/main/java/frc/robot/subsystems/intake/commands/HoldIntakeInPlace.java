@@ -20,6 +20,6 @@ public class HoldIntakeInPlace extends CommandBase {
             angle = intake.getAngle();
             angle = MathUtil.clamp(angle, IntakeConstants.ANGLE_DOWN, IntakeConstants.ANGLE_UP);
         }
-        intake.setAngle(angle);
+        intake.setAngle(IntakeConstants.ANGLE_UP);
     }
 }
