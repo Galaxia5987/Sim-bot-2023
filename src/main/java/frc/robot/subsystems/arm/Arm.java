@@ -55,6 +55,8 @@ public class Arm extends LoggedSubsystem<ArmInputsAutoLogged> {
         shoulderMainMotor.setInverted(TalonFXInvertType.CounterClockwise);
         elbowMainMotor.setInverted(ArmConstants.MAIN_CLOCKWISE);
 
+        elbowMainMotor.configClosedLoopPeakOutput(0, 0.5);
+
         configureMainMotor(shoulderMainMotor,
                 ArmConstants.shoulderP,
                 ArmConstants.shoulderI,
@@ -109,6 +111,10 @@ public class Arm extends LoggedSubsystem<ArmInputsAutoLogged> {
         mainMotor.config_kP(0, kP);
         mainMotor.config_kI(0, kI);
         mainMotor.config_kD(0, kD);
+    }
+
+    public void setElbowP(double kP){
+        elbowMainMotor.config_kP(0, kP);
     }
 
     /**

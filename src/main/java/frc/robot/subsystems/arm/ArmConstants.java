@@ -50,7 +50,7 @@ public class ArmConstants {
     public static final double shoulderP = 0.02;
     public static final double shoulderI = 0.0;
     public static final double shoulderD = 0.0;
-    public static final double elbowP = 0.02;
+    public static final double elbowP = 0.038;
     public static final double elbowI = 0.0;
     public static final double elbowD = 0.0;
 
@@ -70,7 +70,7 @@ public class ArmConstants {
     public static final Translation2d UPPER_CUBE_SCORING = new Translation2d(1.195, 0.741);
     public static final Translation2d MIDDLE_CUBE_SCORING = new Translation2d(0.8, 0.481);
     public static final Translation2d OUT_ROBOT1 = new Translation2d(-0.392, 0.0);
-    public static final Translation2d IN_ROBOT1 = new Translation2d(-0.32, 0.0101);
+    public static final Translation2d IN_ROBOT1 = new Translation2d(-0.01, 0.8);
     public static final Translation2d IN_ROBOT2 = new Translation2d(-0.34, -0.13);
     public static final Translation2d OUT_ROBOT2 = new Translation2d(-0.4508, 0.3976);
     public static final Translation2d FLOOR_SCORING = new Translation2d();
@@ -85,6 +85,6 @@ public class ArmConstants {
     public static final ArmLinearProfile.Waypoint ARM_OUT_OF_ROBOT_POINT1 = new ArmLinearProfile.Waypoint(0, 0, 0, 0.5);
     public static final ArmLinearProfile.Waypoint ARM_OUT_OF_ROBOT_POINT2 = new ArmLinearProfile.Waypoint(0, 0, 0, 0);
 
-    public static final double FEEDER_DISTANCE = 28;
+    public static final double FEEDER_DISTANCE = 26;
     public static final double FEEDER_MINIMUM_DISTANCE = 18.1;
 }

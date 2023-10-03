@@ -4,23 +4,28 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.autonomous.paths.BumperCone2Cubes;
 import frc.robot.autonomous.paths.BumperConeCubeHighCube;
 import frc.robot.commandgroups.PickUpCubeTeleop;
+import frc.robot.commandgroups.ReturnIntake;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmConstants;
 import frc.robot.subsystems.arm.ArmPosition;
 import frc.robot.subsystems.arm.commands.ArmAxisControl;
+import frc.robot.subsystems.arm.commands.ArmWithSpline;
 import frc.robot.subsystems.arm.commands.ArmWithStateMachine;
 import frc.robot.subsystems.arm.commands.ArmXboxControl;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
 import frc.robot.subsystems.drivetrain.commands.JoystickDrive;
+import frc.robot.subsystems.drivetrain.commands.Lock;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.commands.HoldIntakeInPlace;
 import frc.robot.subsystems.intake.commands.ProximitySensorDefaultCommand;
+import frc.robot.subsystems.intake.commands.Retract;
 import frc.robot.subsystems.leds.Leds;
 import frc.robot.utils.Utils;
 
@@ -83,21 +88,26 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         leftJoystickTrigger.onTrue(new InstantCommand(swerveDrive::resetGyro));
-        y.whileTrue(new ArmWithStateMachine(ArmPosition.TOP_SCORING));
-        x.whileTrue(new ArmWithStateMachine(ArmPosition.MIDDLE_SCORING));
-        b.whileTrue(new ArmWithStateMachine(ArmPosition.FEEDER));
-        a.whileTrue(new ArmWithStateMachine(ArmPosition.NEUTRAL));
+        y.whileTrue(new ArmWithSpline(ArmPosition.TOP_SCORING));
+        x.whileTrue(new ArmWithSpline(ArmPosition.MIDDLE_SCORING));
+        b.whileTrue(new ArmWithSpline(ArmPosition.FEEDER));
+        back.whileTrue(new ArmWithSpline(ArmPosition.FEEDER_CONE));
+        a.whileTrue(new ArmWithSpline(ArmPosition.NEUTRAL));
 
         lb.onTrue(new InstantCommand(gripper::toggle));
 
         start.onTrue(new InstantCommand(leds::toggle));
 
+        leftJoystickTopBottom.toggleOnTrue(
+                new Lock()
+        );
         leftJoystickTopBottom.onTrue(
                 new InstantCommand(leds::toggleRainbow)
-                        .alongWith(new InstantCommand(swerveDrive::lock))
         );
 
-        xboxLeftTrigger.whileTrue(new PickUpCubeTeleop());
+        xboxLeftTrigger.whileTrue(new PickUpCubeTeleop())
+                .onFalse(new Retract(Retract.Mode.UP).andThen(new InstantCommand(() -> intake.setPower(0))));
+        xboxRightTrigger.whileTrue(new ReturnIntake());
 
         rb.whileTrue(new ArmAxisControl(1, 0.02, 0)
                 .until(() -> gripper.getDistance() < ArmConstants.FEEDER_DISTANCE));
