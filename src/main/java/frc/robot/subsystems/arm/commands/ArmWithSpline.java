@@ -17,11 +17,10 @@ public class ArmWithSpline extends CommandBase {
     private QuinticBezierSpline spline;
     private final ArmPosition desiredPosition;
 
-    private Vector2 startPosition;
-    private Vector2 middlePositions;
-    private Vector2 endPosition;
-
     private final Timer timer = new Timer();
+
+    private double shoulderDistance = 90;
+    private double elbowDistance = 180;
 
     public ArmWithSpline(ArmPosition desiredPosition) {
         this.desiredPosition = desiredPosition;
@@ -33,6 +32,9 @@ public class ArmWithSpline extends CommandBase {
         arm.setDesiredPosition(desiredPosition);
 
         spline = desiredPosition.getSpline(arm.getInputs(), desiredPosition);
+        Vector2[] controlPoints = spline.getControlPoints();
+        shoulderDistance = Math.abs(controlPoints[0].x - controlPoints[controlPoints.length - 1].x);
+        elbowDistance = Math.abs(controlPoints[0].y - controlPoints[controlPoints.length - 1].y);
 
         timer.start();
         timer.reset();
@@ -40,9 +42,11 @@ public class ArmWithSpline extends CommandBase {
 
     @Override
     public void execute() {
-        var position = spline.getPoint(MathUtil.clamp(timer.get() / 1.2, 0, 1));
+        double multiplier = Math.min(90 / shoulderDistance, 180 / elbowDistance);
+        var positionShoulder = spline.getPoint(MathUtil.clamp(timer.get() * multiplier, 0, 1)).x;
+        var positionElbow = spline.getPoint(MathUtil.clamp(timer.get() * multiplier, 0, 1)).y;
 
-        arm.setShoulderJointAngle(position.x);
-        arm.setElbowJointAngle(position.y);
+        arm.setShoulderJointAngle(positionShoulder);
+        arm.setElbowJointAngle(positionElbow);
     }
 }
