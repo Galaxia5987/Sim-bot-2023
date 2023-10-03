@@ -89,6 +89,7 @@ public final class Ports {
         public static final int JOYSTICK_TOP_BOTTOM_BUTTON = 2;
         public static final int JOYSTICK_TOP_LEFT_BUTTON = 3;
         public static final int JOYSTICK_TOP_RIGHT_BUTTON = 4;
+        public static final int JOYSTICK_RIGHT_BIG_BUTTON = 13; //maybe 14
     }
 }
 
