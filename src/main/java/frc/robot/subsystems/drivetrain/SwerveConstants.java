@@ -39,7 +39,7 @@ public class SwerveConstants {
     public static final double DRIVE_kD = 0.148;
     public static final double DRIVE_KF = 0.05;
 
-    public static final double OMEGA_kP = 1.8;
+    public static final double OMEGA_kP = 0.0;
     public static final double OMEGA_kI = 0.0;
     public static final double OMEGA_kD = 0.0;
 
