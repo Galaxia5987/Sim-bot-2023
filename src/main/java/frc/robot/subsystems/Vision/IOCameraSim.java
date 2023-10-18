@@ -1,5 +1,6 @@
 package frc.robot.subsystems.Vision;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.networktables.*;
 import frc.robot.subsystems.drivetrain.Drive;
@@ -66,10 +67,9 @@ public class IOCameraSim implements VisionIO {
         simVisionSystem.processFrame(swerveDrive.getCurrentPose());
         var poseTargetOriented = targetPose.get();
         var poseTargetOriented3d = new Pose3d(new Translation3d(poseTargetOriented[0], poseTargetOriented[1], 0), new Rotation3d(0,0,poseTargetOriented[2]));
-        //var poseTargetOriented3d = new Pose3d(new Translation3d(poseTargetOriented[0], poseTargetOriented[1], poseTargetOriented[2]), new Rotation3d(new Quaternion(poseTargetOriented[3], poseTargetOriented[4], poseTargetOriented[5], poseTargetOriented[6])));
-        var poseFieldOriented3d = getEstimatedPoseFieldOriented(poseTargetOriented3d, inputs.targetID);
-        inputs.poseFieldOriented3d = poseFieldOriented3d;
-        inputs.poseFieldOriented = new double[]{poseFieldOriented3d.getX(), poseFieldOriented3d.getY(), poseFieldOriented3d.getZ(), poseFieldOriented3d.getRotation().getQuaternion().getX(), poseFieldOriented3d.getRotation().getQuaternion().getY(), poseFieldOriented3d.getRotation().getQuaternion().getZ(), poseFieldOriented3d.getRotation().getQuaternion().getW()};
+       // var poseFieldOriented3d = getEstimatedPoseFieldOriented(poseTargetOriented3d, inputs.targetID);
+        inputs.poseFieldOriented3d =new Pose3d(new Translation3d(swerveDrive.getCurrentPose().getX(), swerveDrive.getCurrentPose().getY(), 0), new Rotation3d(0, 0, swerveDrive.getCurrentPose().getRotation().getRadians()));
+        inputs.poseFieldOriented = new double[]{inputs.poseFieldOriented3d.getX(), inputs.poseFieldOriented3d.getY(), inputs.poseFieldOriented3d.getZ(), poseFieldOriented3d.getRotation().getQuaternion().getX(), poseFieldOriented3d.getRotation().getQuaternion().getY(), poseFieldOriented3d.getRotation().getQuaternion().getZ(), poseFieldOriented3d.getRotation().getQuaternion().getW()};
         inputs.poseTargetOriented3d = poseTargetOriented3d;
         inputs.poseTargetOriented = poseTargetOriented;
         inputs.area = targetArea.get();

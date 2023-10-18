@@ -12,7 +12,7 @@ public class RobotState {
     private static RobotState INSTANCE;
     private Drive swerveDrive = Drive.getInstance();
     private Vision vision = Vision.getINSTANCE();
-    private SwerveDrivePoseEstimator drivePoseEstimator = new SwerveDrivePoseEstimator(new SwerveDriveKinematics(SwerveConstants.WHEELS_POSITION_RELATIVE_TO_CENTER), swerveDrive.getCurrentAngle(), swerveDrive.getCurrentModulePositions(), new Pose2d());
+    private SwerveDrivePoseEstimator drivePoseEstimator = new SwerveDrivePoseEstimator( swerveDrive.getKinematics(), swerveDrive.getCurrentAngle(), swerveDrive.getCurrentModulePositions(), new Pose2d());
 
 
     public static RobotState getINSTANCE() {
@@ -25,7 +25,7 @@ public class RobotState {
     public void update() {
         var measurements = vision.getEstimatedPoses();
         for (int i = 0; i < measurements.length; i++) {
-            if (measurements != null) {
+            if (measurements[i] != null) {
                 drivePoseEstimator.addVisionMeasurement(measurements[i].toPose2d(), Timer.getFPGATimestamp());
             } else {
                 drivePoseEstimator.addVisionMeasurement(new Pose2d(), Timer.getFPGATimestamp());
