@@ -93,7 +93,7 @@ public class AutoFunctions extends SequentialCommandGroup {
     protected CommandBase feederTakeCube() {
         return FollowPath.loadTrajectory("FeederConeCubeHigh 1", FollowPath.resetCommand(swerveDrive))
                 .alongWith(
-                        new PickUpCubeAuto().withTimeout(3.3));
+                        new PickUpCubeAuto().withTimeout(3.5));
     }
 }
 

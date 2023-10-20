@@ -78,6 +78,10 @@ public class ModuleIOReal implements ModuleIO {
         angleMotor.configAllowableClosedloopError(0, motionMagicConfigs[7], Constants.TALON_TIMEOUT);
         angleMotor.configMaxIntegralAccumulator(0, motionMagicConfigs[8], Constants.TALON_TIMEOUT);
         angleMotor.configClosedLoopPeakOutput(0, motionMagicConfigs[9], Constants.TALON_TIMEOUT);
+        if (number==3){
+            driveMotor.setNeutralMode(NeutralMode.Coast);
+            angleMotor.setNeutralMode(NeutralMode.Coast);
+        }
     }
 
     @Override

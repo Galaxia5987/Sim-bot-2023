@@ -113,7 +113,9 @@ public class RobotContainer {
         xboxRightTrigger.whileTrue(new ReturnIntake());
 
         rb.whileTrue(new ArmAxisControl(1, 0.02, 0)
-                .until(() -> gripper.getDistance() < ArmConstants.FEEDER_DISTANCE));
+                .until((
+                        
+                ) -> gripper.getDistance() < ArmConstants.FEEDER_DISTANCE));
 
         leftPOV.whileTrue(new ArmAxisControl(0.33, 0.02, 0, 0, 0));
         rightPOV.whileTrue(new ArmAxisControl(0.33, -0.02, 0, 0, 0));
