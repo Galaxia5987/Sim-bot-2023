@@ -47,7 +47,7 @@ public class IOLimeLight implements VisionIO {
 
         double[] targetRobotOriented = table.getDoubleArrayTopic("botpose_targetspace").getEntry(new double[6]).get();
         inputs.poseTargetOriented3d = new Pose3d(targetRobotOriented[0], targetRobotOriented[1], targetRobotOriented[2], new Rotation3d(targetRobotOriented[3], targetRobotOriented[4], targetRobotOriented[5]));
-        inputs.poseFieldOriented3d = getEstimatedPoseFieldOriented(inputs.poseTargetOriented3d, inputs.targetID);
+        inputs.poseFieldOriented3d = getEstimatedPoseFieldOriented(inputs.poseTargetOriented3d, (int) inputs.targetID);
 
         inputs.poseTargetOriented = new double[]{
                 inputs.poseTargetOriented3d.getX(),

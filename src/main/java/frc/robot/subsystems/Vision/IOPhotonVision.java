@@ -62,7 +62,7 @@ public class IOPhotonVision implements VisionIO {
         inputs.area = target.getArea();
         inputs.latency = 0;
         inputs.poseTargetOriented3d = getEstimatedPoseTargetOriented();
-        inputs.poseFieldOriented3d = getEstimatedPoseFieldOriented(inputs.poseTargetOriented3d, inputs.targetID);
+        inputs.poseFieldOriented3d = getEstimatedPoseFieldOriented(inputs.poseTargetOriented3d, (int) inputs.targetID);
         inputs.poseTargetOriented = new double[]{
                 inputs.poseTargetOriented3d.getX(),
                 inputs.poseTargetOriented3d.getY(),

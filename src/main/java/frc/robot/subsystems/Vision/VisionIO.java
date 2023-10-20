@@ -36,11 +36,12 @@ public interface VisionIO {
         double pitch = 0;
         double area = 0;
         double targetSkew = 0;
-        int targetID = 0;
+        long targetID = 0;
         double[] poseTargetOriented = new double[7];
         double[] poseFieldOriented = new double[7];
+        double[] targetFieldOriented = new double[7];
         Pose3d poseTargetOriented3d = new Pose3d();
         Pose3d poseFieldOriented3d = new Pose3d();
+        Pose3d targetFieldOriented3d = new Pose3d();
 
     }
-}
