@@ -15,6 +15,9 @@
     },
     "transitory": {
       "AdvantageKit": {
+        "RealOutputs": {
+          "open": true
+        },
         "Vision_0": {
           "open": true
         },
@@ -27,5 +30,8 @@
         "open": true
       }
     }
+  },
+  "NetworkTables Info": {
+    "visible": true
   }
 }

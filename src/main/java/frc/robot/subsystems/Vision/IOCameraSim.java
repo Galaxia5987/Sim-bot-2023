@@ -8,8 +8,6 @@ import frc.robot.subsystems.drivetrain.Drive;
 import org.photonvision.SimVisionSystem;
 import org.photonvision.SimVisionTarget;
 
-import java.util.Arrays;
-
 public class IOCameraSim implements VisionIO {
     private final NetworkTable table;
     private final IntegerPublisher publisherInteger;
@@ -39,7 +37,7 @@ public class IOCameraSim implements VisionIO {
                 0.0
         );
         for (int i = 0; i < 8; i++) {
-            simVisionSystem.addSimVisionTarget(new SimVisionTarget(VisionConstants.TARGET_POSITION_SIM[i + 1], VisionConstants.TARGET_WIDTH, VisionConstants.TARGET_LENGTH, i + 1));
+            simVisionSystem.addSimVisionTarget(new SimVisionTarget(VisionConstants.TARGET_POSITION_SIM[i + 1].plus(VisionConstants.LIME_OFFSET), VisionConstants.TARGET_WIDTH, VisionConstants.TARGET_LENGTH, i + 1));
         }
         targetPose = table.getDoubleArrayTopic("targetPose").subscribe(new double[7]);
         targetArea = table.getDoubleTopic("targetArea").subscribe(0);
@@ -50,13 +48,6 @@ public class IOCameraSim implements VisionIO {
         hasTarget = table.getBooleanTopic("hasTarget").subscribe(false);
     }
 
-
-    @Override
-    public Pose3d getEstimatedPoseFieldOriented(Pose3d poseTargetOriented, int aprilID) {
-//        Transform3d transform3d = new Transform3d(poseTargetOriented.getTranslation(), poseTargetOriented.getRotation());
-//        return VisionConstants.TARGET_POSITION_SIM[aprilID].plus(transform3d);
-        return VisionIO.super.getEstimatedPoseFieldOriented(poseTargetOriented, aprilID);
-    }
 
     @Override
     public void setPipeLine(int pipeLineIndex) {
@@ -77,6 +68,11 @@ public class IOCameraSim implements VisionIO {
         return aprilId;
     }
 
+    private Pose3d getTargetPositions(int AprilId){
+        return VisionConstants.TARGET_POSITION_SIM[AprilId].plus(VisionConstants.LIME_OFFSET);
+    }
+
+
     @Override
     public void updateInputs(VisionInputs inputs) {
         simVisionSystem.processFrame(swerveDrive.getCurrentPose());
@@ -84,7 +80,7 @@ public class IOCameraSim implements VisionIO {
         var poseTargetOriented3d = new Pose3d(new Translation3d(poseTargetOriented[0], poseTargetOriented[1], 0), new Rotation3d(0, 0, poseTargetOriented[2]));
         var poseFieldOriented3d = inputs.poseFieldOriented3d;
         var targetFieldOriented3d = inputs.targetFieldOriented3d;
-        var aprilDifference = new double[]{0, VisionConstants.TARGET_POSITION_SIM[1].minus(targetFieldOriented3d).getTranslation().getNorm(), VisionConstants.TARGET_POSITION_SIM[2].minus(targetFieldOriented3d).getTranslation().getNorm(), VisionConstants.TARGET_POSITION_SIM[3].minus(targetFieldOriented3d).getTranslation().getNorm(), VisionConstants.TARGET_POSITION_SIM[5].minus(targetFieldOriented3d).getTranslation().getNorm(), VisionConstants.TARGET_POSITION_SIM[6].minus(targetFieldOriented3d).getTranslation().getNorm(), VisionConstants.TARGET_POSITION_SIM[7].minus(targetFieldOriented3d).getTranslation().getNorm(), VisionConstants.TARGET_POSITION_SIM[8].minus(targetFieldOriented3d).getTranslation().getNorm()};
+        var aprilDifference = new double[]{0,getTargetPositions(1).minus(targetFieldOriented3d).getTranslation().getNorm() ,getTargetPositions(2).minus(targetFieldOriented3d).getTranslation().getNorm(), getTargetPositions(3).minus(targetFieldOriented3d).getTranslation().getNorm(), getTargetPositions(4).minus(targetFieldOriented3d).getTranslation().getNorm(), getTargetPositions(5).minus(targetFieldOriented3d).getTranslation().getNorm(), getTargetPositions(6).minus(targetFieldOriented3d).getTranslation().getNorm(), getTargetPositions(7).minus(targetFieldOriented3d).getTranslation().getNorm(), getTargetPositions(8).minus(targetFieldOriented3d).getTranslation().getNorm()};
         inputs.poseFieldOriented3d = new Pose3d(new Translation3d(swerveDrive.getCurrentPose().getX(), swerveDrive.getCurrentPose().getY(), 0), new Rotation3d(0, 0, swerveDrive.getCurrentPose().getRotation().getRadians()));
         inputs.poseFieldOriented = new double[]{poseFieldOriented3d.getX(), poseFieldOriented3d.getY(), poseFieldOriented3d.getZ(), poseFieldOriented3d.getRotation().getQuaternion().getX(), poseFieldOriented3d.getRotation().getQuaternion().getY(), poseFieldOriented3d.getRotation().getQuaternion().getZ(), poseFieldOriented3d.getRotation().getQuaternion().getW()};
         inputs.poseTargetOriented3d = poseTargetOriented3d;

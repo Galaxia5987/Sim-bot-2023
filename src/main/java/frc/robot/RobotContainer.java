@@ -6,19 +6,22 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.drivetrain.Drive;
 import frc.robot.subsystems.drivetrain.commands.KeyboardDriveSim;
+import frc.robot.subsystems.drivetrain.commands.SonyDrive;
 import frc.robot.subsystems.drivetrain.commands.XboxDrive;
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
 
     private final Drive drive = Drive.getInstance();
     private final Vision vision = Vision.getINSTANCE();
-    private final XboxController xboxControl = new XboxController(0);
+    //private final XboxController xboxControl = new XboxController(0);
+    private final PS4Controller ps4Controller = new PS4Controller(0);
 
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -37,7 +40,7 @@ public class RobotContainer {
 
     private void configureDefaultCommands() {
         drive.setDefaultCommand(
-                new XboxDrive(xboxControl)
+                new SonyDrive(ps4Controller)
         );
     }
 
