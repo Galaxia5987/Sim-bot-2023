@@ -37,8 +37,7 @@ public class Vision extends SubsystemBase {
             }
             else{
                 INSTANCE = new Vision(
-                        new IOCameraSim(0 ,"simCam_1"),
-                        new IOCameraSim(1 , "simCam_2")
+                        new IOCameraSim(0 ,"simCam_1")
                 );
             }
         }
