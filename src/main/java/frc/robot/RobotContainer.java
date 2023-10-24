@@ -20,7 +20,7 @@ public class RobotContainer {
 
     private final Drive drive = Drive.getInstance();
     private final Vision vision = Vision.getINSTANCE();
-    //private final XboxController xboxControl = new XboxController(0);
+    private final XboxController xboxControl = new XboxController(0);
     private final PS4Controller ps4Controller = new PS4Controller(0);
 
     /**
@@ -40,7 +40,7 @@ public class RobotContainer {
 
     private void configureDefaultCommands() {
         drive.setDefaultCommand(
-                new SonyDrive(ps4Controller)
+                new KeyboardDriveSim()
         );
     }
 

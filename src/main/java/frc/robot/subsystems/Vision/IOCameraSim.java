@@ -39,7 +39,7 @@ public class IOCameraSim implements VisionIO {
         for (int i = 0; i < 8; i++) {
             simVisionSystem.addSimVisionTarget(new SimVisionTarget(VisionConstants.TARGET_POSITION_SIM[i + 1].plus(VisionConstants.LIME_OFFSET), VisionConstants.TARGET_WIDTH, VisionConstants.TARGET_LENGTH, i + 1));
         }
-        targetPose = table.getDoubleArrayTopic("targetPose").subscribe(new double[7]);
+        targetPose = table.getDoubleArrayTopic("targetPose").subscribe(new double[3]);
         targetArea = table.getDoubleTopic("targetArea").subscribe(0);
         latency = table.getDoubleTopic("latencyMillis").subscribe(0);
         targetPitch = table.getDoubleTopic("targetPitch").subscribe(0);
@@ -76,7 +76,7 @@ public class IOCameraSim implements VisionIO {
     @Override
     public void updateInputs(VisionInputs inputs) {
         simVisionSystem.processFrame(swerveDrive.getCurrentPose());
-        var poseTargetOriented = targetPose.get();
+        var poseTargetOriented = new double[] {-targetPose.get()[0], -targetPose.get()[1], -targetPose.get()[2]};
         var poseTargetOriented3d = new Pose3d(new Translation3d(poseTargetOriented[0], poseTargetOriented[1], 0), new Rotation3d(0, 0, poseTargetOriented[2]));
         var poseFieldOriented3d = inputs.poseFieldOriented3d;
         var targetFieldOriented3d = inputs.targetFieldOriented3d;
