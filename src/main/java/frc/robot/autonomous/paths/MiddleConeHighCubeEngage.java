@@ -42,7 +42,7 @@ public class MiddleConeHighCubeEngage extends AutoFunctions {
                         .alongWith(new PickUpCubeAuto())
                         .withTimeout(1.9),
 
-                engage(false, false)
+                engage(false, false).withTimeout(3)
                         .alongWith(new ReturnIntake()
                                 .andThen(new InstantCommand(gripper::close)))
         );

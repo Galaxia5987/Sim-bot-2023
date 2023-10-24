@@ -16,7 +16,7 @@ public enum ArmPosition {
     MIDDLE_SCORING(new Translation2d(0.8, 0.481), new Translation2d(0.929, 0.59)),
     BOTTOM_SCORING(new Translation2d(0.2, 0.775), new Translation2d(0.2, 0.775)),
 
-    FEEDER_CONE(new Translation2d(0.53, 0.75), new Translation2d(0.53, 0.65));
+    FEEDER_CONE(new Translation2d(0.42, 0.67), new Translation2d(0.42, 0.67));
 
     public final Translation2d cubePose;
     public final Translation2d conePose;
@@ -93,8 +93,8 @@ public enum ArmPosition {
         var endPosition = new Vector2(
                 Math.toDegrees(endSolution.shoulderAngle), Math.toDegrees(endSolution.elbowAngle));
 
-        System.out.println(middlePosition1);
-        System.out.println(middlePosition2);
+//        System.out.println(middlePosition1);
+//        System.out.println(middlePosition2);
         return new QuinticBezierSpline(startPosition, middlePosition1, middlePosition1, middlePosition2, middlePosition2, endPosition);
     }
 }

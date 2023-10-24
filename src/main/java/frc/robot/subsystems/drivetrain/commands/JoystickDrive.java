@@ -22,12 +22,13 @@ public class JoystickDrive extends CommandBase {
         this.swerveDrive = swerveDrive;
         this.joystick1 = joystick1;
         this.joystick2 = joystick2;
+        omegaController.enableContinuousInput(-Math.PI, Math.PI);
         addRequirements(swerveDrive);
     }
 
     @Override
     public void execute() {
-        shouldHoldAngle = new JoystickButton(joystick2, Ports.UI.JOYSTICK_RIGHT_BIG_BUTTON).getAsBoolean();
+        shouldHoldAngle = joystick2.getRawButton(Ports.UI.JOYSTICK_RIGHT_BIG_BUTTON);
         if (!shouldHoldAngle) {
             swerveDrive.drive(
                     MathUtil.applyDeadband(-joystick1.getY(), 0.1),
@@ -40,7 +41,7 @@ public class JoystickDrive extends CommandBase {
             swerveDrive.drive(
                     MathUtil.applyDeadband(-joystick1.getY(), 0.1),
                     MathUtil.applyDeadband(-joystick1.getX(), 0.1),
-                    omegaController.calculate(swerveDrive.getYaw(), Math.toRadians(180)),
+                    omegaController.calculate(swerveDrive.getYaw(), Math.PI),
                     true
             );
         }

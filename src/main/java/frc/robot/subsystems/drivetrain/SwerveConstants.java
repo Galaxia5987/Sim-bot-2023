@@ -7,7 +7,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 
 public class SwerveConstants {
     public static final double[] OFFSETS =
-            {0.5709977142749428, 0.26230635655765894, 0.9328634483215862, 0.5489868137246704};
+            {0.5650298641257466,0.2622759815568995,0.008052200201305005,0.5445371386134285};
 
     public static final double VOLT_COMP_SATURATION = 12;
     public static final SupplyCurrentLimitConfiguration SUPPLY_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(true, 50, 0, 0);
@@ -39,7 +39,7 @@ public class SwerveConstants {
     public static final double DRIVE_kD = 0.148;
     public static final double DRIVE_KF = 0.05;
 
-    public static final double OMEGA_kP = 0.0;
+    public static final double OMEGA_kP = 0.5;
     public static final double OMEGA_kI = 0.0;
     public static final double OMEGA_kD = 0.0;
 
@@ -79,6 +79,6 @@ public class SwerveConstants {
     public static double AUTO_ROTATION_Ki = 0.0;
     public static double AUTO_ROTATION_Kd = 0.0;
 
-    public static double FORWARD_BALANCE_TIME = 1.3;
-    public static double BACKWARD_BALANCE_TIME = 1.1;
+    public static double FORWARD_BALANCE_TIME = 0.65;
+    public static double BACKWARD_BALANCE_TIME = 0.55;
 }

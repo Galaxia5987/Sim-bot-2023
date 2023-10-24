@@ -9,8 +9,11 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.autonomous.paths.BumperCone2Cubes;
 import frc.robot.autonomous.paths.BumperConeCubeHighCube;
+import frc.robot.autonomous.paths.FeederConeCubeHighCube;
+import frc.robot.autonomous.paths.MiddleConeHighCubeEngage;
 import frc.robot.commandgroups.PickUpCubeTeleop;
 import frc.robot.commandgroups.ReturnIntake;
+import frc.robot.commandgroups.bits.RunAllBits;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmConstants;
 import frc.robot.subsystems.arm.ArmPosition;
@@ -110,7 +113,9 @@ public class RobotContainer {
         xboxRightTrigger.whileTrue(new ReturnIntake());
 
         rb.whileTrue(new ArmAxisControl(1, 0.02, 0)
-                .until(() -> gripper.getDistance() < ArmConstants.FEEDER_DISTANCE));
+                .until((
+                        
+                ) -> gripper.getDistance() < ArmConstants.FEEDER_DISTANCE));
 
         leftPOV.whileTrue(new ArmAxisControl(0.33, 0.02, 0, 0, 0));
         rightPOV.whileTrue(new ArmAxisControl(0.33, -0.02, 0, 0, 0));
@@ -124,6 +129,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new BumperCone2Cubes();
+        return new FeederConeCubeHighCube();
     }
 }
