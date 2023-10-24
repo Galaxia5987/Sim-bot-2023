@@ -28,7 +28,6 @@ public class SwerveDrive extends SubsystemBase {
     private final SwerveModuleState[] currentModuleStates = new SwerveModuleState[4];
     private final SwerveModuleState[] desiredModuleStates = new SwerveModuleState[4];
     private final Derivative acceleration = new Derivative(0, 0);
-    private double linearVelocity;
     private final SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
 
     private SwerveDrive() {
@@ -87,7 +86,7 @@ public class SwerveDrive extends SubsystemBase {
      * @return Yaw angle reading from gyro. [rad]
      */
     public double getRawYaw() {
-        return gyro.getRawYaw();
+        return loggerInputs.rawYaw;
     }
 
     /**
@@ -96,11 +95,11 @@ public class SwerveDrive extends SubsystemBase {
      * @return Yaw angle with offset. [rad]
      */
     public double getYaw() {
-        return gyro.getYaw();
+        return loggerInputs.yaw;
     }
 
     public double getPitch() {
-        return gyro.getPitch();
+        return loggerInputs.pitch;
     }
 
     /**
@@ -109,22 +108,7 @@ public class SwerveDrive extends SubsystemBase {
      * @param desiredModuleStates The desired module states to set the modules to.
      */
     public void setModuleStates(SwerveModuleState[] desiredModuleStates) {
-        Logger.getInstance().recordOutput("SwerveDrive/desiredModuleStates", desiredModuleStates);
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredModuleStates, SwerveConstants.MAX_X_Y_VELOCITY);
-        for (int i = 0; i < modules.length; i++) {
-            modules[i].setModuleState(desiredModuleStates[i]);
-        }
-    }
-
-    /**
-     * Updates each module position with an offset and an absolute encoder.
-     *
-     * @param offsets Offsets for each of the modules. [sensor ticks]
-     */
-    public void updateOffsets(double[] offsets) {
-        for (int i = 0; i < modules.length; i++) {
-            modules[i].updateOffset(offsets[i]);
-        }
+        loggerInputs.desiredModuleStates = Utils.swerveModuleStatesToArray(desiredModuleStates);
     }
 
     public void updateModulePositions() {
@@ -134,7 +118,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public Pose2d getBotPose() {
-        return odometry.getPoseMeters();
+        return Utils.arrayToPose2d(loggerInputs.botPose);
     }
 
     public SwerveDriveKinematics getKinematics() {
@@ -142,15 +126,15 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public double getVelocity() {
-        return linearVelocity;
-    }
-
-    public void resetPose() {
-        odometry.resetPosition(new Rotation2d(getYaw()), modulePositions, new Pose2d());
+        return loggerInputs.linearVelocity;
     }
 
     public void resetPose(Pose2d pose) {
         odometry.resetPosition(new Rotation2d(getYaw()), modulePositions, pose);
+    }
+
+    public void resetPose() {
+        odometry.resetPosition(new Rotation2d(getYaw()), modulePositions, new Pose2d());
     }
 
     public boolean encodersConnected() {
@@ -252,7 +236,6 @@ public class SwerveDrive extends SubsystemBase {
         }
 
         loggerInputs.linearVelocity = Math.hypot(loggerInputs.currentSpeeds[0], loggerInputs.currentSpeeds[1]);
-        linearVelocity = loggerInputs.linearVelocity;
 
         acceleration.update(loggerInputs.linearVelocity);
         loggerInputs.acceleration = accelFilter.calculate(acceleration.get());
@@ -263,10 +246,15 @@ public class SwerveDrive extends SubsystemBase {
         loggerInputs.statorCurrent =
                 modules[0].getStatorCurrent() + modules[1].getStatorCurrent() + modules[2].getStatorCurrent() + modules[3].getStatorCurrent();
 
-        loggerInputs.pitch = getPitch();
-        loggerInputs.rawYaw = getRawYaw();
-        loggerInputs.yaw = getYaw();
+        loggerInputs.rawYaw = gyro.getRawYaw();
+        loggerInputs.yaw = gyro.getYaw();
+        loggerInputs.pitch = gyro.getPitch();
         gyro.updateInputs(loggerInputs);
+
+        SwerveDriveKinematics.desaturateWheelSpeeds(Utils.arrayToSwerveModuleStates(loggerInputs.desiredModuleStates), SwerveConstants.MAX_X_Y_VELOCITY); //TODO: may not work
+        for (int i = 0; i < modules.length; i++) {
+            modules[i].setModuleState(desiredModuleStates[i]);
+        }
 
         Logger.getInstance().processInputs("SwerveDrive", loggerInputs);
     }

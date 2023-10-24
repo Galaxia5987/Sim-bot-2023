@@ -7,6 +7,8 @@ public class SwerveDriveInputs {
     public double supplyCurrent;
     public double statorCurrent;
 
+    public double[] desiredModuleStates = new double[4];
+
     // x, y, omega
     public double[] currentSpeeds = {0, 0, 0};
     public double[] desiredSpeeds = {0, 0, 0};
