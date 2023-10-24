@@ -10,23 +10,23 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Ports;
-import frc.robot.subsystems.LoggedSubsystem;
 import frc.robot.subsystems.intake.commands.HoldIntakeInPlace;
 import frc.robot.utils.units.UnitModel;
+import org.littletonrobotics.junction.Logger;
 
-public class Intake extends LoggedSubsystem<IntakeLoggedInputs> {
+public class Intake extends SubsystemBase {
     private static Intake INSTANCE;
     private final CANSparkMax motor = new CANSparkMax(Ports.Intake.INTAKE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
     private final TalonFX angleMotor = new TalonFX(Ports.Intake.ANGLE_MOTOR);
     private final UnitModel unitModel = new UnitModel(IntakeConstants.TICKS_PER_DEGREE);
-
+    private final IntakeLoggedInputs inputs = new IntakeLoggedInputs();
     private Command lastCommand = null;
     private boolean switchedToDefaultCommand = false;
 
     private Intake() {
-        super(new IntakeLoggedInputs());
         angleMotor.configFactoryDefault();
         motor.restoreFactoryDefaults();
 
@@ -76,16 +76,15 @@ public class Intake extends LoggedSubsystem<IntakeLoggedInputs> {
      * @param power is the power that the motor applies. [%]
      */
     public void setPower(double power) {
-        motor.set(power);
-        loggerInputs.setpointPower = power;
+        inputs.setpointPower = power;
     }
 
     private double getAngleMotorVelocity() {
-        return unitModel.toVelocity(angleMotor.getSelectedSensorVelocity());
+        return unitModel.toVelocity(inputs.velocity);
     }
 
     public void setAnglePower(double power) {
-        angleMotor.set(TalonFXControlMode.PercentOutput, power);
+        inputs.setpointPower = power;
     }
 
     /**
@@ -93,7 +92,7 @@ public class Intake extends LoggedSubsystem<IntakeLoggedInputs> {
      */
 
     public double getAngle() {
-        return unitModel.toUnits(angleMotor.getSelectedSensorPosition());
+        return unitModel.toUnits(inputs.angle);
     }
 
     /**
@@ -102,7 +101,7 @@ public class Intake extends LoggedSubsystem<IntakeLoggedInputs> {
      * @param angle is the angle of the retractor. [degrees]
      */
     public void setAngle(double angle) {
-        angleMotor.set(ControlMode.Position, unitModel.toTicks(angle));
+        inputs.angle = angle;
     }
 
     public Command lowerIntake() {
@@ -117,7 +116,7 @@ public class Intake extends LoggedSubsystem<IntakeLoggedInputs> {
     }
 
     public double getCurrent() {
-        return loggerInputs.current;
+        return inputs.current;
     }
 
     public Command run(double power) {
@@ -126,30 +125,25 @@ public class Intake extends LoggedSubsystem<IntakeLoggedInputs> {
 
     @Override
     public void periodic() {
+        inputs.power = getPower();
+        inputs.angle = getAngle();
+        inputs.velocity = getAngleMotorVelocity();
+        inputs.current = angleMotor.getSupplyCurrent();
+        inputs.anglePower = angleMotor.getMotorOutputPercent();
+
+        motor.set(inputs.power);
+        angleMotor.set(TalonFXControlMode.PercentOutput, inputs.anglePower);
+        angleMotor.set(ControlMode.Position, unitModel.toTicks(inputs.angle));
+
         var currentCommand = getCurrentCommand();
         switchedToDefaultCommand = (currentCommand instanceof HoldIntakeInPlace) &&
                 !(lastCommand instanceof HoldIntakeInPlace);
         lastCommand = currentCommand;
+
+        Logger.getInstance().processInputs("Intake", inputs);
     }
 
     public boolean switchedToDefaultCommand() {
         return switchedToDefaultCommand;
-    }
-
-    /**
-     * Update the logger inputs' value.
-     */
-    @Override
-    public void updateInputs() {
-        loggerInputs.power = getPower();
-        loggerInputs.angle = getAngle();
-        loggerInputs.velocity = getAngleMotorVelocity();
-        loggerInputs.current = angleMotor.getSupplyCurrent();
-        loggerInputs.anglePower = angleMotor.getMotorOutputPercent();
-    }
-
-    @Override
-    public String getSubsystemName() {
-        return "Intake";
     }
 }
