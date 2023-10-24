@@ -58,6 +58,14 @@ public class Utils {
         return array;
     }
 
+    public static SwerveModuleState[] arrayToSwerveModuleStates(double[] states){ //TODO: check
+        SwerveModuleState[] swerveModuleStates = new SwerveModuleState[states.length/2];
+        for (int i = 0; i < states.length; i+=2) {
+            swerveModuleStates[i] = new SwerveModuleState(states[i], new Rotation2d(states[i+1]));
+        }
+        return swerveModuleStates;
+    }
+
     /**
      * Converts the relative angles to pitch relative to the coordinate system of the field,
      * aka the absolute pitch. This value can be used to balance on the charge station.
