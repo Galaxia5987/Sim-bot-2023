@@ -1,6 +1,7 @@
 package frc.robot.utils;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
@@ -30,6 +31,14 @@ public class Utils {
 
     public static double[] pose2dToArray(Pose2d pose) {
         return new double[]{pose.getX(), pose.getY(), pose.getRotation().getRadians()};
+    }
+
+    public static Pose2d arrayToPose2d(double[] array){
+        return new Pose2d(
+                array[0],
+                array[1],
+                new Rotation2d(array[2])
+        );
     }
 
     public static double[] chassisSpeedsToArray(ChassisSpeeds speeds) {
