@@ -61,7 +61,7 @@ public class Utils {
     public static SwerveModuleState[] arrayToSwerveModuleStates(double[] states){ //TODO: check
         SwerveModuleState[] swerveModuleStates = new SwerveModuleState[states.length/2];
         for (int i = 0; i < states.length; i+=2) {
-            swerveModuleStates[i] = new SwerveModuleState(states[i], new Rotation2d(states[i+1]));
+            swerveModuleStates[i/2] = new SwerveModuleState(states[i+1], new Rotation2d(states[i]));
         }
         return swerveModuleStates;
     }
