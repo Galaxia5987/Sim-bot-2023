@@ -24,9 +24,9 @@ public class SwerveDrive extends SubsystemBase {
             SwerveConstants.wheelPositions[3]
     );
     private final SwerveDriveOdometry odometry;
-    private final SwerveDriveInputsAutoLogged loggerInputs = new SwerveDriveInputsAutoLogged();
-    private final SwerveModuleState[] currentModuleStates = new SwerveModuleState[4];
-    private final SwerveModuleState[] desiredModuleStates = new SwerveModuleState[4];
+    private SwerveDriveInputsAutoLogged loggerInputs = new SwerveDriveInputsAutoLogged();
+    private SwerveModuleState[] currentModuleStates = new SwerveModuleState[4];
+    private SwerveModuleState[] desiredModuleStates = new SwerveModuleState[4];
     private final Derivative acceleration = new Derivative(0, 0);
     private final SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
 
@@ -251,9 +251,10 @@ public class SwerveDrive extends SubsystemBase {
         loggerInputs.pitch = gyro.getPitch();
         gyro.updateInputs(loggerInputs);
 
+//        desiredModuleStates = Utils.arrayToSwerveModuleStates(loggerInputs.desiredModuleStates);
         SwerveDriveKinematics.desaturateWheelSpeeds(Utils.arrayToSwerveModuleStates(loggerInputs.desiredModuleStates), SwerveConstants.MAX_X_Y_VELOCITY); //TODO: may not work
         for (int i = 0; i < modules.length; i++) {
-            modules[i].setModuleState(desiredModuleStates[i]);
+            modules[i].setModuleState(Utils.arrayToSwerveModuleStates(loggerInputs.desiredModuleStates)[i]);
         }
 
         Logger.getInstance().processInputs("SwerveDrive", loggerInputs);
