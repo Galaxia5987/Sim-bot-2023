@@ -101,7 +101,7 @@ public class Intake extends SubsystemBase {
      * @param angle is the angle of the retractor. [degrees]
      */
     public void setAngle(double angle) {
-        inputs.setpointAngle = angle;
+        inputs.angle = angle;
     }
 
     public Command lowerIntake() {
@@ -131,8 +131,9 @@ public class Intake extends SubsystemBase {
         inputs.current = angleMotor.getSupplyCurrent();
         inputs.anglePower = angleMotor.getMotorOutputPercent();
 
-        motor.set(inputs.setpointPower);
-        angleMotor.set(ControlMode.Position, unitModel.toTicks(inputs.setpointAngle));
+        motor.set(inputs.power);
+        angleMotor.set(TalonFXControlMode.PercentOutput, inputs.anglePower);
+        angleMotor.set(ControlMode.Position, unitModel.toTicks(inputs.angle));
 
         var currentCommand = getCurrentCommand();
         switchedToDefaultCommand = (currentCommand instanceof HoldIntakeInPlace) &&
