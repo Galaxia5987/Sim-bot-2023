@@ -125,9 +125,9 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        inputs.power = getPower();
-        inputs.angle = getAngle();
-        inputs.velocity = getAngleMotorVelocity();
+        inputs.power = motor.getAppliedOutput();
+        inputs.angle = unitModel.toUnits(angleMotor.getSelectedSensorPosition());
+        inputs.velocity = unitModel.toVelocity(angleMotor.getSelectedSensorVelocity());
         inputs.current = angleMotor.getSupplyCurrent();
         inputs.anglePower = angleMotor.getMotorOutputPercent();
 
