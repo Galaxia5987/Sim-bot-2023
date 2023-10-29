@@ -7,6 +7,7 @@ public class IntakeLoggedInputs implements LoggableInputs {
     public double velocity;
     public double power;
     public double setpointPower;
+    public double setpointAnglePower;
     public double setpointAngle;
     public double anglePower;
     public double angle;
@@ -20,6 +21,7 @@ public class IntakeLoggedInputs implements LoggableInputs {
     public void toLog(LogTable table) {
         table.put("power", power);
         table.put("setpointPower", setpointPower);
+        table.put("setpointAnglePower", setpointAnglePower);
         table.put("setpointAngle", setpointAngle);
         table.put("angle", angle);
         table.put("velocity", velocity);
