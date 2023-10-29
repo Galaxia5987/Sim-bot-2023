@@ -22,6 +22,7 @@ public class Intake extends SubsystemBase {
     private final CANSparkMax motor = new CANSparkMax(Ports.Intake.INTAKE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
     private final TalonFX angleMotor = new TalonFX(Ports.Intake.ANGLE_MOTOR);
     private final UnitModel unitModel = new UnitModel(IntakeConstants.TICKS_PER_DEGREE);
+    private ControlMode angleMode;
     private final IntakeLoggedInputs inputs = new IntakeLoggedInputs();
     private Command lastCommand = null;
     private boolean switchedToDefaultCommand = false;
@@ -79,22 +80,6 @@ public class Intake extends SubsystemBase {
         inputs.setpointPower = power;
     }
 
-    private double getAngleMotorVelocity() {
-        return unitModel.toVelocity(inputs.velocity);
-    }
-
-    public void setAnglePower(double power) {
-        inputs.setpointPower = power;
-    }
-
-    /**
-     * @return the motor's position. [degrees]
-     */
-
-    public double getAngle() {
-        return unitModel.toUnits(inputs.angle);
-    }
-
     /**
      * Sets the angles position.
      *
@@ -102,6 +87,23 @@ public class Intake extends SubsystemBase {
      */
     public void setAngle(double angle) {
         inputs.setpointAngle = angle;
+        angleMode = ControlMode.Position;
+    }
+
+    public void setAnglePower(double power) {
+        inputs.setpointAnglePower = power;
+        angleMode = ControlMode.PercentOutput;
+    }
+
+    /**
+     * @return the motor's position. [degrees]
+     */
+    public double getAngle() {
+        return inputs.angle;
+    }
+
+    private double getAngleMotorVelocity() {
+        return inputs.velocity;
     }
 
     public Command lowerIntake() {
@@ -132,7 +134,13 @@ public class Intake extends SubsystemBase {
         inputs.anglePower = angleMotor.getMotorOutputPercent();
 
         motor.set(inputs.setpointPower);
-        angleMotor.set(ControlMode.Position, unitModel.toTicks(inputs.setpointAngle));
+        if (angleMode == ControlMode.Position){
+            angleMotor.set(ControlMode.Position, unitModel.toTicks(inputs.setpointAngle));
+        }
+        else {
+            angleMotor.set(TalonFXControlMode.PercentOutput, inputs.setpointAnglePower);
+        }
+
 
         var currentCommand = getCurrentCommand();
         switchedToDefaultCommand = (currentCommand instanceof HoldIntakeInPlace) &&
