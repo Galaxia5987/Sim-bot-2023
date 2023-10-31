@@ -3,7 +3,7 @@ package frc.robot.autonomous;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commandgroups.GetArmIntoRobot;
+//import frc.robot.commandgroups.GetArmIntoRobot;
 import frc.robot.commandgroups.ReturnArm;
 import frc.robot.subsystems.drivetrain.SwerveConstants;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
