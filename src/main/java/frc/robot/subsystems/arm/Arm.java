@@ -44,6 +44,7 @@ public class Arm extends SubsystemBase {
     }
 
     public void setEndEffectorPosition(Translation2d endEffectorPosition, ArmKinematics armKinematics){
+        inputs.endEffectorPosition = new double[]{endEffectorPosition.getX(), endEffectorPosition.getY()};
         io.setEndEffectorPosition(endEffectorPosition, armKinematics);
     }
 
@@ -53,6 +54,7 @@ public class Arm extends SubsystemBase {
         io.setElbowPower(inputs.elbowAppliedVoltage);
         io.setShoulderAngle(inputs.shoulderAngle);
         io.setShoulderPower(inputs.shoulderAppliedVoltage);
+        io.setEndEffectorPosition(new Translation2d(inputs.endEffectorPosition[0],inputs.endEffectorPosition[1] ) , ArmIO.armKenematics);
         io.updateInputs();
     }
 }
