@@ -24,7 +24,7 @@ public class CheckIntakeFlow extends SequentialCommandGroup {
                 new PickUpCubeAuto().withTimeout(3)
                         .andThen(new ReturnIntake()),
                 intake.run(0.5).withTimeout(3)
-                        .finallyDo((b) -> intake.setPower(0)),
+                        .finallyDo((b) -> intake.setSpinMotorPower(0)),
                 new WaitCommand(1),
                 new InstantCommand(gripper::toggle, gripper),
                 new WaitCommand(1),

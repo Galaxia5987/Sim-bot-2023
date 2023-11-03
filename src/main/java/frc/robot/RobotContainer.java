@@ -109,7 +109,7 @@ public class RobotContainer {
         );
 
         xboxLeftTrigger.whileTrue(new PickUpCubeTeleop())
-                .onFalse(new Retract(Retract.Mode.UP).andThen(new InstantCommand(() -> intake.setPower(0))));
+                .onFalse(new Retract(Retract.Mode.UP).andThen(new InstantCommand(() -> intake.setSpinMotorPower(0))));
         xboxRightTrigger.whileTrue(new ReturnIntake());
 
         rb.whileTrue(new ArmAxisControl(1, 0.02, 0)

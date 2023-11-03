@@ -12,7 +12,7 @@ public class FeedTeleop extends ParallelCommandGroup {
 
         addCommands(
                 new Retract(Retract.Mode.DOWN)
-                        .andThen(new RunCommand(() -> intake.setAngle(IntakeConstants.ANGLE_DOWN))),
+                        .andThen(new RunCommand(() -> intake.setAngleMotorAngle(IntakeConstants.ANGLE_DOWN))),
                 intake.run(outtake ? -IntakeConstants.INTAKE_POWER : IntakeConstants.INTAKE_POWER)
         );
     }

@@ -12,7 +12,7 @@ public class ReturnIntake extends SequentialCommandGroup {
 
         addCommands(
                 new Retract(Retract.Mode.UP),
-                new InstantCommand(() -> intake.setPower(0))
+                new InstantCommand(() -> intake.setSpinMotorPower(0))
         );
     }
 }
