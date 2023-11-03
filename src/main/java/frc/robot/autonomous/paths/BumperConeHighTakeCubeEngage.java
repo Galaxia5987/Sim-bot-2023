@@ -6,8 +6,6 @@ import frc.robot.autonomous.AutonUpperScoring;
 import frc.robot.autonomous.Engage;
 import frc.robot.autonomous.FollowPath;
 import frc.robot.autonomous.ResetAuto;
-import frc.robot.commandgroups.PickUpCubeAuto;
-import frc.robot.commandgroups.ReturnArm;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.intake.commands.Retract;

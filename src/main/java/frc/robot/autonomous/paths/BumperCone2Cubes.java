@@ -3,7 +3,6 @@ package frc.robot.autonomous.paths;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.autonomous.AutoFunctions;
 import frc.robot.autonomous.FollowPath;
-import frc.robot.commandgroups.ReturnIntake;
 
 public class BumperCone2Cubes extends AutoFunctions {
     public BumperCone2Cubes() {

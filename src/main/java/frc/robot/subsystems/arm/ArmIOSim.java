@@ -1,18 +1,20 @@
 package frc.robot.subsystems.arm;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 public class ArmIOSim implements ArmIO {
-    private final ArmInputs inputs;
+    private ArmInputs inputs;
     private SingleJointedArmSim shoulder;
     private SingleJointedArmSim elbow;
     private PIDController shoulderController;
     private PIDController elbowController;
     private double angleCalculated = 0;
 
-    private ArmIOSim(ArmInputs inputs) {
+    public ArmIOSim(ArmInputs inputs) {
         this.inputs = inputs;
         shoulder = new SingleJointedArmSim(DCMotor.getFalcon500(2), ArmConstants.SHOULDER_GEARING, ArmConstants.SHOULDER_MOMENT_OF_INERTIA, ArmConstants.SHOULDER_ARM_LENGTH, 0, Math.toRadians(150), true);
         elbow = new SingleJointedArmSim(DCMotor.getFalcon500(2), ArmConstants.ELBOW_GEARING, ArmConstants.ELBOW_MOMENT_OF_INERTIA, ArmConstants.ELBOW_ARM_LENGTH, 0, Math.toRadians(359), true);
@@ -40,6 +42,12 @@ public class ArmIOSim implements ArmIO {
     public void setElbowAngle(double angle) {
         inputs.elbowAppliedVoltage = elbowController.calculate(inputs.elbowAngleRelative ,angle);
         elbow.setInputVoltage(inputs.elbowAppliedVoltage);
+    }
+
+    @Override
+    public void setEndEffectorPosition(Translation2d position, ArmKinematics armKinematics) {
+        setElbowAngle(armKinematics.inverseKinematics(position).elbowAngle);
+        setShoulderAngle(armKinematics.inverseKinematics(position).shoulderAngle);
     }
 
     @Override

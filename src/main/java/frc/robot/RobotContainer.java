@@ -7,8 +7,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 //import frc.robot.autonomous.paths.FeederConeCubeHighCube;
-import frc.robot.commandgroups.PickUpCubeTeleop;
-import frc.robot.commandgroups.ReturnIntake;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmConstants;
 //import frc.robot.subsystems.arm.ArmPosition;
@@ -25,7 +23,7 @@ import frc.robot.utils.Utils;
 
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
-    private final Arm arm = Arm.getInstance();
+    private static final Arm arm = Arm.getINSTANCE();
     private final Leds leds = Leds.getInstance();
     private final SwerveDrive swerveDrive = SwerveDrive.getInstance();
     private final Intake intake = Intake.getInstance();

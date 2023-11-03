@@ -1,5 +1,7 @@
 package frc.robot.subsystems.arm;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ArmIO {
@@ -15,6 +17,8 @@ public interface ArmIO {
 
     default void setElbowAngle(double angle) {
     }
+
+    default void setEndEffectorPosition(Translation2d position, ArmKinematics armKinematics){}
 
     default void updateInputs(){}
 

@@ -6,9 +6,6 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.autonomous.AutoFunctions;
 import frc.robot.autonomous.FollowPath;
-import frc.robot.commandgroups.PickUpCubeAuto;
-import frc.robot.commandgroups.ReturnArm;
-import frc.robot.commandgroups.ReturnIntake;
 import frc.robot.subsystems.drivetrain.SwerveConstants;
 import frc.robot.subsystems.gripper.Gripper;
 

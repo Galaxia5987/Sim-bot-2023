@@ -1,7 +1,6 @@
 package frc.robot.autonomous;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commandgroups.UpperScoring;
 import frc.robot.subsystems.leds.command.PurpleLed;
 import frc.robot.subsystems.leds.command.YellowLed;
 

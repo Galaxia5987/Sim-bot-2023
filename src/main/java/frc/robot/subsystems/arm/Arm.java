@@ -1,10 +1,12 @@
 package frc.robot.subsystems.arm;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 
 public class Arm extends SubsystemBase {
     static Arm INSTANCE;
-    private ArmIO io;
+    private final ArmIO io;
     private ArmInputsAutoLogged inputs;
 
     private Arm(ArmIO io) {
@@ -13,27 +15,36 @@ public class Arm extends SubsystemBase {
 
     public static Arm getINSTANCE() {
         if (INSTANCE == null) {
-            INSTANCE = new Arm(new ArmIO());
+            if (Robot.isReal()) {
+                INSTANCE = new Arm(new ArmIOSim(new ArmInputsAutoLogged()));
+
+            } else {
+                INSTANCE = new Arm(new ArmIOSim(new ArmInputsAutoLogged()));
+            }
         }
 
         return INSTANCE;
 
     }
 
-    private void setElbowPower(double power) {
+    public void setElbowPower(double power) {
         inputs.elbowAppliedVoltage = power * 12;
     }
 
-    private void setElbowAngleRelative(double angle) {
+    public void setElbowAngleRelative(double angle) {
         inputs.elbowAngleRelative = angle;
     }
 
-    private void setShoulderPower(double power) {
+    public void setShoulderPower(double power) {
         inputs.elbowAppliedVoltage = power * 12;
     }
 
-    private void setShoulderAngle(double angle) {
+    public void setShoulderAngle(double angle) {
         inputs.elbowAngleRelative = angle;
+    }
+
+    public void setEndEffectorPosition(Translation2d endEffectorPosition, ArmKinematics armKinematics){
+        io.setEndEffectorPosition(endEffectorPosition, armKinematics);
     }
 
     @Override

@@ -5,7 +5,6 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import frc.robot.autonomous.AutoFunctions;
 import frc.robot.autonomous.FollowPath;
-import frc.robot.commandgroups.ReturnArm;
 import frc.robot.subsystems.drivetrain.SwerveConstants;
 
 /**
