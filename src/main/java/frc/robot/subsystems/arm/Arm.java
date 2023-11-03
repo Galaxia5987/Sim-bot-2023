@@ -45,7 +45,6 @@ public class Arm extends SubsystemBase {
 
     public void setEndEffectorPosition(Translation2d endEffectorPosition, ArmKinematics armKinematics){
         inputs.endEffectorPosition = new double[]{endEffectorPosition.getX(), endEffectorPosition.getY()};
-        io.setEndEffectorPosition(endEffectorPosition, armKinematics);
     }
 
     @Override
