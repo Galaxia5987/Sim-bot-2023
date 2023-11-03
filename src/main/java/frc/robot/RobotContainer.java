@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -10,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmConstants;
 //import frc.robot.subsystems.arm.ArmPosition;
+import frc.robot.subsystems.arm.commands.setTipPosition;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
 import frc.robot.subsystems.drivetrain.commands.JoystickDrive;
 import frc.robot.subsystems.drivetrain.commands.Lock;
@@ -74,7 +76,7 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-
+a.onTrue(new setTipPosition(Arm.getINSTANCE(), ArmConstants.FEEDER_POSITION));
     }
 
     /**

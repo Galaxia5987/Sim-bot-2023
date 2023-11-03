@@ -10,8 +10,8 @@ public class ArmIOSim implements ArmIO {
     private ArmInputs inputs;
     private SingleJointedArmSim shoulder;
     private SingleJointedArmSim elbow;
-    private PIDController shoulderController;
-    private PIDController elbowController;
+    private PIDController shoulderController = new PIDController(ArmConstants.shoulderP, ArmConstants.shoulderI, ArmConstants.shoulderD);
+    private PIDController elbowController = new PIDController(ArmConstants.elbowP, ArmConstants.elbowI, ArmConstants.elbowD);
     private double angleCalculated = 0;
 
     public ArmIOSim(ArmInputs inputs) {
@@ -32,6 +32,7 @@ public class ArmIOSim implements ArmIO {
 
     @Override
     public void setShoulderAngle(double angle) {
+        inputs.shoulderTipPose = new double[]{Math.cos(inputs.shoulderAngle)*ArmConstants.SHOULDER_LENGTH,Math.sin(inputs.shoulderAngle)*ArmConstants.SHOULDER_LENGTH };
         inputs.shoulderAppliedVoltage = shoulderController.calculate(inputs.shoulderAngle ,angle);
         shoulder.setInputVoltage(inputs.shoulderAppliedVoltage);
 

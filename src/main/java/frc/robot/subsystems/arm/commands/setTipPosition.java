@@ -11,7 +11,7 @@ public class setTipPosition extends CommandBase {
     private ArmKinematics armKinematics;
     private Translation2d endEffectorPosition;
 
-    private setTipPosition(Arm arm, Translation2d endEffectorPosition) {
+    public setTipPosition(Arm arm, Translation2d endEffectorPosition) {
         this.armKinematics = new ArmKinematics(ArmConstants.SHOULDER_LENGTH, ArmConstants.ELBOW_LENGTH);
         this.endEffectorPosition = endEffectorPosition;
         addRequirements(arm);
