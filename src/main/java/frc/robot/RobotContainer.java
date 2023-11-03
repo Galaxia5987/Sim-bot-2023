@@ -70,46 +70,11 @@ public class RobotContainer {
     }
 
     private void configureDefaultCommands() {
-        swerveDrive.setDefaultCommand(
-                new JoystickDrive(swerveDrive, leftJoystick, rightJoystick)
-        );
-        arm.setDefaultCommand(new ArmXboxControl(xboxController));
-        intake.setDefaultCommand(new HoldIntakeInPlace());
-        leds.setDefaultCommand(new ProximitySensorDefaultCommand());
+        
     }
 
     private void configureButtonBindings() {
-        leftJoystickTrigger.onTrue(new InstantCommand(swerveDrive::resetGyro));
-        y.whileTrue(new ArmWithSpline(ArmPosition.TOP_SCORING));
-        x.whileTrue(new ArmWithSpline(ArmPosition.MIDDLE_SCORING));
-        b.whileTrue(new ArmWithSpline(ArmPosition.FEEDER));
-        back.whileTrue(new ArmWithSpline(ArmPosition.FEEDER_CONE));
-        a.whileTrue(new ArmWithSpline(ArmPosition.NEUTRAL));
 
-        lb.onTrue(new InstantCommand(gripper::toggle));
-
-        start.onTrue(new InstantCommand(leds::toggle));
-
-        leftJoystickTopBottom.toggleOnTrue(
-                new Lock()
-        );
-        leftJoystickTopBottom.onTrue(
-                new InstantCommand(leds::toggleRainbow)
-        );
-
-        xboxLeftTrigger.whileTrue(new PickUpCubeTeleop())
-                .onFalse(new Retract(Retract.Mode.UP).andThen(new InstantCommand(() -> intake.setPower(0))));
-        xboxRightTrigger.whileTrue(new ReturnIntake());
-
-        rb.whileTrue(new ArmAxisControl(1, 0.02, 0)
-                .until((
-                        
-                ) -> gripper.getDistance() < ArmConstants.FEEDER_DISTANCE));
-
-        leftPOV.whileTrue(new ArmAxisControl(0.33, 0.02, 0, 0, 0));
-        rightPOV.whileTrue(new ArmAxisControl(0.33, -0.02, 0, 0, 0));
-        upPOV.whileTrue(new ArmAxisControl(0.33, 0, 0.02, 0, 0));
-        downPOV.whileTrue(new ArmAxisControl(0.33, 0, -0.02, 0, 0));
     }
 
     /**
@@ -118,6 +83,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new FeederConeCubeHighCube();
+        return null;
     }
 }
