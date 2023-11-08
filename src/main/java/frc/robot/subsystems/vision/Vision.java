@@ -3,6 +3,7 @@ package frc.robot.subsystems.vision;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
+import org.photonvision.PhotonCamera;
 
 public class Vision extends SubsystemBase {
 
@@ -19,7 +20,10 @@ public class Vision extends SubsystemBase {
     public static Vision getInstance() {
         if (INSTANCE == null) {
             if (Robot.isReal()) {
-                INSTANCE = new Vision();
+                INSTANCE = new Vision(
+                        VisionModule.photonVisionIO("LeftPie", 0),
+                        VisionModule.photonVisionIO("RightPie", 1)
+                );
             } else {
                 INSTANCE = new Vision();
             }
