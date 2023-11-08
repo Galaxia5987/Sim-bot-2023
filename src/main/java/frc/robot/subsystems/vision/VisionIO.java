@@ -1,9 +1,7 @@
-package frc.robot.subsystems.Vision;
+package frc.robot.subsystems.vision;
 
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
 import frc.robot.Robot;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -40,8 +38,4 @@ public interface VisionIO {
         double[] poseTargetOriented = new double[7];
         double[] poseFieldOriented = new double[7];
         double[] targetFieldOriented = new double[7];
-        Pose3d poseTargetOriented3d = new Pose3d();
-        Pose3d poseFieldOriented3d = new Pose3d();
-        Pose3d targetFieldOriented3d = new Pose3d();
-
     }
