@@ -1,6 +1,10 @@
 package frc.robot.subsystems.intake;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -16,7 +20,10 @@ public class Intake extends SubsystemBase {
     private final IntakeLoggedInputs inputs = new IntakeLoggedInputs();
     private Command lastCommand = null;
     private boolean switchedToDefaultCommand = false;
-
+    private final Mechanism2d mech = new Mechanism2d(3, 3);
+    private final MechanismRoot2d root = mech.getRoot("Intake", 1, 1);
+    private final MechanismLigament2d intakeP1 = root.append(new MechanismLigament2d("IntakeP1", 0.3, 0));
+//    private final MechanismLigament2d intakeP2 = root.append(new MechanismLigament2d("IntakeP2", 0.3, -135));
 
     private Intake(){
         if (Robot.isReal()){
@@ -57,7 +64,6 @@ public class Intake extends SubsystemBase {
 
     /**
      * Set the motors' relative output.
-     *
      * @param power is the power that the motor applies. [%]
      */
     public void setSpinMotorPower(double power) {
@@ -108,7 +114,10 @@ public class Intake extends SubsystemBase {
                 !(lastCommand instanceof HoldIntakeInPlace);
         lastCommand = currentCommand;
 
+        intakeP1.setAngle(Math.toDegrees(getAngleMotorAngle()));
+
         Logger.getInstance().processInputs("Intake", inputs);
+        SmartDashboard.putData("IntakeMech", mech);
     }
 
     public boolean switchedToDefaultCommand() {
