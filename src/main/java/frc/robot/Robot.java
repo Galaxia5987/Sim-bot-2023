@@ -11,8 +11,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.utils.TunableNumber;
-import frc.robot.utils.math.differential.BooleanTrigger;
+import frc.robot.common.utils.math.differential.BooleanTrigger;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
@@ -26,7 +25,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  */
 public class Robot extends LoggedRobot {
     public static boolean debug = false;
-    private static final BooleanTrigger enabledTrigger = new BooleanTrigger(false, false);
+    private static final BooleanTrigger enabledTrigger = new BooleanTrigger();
     private final Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
     private final Timer timer = new Timer();
     private RobotContainer robotContainer;
@@ -71,7 +70,6 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void robotPeriodic() {
-        TunableNumber.INSTANCES.forEach(TunableNumber::update);
         CommandScheduler.getInstance().run();
 
         enabledTrigger.update(isEnabled());

@@ -1,8 +1,5 @@
 package frc.robot;
 
-import frc.robot.subsystems.drivetrain.Module;
-import frc.robot.subsystems.drivetrain.SwerveConstants;
-
 public final class Ports {
 
     public static class ArmPorts {
