@@ -63,6 +63,8 @@ public class PhotonVisionIO implements VisionIO {
                     cameraToTarget.getRotation().getY(),
                     cameraToTarget.getRotation().getZ()
             };
+
+            result = new Result(latestResult.getTimestampSeconds(), estimatedPose.get().estimatedPose);
         } else {
             result = null;
         }
