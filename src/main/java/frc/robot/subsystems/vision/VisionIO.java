@@ -14,17 +14,14 @@ public interface VisionIO {
 
     default Pose3d getEstimatedPoseFieldOriented(Pose3d poseTargetOriented, int aprilId) {
         Transform3d transform3d = new Transform3d(poseTargetOriented.getTranslation(), poseTargetOriented.getRotation());
-        if(Robot.isReal()){
+        if (Robot.isReal()) {
             return VisionConstants.TARGET_POSITION_REAL[aprilId].plus(transform3d);
 
-        }
-        else {
+        } else {
             return VisionConstants.TARGET_POSITION_SIM[aprilId].plus(transform3d);
         }
     }
 
-
-    }
 
     @AutoLog
     class VisionInputs {
@@ -39,3 +36,4 @@ public interface VisionIO {
         double[] poseFieldOriented = new double[7];
         double[] targetFieldOriented = new double[7];
     }
+}
