@@ -16,6 +16,10 @@ public class PhotonVisionIO implements VisionIO {
         this.camera = camera;
 
         try {
+            var field = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();
+            for (int i = 0; i < 7; i++) {
+                System.out.println(field.getTagPose(i + 1).toString());
+            }
             estimator = new PhotonPoseEstimator(
                     AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField(),
                     PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP,
@@ -35,37 +39,43 @@ public class PhotonVisionIO implements VisionIO {
     @Override
     public void updateInputs(VisionInputs inputs) {
         var latestResult = camera.getLatestResult();
-        inputs.latency = (long) latestResult.getLatencyMillis();
-        inputs.area = latestResult.getBestTarget().getArea();
-        inputs.pitch = latestResult.getBestTarget().getPitch();
-        inputs.yaw = latestResult.getBestTarget().getYaw();
-        inputs.targetSkew = latestResult.getBestTarget().getSkew();
-        inputs.hasTargets = latestResult.hasTargets();
-        inputs.targetID = latestResult.getBestTarget().getFiducialId();
+        if (latestResult != null) {
+            inputs.latency = (long) latestResult.getLatencyMillis();
+            if (latestResult.getBestTarget() != null) {
+                inputs.area = latestResult.getBestTarget().getArea();
+                inputs.pitch = latestResult.getBestTarget().getPitch();
+                inputs.yaw = latestResult.getBestTarget().getYaw();
+                inputs.targetSkew = latestResult.getBestTarget().getSkew();
+                inputs.hasTargets = latestResult.hasTargets();
+                inputs.targetID = latestResult.getBestTarget().getFiducialId();
+            }
+            var estimatedPose = estimator.update(latestResult);
+            if (estimatedPose.isPresent()) {
+                var pose = estimatedPose.get().estimatedPose;
+                inputs.poseFieldOriented = new double[]{
+                        pose.getX(),
+                        pose.getY(),
+                        pose.getZ(),
+                        pose.getRotation().getX(),
+                        pose.getRotation().getY(),
+                        pose.getRotation().getZ()
+                };
 
-        var estimatedPose = estimator.update(latestResult);
-        if (estimatedPose.isPresent()) {
-            var pose = estimatedPose.get().estimatedPose;
-            inputs.poseFieldOriented = new double[] {
-                    pose.getX(),
-                    pose.getY(),
-                    pose.getZ(),
-                    pose.getRotation().getX(),
-                    pose.getRotation().getY(),
-                    pose.getRotation().getZ()
-            };
+                var cameraToTarget = latestResult.getBestTarget().getBestCameraToTarget();
+                System.out.println("cameraToTarget: " + cameraToTarget);
+                inputs.cameraToTarget = new double[]{
+                        cameraToTarget.getX(),
+                        cameraToTarget.getY(),
+                        cameraToTarget.getZ(),
+                        cameraToTarget.getRotation().getX(),
+                        cameraToTarget.getRotation().getY(),
+                        cameraToTarget.getRotation().getZ()
+                };
 
-            var cameraToTarget = latestResult.getBestTarget().getBestCameraToTarget();
-            inputs.cameraToTarget = new double[] {
-                    cameraToTarget.getX(),
-                    cameraToTarget.getY(),
-                    cameraToTarget.getZ(),
-                    cameraToTarget.getRotation().getX(),
-                    cameraToTarget.getRotation().getY(),
-                    cameraToTarget.getRotation().getZ()
-            };
-
-            result = new Result(latestResult.getTimestampSeconds(), estimatedPose.get().estimatedPose);
+                result = new Result(latestResult.getTimestampSeconds(), estimatedPose.get().estimatedPose);
+            } else {
+                result = null;
+            }
         } else {
             result = null;
         }
