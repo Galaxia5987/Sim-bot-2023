@@ -54,10 +54,18 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void periodic() {
-        io.setElbowAngle(inputs.elbowAngleRelative);
-        io.setElbowPower(inputs.elbowAppliedVoltage);
-        io.setShoulderAngle(inputs.shoulderAngle);
-        io.setShoulderPower(inputs.shoulderAppliedVoltage);
+        if(inputs.elbowControlMode == ArmIO.ControlMode.POSITION){
+            io.setElbowAngle(inputs.elbowAngleRelative);
+        }
+        if(inputs.elbowControlMode == ArmIO.ControlMode.PRECENT_OUTPUT){
+            io.setElbowPower(inputs.elbowAppliedVoltage);
+        }
+        if (inputs.shoulderControlMode == ArmIO.ControlMode.POSITION){
+            io.setShoulderAngle(inputs.shoulderAngle);
+        }
+        if(inputs.shoulderControlMode == ArmIO.ControlMode.PRECENT_OUTPUT){
+            io.setShoulderPower(inputs.shoulderAppliedVoltage);
+        }
         io.setEndEffectorPosition(new Translation2d(inputs.endEffectorPosition[0], inputs.endEffectorPosition[1]), ArmIO.armKenematics);
         io.updateInputs();
         Logger.getInstance().recordOutput("BottomArmPose", new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(Math.toRadians(0), Math.toRadians(0), Math.toRadians(0))));

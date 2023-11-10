@@ -23,17 +23,20 @@ public class ArmIOSim implements ArmIO {
     @Override
     public void setShoulderPower(double power) {
         shoulder.setInputVoltage(power * 12);
+        inputs.shoulderControlMode = ControlMode.PRECENT_OUTPUT;
     }
 
     @Override
     public void setElbowPower(double power) {
         elbow.setInputVoltage(power * 12);
+        inputs.elbowControlMode = ControlMode.PRECENT_OUTPUT;
     }
 
     @Override
     public void setShoulderAngle(double angle) {
         inputs.shoulderTipPose = new double[]{Math.cos(inputs.shoulderAngle)*ArmConstants.SHOULDER_LENGTH,Math.sin(inputs.shoulderAngle)*ArmConstants.SHOULDER_LENGTH };
         inputs.shoulderAppliedVoltage = shoulderController.calculate(inputs.shoulderAngle ,angle);
+        inputs.shoulderControlMode = ControlMode.POSITION;
         shoulder.setInputVoltage(inputs.shoulderAppliedVoltage);
 
     }
@@ -42,6 +45,7 @@ public class ArmIOSim implements ArmIO {
 
     public void setElbowAngle(double angle) {
         inputs.elbowAppliedVoltage = elbowController.calculate(inputs.elbowAngleRelative ,angle);
+        inputs.elbowControlMode = ControlMode.POSITION;
         elbow.setInputVoltage(inputs.elbowAppliedVoltage);
     }
 

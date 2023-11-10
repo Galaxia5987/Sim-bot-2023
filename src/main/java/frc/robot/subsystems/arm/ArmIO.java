@@ -25,6 +25,12 @@ public interface ArmIO {
     default void updateInputs() {
     }
 
+
+    enum ControlMode {
+        PRECENT_OUTPUT,
+        POSITION,
+    }
+
     @AutoLog
     class ArmInputs {
 
@@ -37,6 +43,8 @@ public interface ArmIO {
         double shoulderAngle = 0;
         double elbowAngleRelative = 0;
         double elbowAngleAbsolute = 0;
+        ControlMode shoulderControlMode = null;
+        ControlMode elbowControlMode = null;
 
 
     }
