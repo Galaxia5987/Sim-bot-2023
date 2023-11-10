@@ -14,8 +14,9 @@ public class KeyBoardControl extends CommandBase {
 
     @Override
     public void execute() {
-        if (controller.getRawButtonPressed(1)) {
-            arm.setShoulderAngle(90);
+        if (controller.getRawButton(1)) {
+            arm.setShoulderAngle(180);
         }
+        System.out.println(controller.getRawButton(1));
     }
 }
