@@ -11,6 +11,7 @@ import frc.robot.autonomous.paths.BumperCone2Cubes;
 import frc.robot.autonomous.paths.BumperConeCubeHighCube;
 import frc.robot.autonomous.paths.FeederConeCubeHighCube;
 import frc.robot.autonomous.paths.MiddleConeHighCubeEngage;
+import frc.robot.commandgroups.FeedTeleop;
 import frc.robot.commandgroups.PickUpCubeTeleop;
 import frc.robot.commandgroups.ReturnIntake;
 import frc.robot.commandgroups.bits.RunAllBits;
@@ -108,7 +109,7 @@ public class RobotContainer {
                 new InstantCommand(leds::toggleRainbow)
         );
 
-        xboxLeftTrigger.whileTrue(new PickUpCubeTeleop())
+        xboxLeftTrigger.whileTrue(new FeedTeleop(false))
                 .onFalse(new Retract(Retract.Mode.UP).andThen(new InstantCommand(() -> intake.setSpinMotorPower(0))));
         xboxRightTrigger.whileTrue(new ReturnIntake());
 
