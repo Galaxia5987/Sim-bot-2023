@@ -45,13 +45,13 @@ public final class Ports {
         public static boolean REAR_LEFT_DRIVE_INVERTED = true;
         public static boolean REAR_LEFT_ANGLE_INVERTED = true;
         public static boolean REAR_RIGHT_DRIVE_INVERTED = true;
+        public static boolean REAR_RIGHT_ANGLE_INVERTED = true;
         public static final boolean[] DRIVE_INVERTED = {
                 FRONT_LEFT_DRIVE_INVERTED,
                 FRONT_RIGHT_DRIVE_INVERTED,
                 REAR_LEFT_DRIVE_INVERTED,
                 REAR_RIGHT_DRIVE_INVERTED
         };
-        public static boolean REAR_RIGHT_ANGLE_INVERTED = true;
         public static final boolean[] ANGLE_INVERTED = {
                 FRONT_LEFT_ANGLE_INVERTED,
                 FRONT_RIGHT_ANGLE_INVERTED,
