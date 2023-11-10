@@ -1,6 +1,7 @@
 package frc.robot.subsystems.vision;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Transform3d;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -16,7 +17,7 @@ public class PhotonVisionIO implements VisionIO {
 
         try {
             estimator = new PhotonPoseEstimator(
-                    AprilTagFieldLayout.loadFromResource("2023field.fmap"),
+                    AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField(),
                     PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP,
                     camera,
                     robotToCamera
