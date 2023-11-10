@@ -174,3 +174,5 @@ build/
 !/.idea/fileTemplates/**
 
 BuildConstants.java
+
+src/main/java/frc/robot/common
