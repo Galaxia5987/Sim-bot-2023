@@ -37,6 +37,8 @@ public class SwerveDrive extends SubsystemBase {
                         Ports.SwerveDrive.DRIVE_IDS[i],
                         Ports.SwerveDrive.ANGLE_IDS[i],
                         Ports.SwerveDrive.ENCODER_IDS[i],
+                        Ports.SwerveDrive.DRIVE_INVERTED[i],
+                        Ports.SwerveDrive.ANGLE_INVERTED[i],
                         SwerveConstants.motionMagicConfigs[i],
                         i + 1);
 
@@ -182,7 +184,7 @@ public class SwerveDrive extends SubsystemBase {
 
         if (chassisSpeeds.equals(new ChassisSpeeds(0, 0, 0))) {
             for (SwerveModule module : modules) {
-                module.neutralOutput();
+                module.stop();
             }
         }
 
