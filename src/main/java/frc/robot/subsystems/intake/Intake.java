@@ -23,7 +23,7 @@ public class Intake extends SubsystemBase {
     private final Mechanism2d mech = new Mechanism2d(3, 3);
     private final MechanismRoot2d root = mech.getRoot("Intake", 1, 1);
     private final MechanismLigament2d intakeP1 = root.append(new MechanismLigament2d("IntakeP1", 0.3, 0));
-//    private final MechanismLigament2d intakeP2 = root.append(new MechanismLigament2d("IntakeP2", 0.3, -135));
+    private final MechanismLigament2d intakeP2 = intakeP1.append(new MechanismLigament2d("IntakeP2", 0.3, -45));
 
     private Intake(){
         if (Robot.isReal()){
@@ -76,7 +76,7 @@ public class Intake extends SubsystemBase {
      * @param angle is the angle of the retractor. [degrees]
      */
     public void setAngleMotorAngle(double angle) {
-        inputs.setpointAngleMotorAngle = angle;
+        inputs.setpointAngleMotorAngle = Math.toRadians(angle);
         angleMode = ControlMode.Position;
     }
 
@@ -104,8 +104,8 @@ public class Intake extends SubsystemBase {
         if (angleMode == ControlMode.Position){
             io.setAngleMotorAngle(inputs.setpointAngleMotorAngle);
         }
-        else {
-            io.setAngleMotorPower(inputs.setpointSpinMotorPower);
+        else {;
+            io.setAngleMotorPower(inputs.setpointAngleMotorPower);
         }
 
 
@@ -114,7 +114,7 @@ public class Intake extends SubsystemBase {
                 !(lastCommand instanceof HoldIntakeInPlace);
         lastCommand = currentCommand;
 
-        intakeP1.setAngle(Math.toDegrees(getAngleMotorAngle()));
+        intakeP1.setAngle(Math.toDegrees(getAngleMotorAngle()) + 90);
 
         Logger.getInstance().processInputs("Intake", inputs);
         SmartDashboard.putData("IntakeMech", mech);
