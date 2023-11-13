@@ -1,6 +1,9 @@
 package frc.robot.subsystems.intake;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -20,7 +23,7 @@ public class Intake extends SubsystemBase {
     private final IntakeLoggedInputs inputs = new IntakeLoggedInputs();
     private Command lastCommand = null;
     private boolean switchedToDefaultCommand = false;
-    private final Mechanism2d mech = new Mechanism2d(3, 3);
+    private final Mechanism2d mech = new Mechanism2d(3, 3); //TODO: config intake origin of axis to be robot center, create getPosed3D function using IntakeConstants
     private final MechanismRoot2d root = mech.getRoot("Intake", 1, 1);
     private final MechanismLigament2d intakeP1 = root.append(new MechanismLigament2d("IntakeP1", 0.3, 0));
     private final MechanismLigament2d intakeP2 = intakeP1.append(new MechanismLigament2d("IntakeP2", 0.3, -45));
@@ -116,8 +119,13 @@ public class Intake extends SubsystemBase {
 
         intakeP1.setAngle(Math.toDegrees(getAngleMotorAngle()) + 90);
 
+        Logger.getInstance().recordOutput("IntakePose",
+                new Pose3d(
+                        new Translation3d(0, 0, 0),
+//                        new Translation3d(Math.cos(Math.toRadians(-30)) * IntakeConstants.axisRadius, 0, Math.sin(Math.toRadians(-30)) * IntakeConstants.axisRadius),
+                        new Rotation3d(Math.toRadians(0), Math.toRadians(0), Math.toRadians(0))));
         Logger.getInstance().processInputs("Intake", inputs);
-        SmartDashboard.putData("IntakeMech", mech);
+        SmartDashboard.putData("IntakeMech", mech); //Cos(pitch * radius )
     }
 
     public boolean switchedToDefaultCommand() {
