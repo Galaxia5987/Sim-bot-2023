@@ -22,4 +22,7 @@ public class IntakeConstants {
     public static final double MAX_CURRENT = 8;
 
     public static final double ANGLE_MOTOR_POWER = 0.3;
+    public static final double axisRadius = 0.5143; //M
+    public static final double intakeX = 261;
+    public static final double intakeY = 443;
 }
