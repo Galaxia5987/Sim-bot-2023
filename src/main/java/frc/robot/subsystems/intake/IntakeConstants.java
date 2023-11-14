@@ -1,5 +1,6 @@
 package frc.robot.subsystems.intake;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.utils.units.Units;
 
 public class IntakeConstants {
@@ -22,7 +23,9 @@ public class IntakeConstants {
     public static final double MAX_CURRENT = 8;
 
     public static final double ANGLE_MOTOR_POWER = 0.3;
-    public static final double axisRadius = 0.5143; //M
-    public static final double intakeX = 261;
-    public static final double intakeY = 443;
+    public static final int INTAKE_MECH_OFFSET = 90; //Degrees
+    public static final double AXIS_RADIUS = 0.5143; //Meters
+    public static final double INTAKE_X = 0.261;
+    public static final double INTAKE_Y = 0.443;
+    public static final Translation2d ROOT_POSITION = new Translation2d(INTAKE_X, INTAKE_Y);
 }
