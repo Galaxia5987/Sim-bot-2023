@@ -27,5 +27,6 @@ public class IntakeConstants {
     public static final double AXIS_RADIUS = 0.5143; //Meters
     public static final double INTAKE_X = 0.261;
     public static final double INTAKE_Y = 0.443;
+    public static final double INTAKE_SIM_ANGLE_OFFSET = -44.8;
     public static final Translation2d ROOT_POSITION = new Translation2d(INTAKE_X, INTAKE_Y);
 }
