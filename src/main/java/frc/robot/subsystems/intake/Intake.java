@@ -123,7 +123,7 @@ public class Intake extends SubsystemBase {
 
         intakeP1.setAngle(Math.toDegrees(getAngleMotorAngle()) + IntakeConstants.INTAKE_MECH_OFFSET);
 
-        Logger.getInstance().recordOutput("IntakePose", getPose3d(getAngleMotorAngle()));
+        Logger.getInstance().recordOutput("IntakePose", getPose3d(getAngleMotorAngle()-  45));
         Logger.getInstance().processInputs("Intake", inputs);
         SmartDashboard.putData("IntakeMech", mech);
     }
