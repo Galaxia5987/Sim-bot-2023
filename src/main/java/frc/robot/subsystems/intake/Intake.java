@@ -22,7 +22,7 @@ public class Intake extends SubsystemBase {
     private final IntakeLoggedInputs inputs = new IntakeLoggedInputs();
     private Command lastCommand = null;
     private boolean switchedToDefaultCommand = false;
-    private final Mechanism2d mech = new Mechanism2d(3, 3); //TODO: config intake origin of axis to be robot center, create getPosed3D function using IntakeConstants
+    private final Mechanism2d mech = new Mechanism2d(3, 3);
     private final MechanismRoot2d root = mech.getRoot("Intake", 1, 1);
     private final MechanismLigament2d intakeP1 = root.append(new MechanismLigament2d("IntakeP1", 0.3, 0));
     private final MechanismLigament2d intakeP2 = intakeP1.append(new MechanismLigament2d("IntakeP2", 0.3, -45));
