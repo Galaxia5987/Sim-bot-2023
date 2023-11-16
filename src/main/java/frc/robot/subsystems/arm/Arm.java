@@ -26,9 +26,7 @@ public class Arm extends SubsystemBase {
                 INSTANCE = new Arm(new ArmIOSim(inputs));
             }
         }
-
         return INSTANCE;
-
     }
 
     public void setElbowPower(double power) {
@@ -66,7 +64,7 @@ public class Arm extends SubsystemBase {
             io.setElbowPower(inputs.elbowAppliedVoltage);
         }
         if (inputs.shoulderControlMode == ArmIO.ControlMode.POSITION){
-            io.setShoulderAngle(inputs.shoulderAngle);
+            io.setShoulderAngle(inputs.shoulderAngleSetPoint);
         }
         else if(inputs.shoulderControlMode == ArmIO.ControlMode.PRECENT_OUTPUT){
             io.setShoulderPower(inputs.shoulderAppliedVoltage);
