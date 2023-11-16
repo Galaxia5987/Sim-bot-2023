@@ -4,7 +4,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
-
 public class ArmIOSim implements ArmIO {
     private ArmInputs inputs;
     private SingleJointedArmSim shoulder;
@@ -40,9 +39,8 @@ public class ArmIOSim implements ArmIO {
     @Override
 
     public void setElbowAngle(double angle) {
-        inputs.elbowAppliedVoltage = elbowController.calculate(inputs.elbowAngleRelative,angle);
+        inputs.elbowAppliedVoltage = elbowController.calculate(inputs.elbowAngleRelative, angle);
         elbow.setInputVoltage(inputs.elbowAppliedVoltage);
-        System.out.println(inputs.elbowAppliedVoltage);
     }
 
     @Override
@@ -57,7 +55,7 @@ public class ArmIOSim implements ArmIO {
         elbow.update(0.02);
         inputs.shoulderAngle = shoulder.getAngleRads();
         inputs.elbowAngleRelative = elbow.getAngleRads();
-        inputs.elbowAngleAbsolute = inputs.elbowAngleRelative + inputs.shoulderAngle+ Math.PI;
+        inputs.elbowAngleAbsolute = inputs.elbowAngleRelative + inputs.shoulderAngle + Math.PI; //TODO: Maybe Math.PI * 2
         inputs.elbowAppliedCurrent = elbow.getCurrentDrawAmps();
         inputs.shoulderAppliedCurrent = shoulder.getCurrentDrawAmps();
     }
