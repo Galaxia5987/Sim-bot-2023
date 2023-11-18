@@ -65,11 +65,12 @@ public class RobotContainer {
     }
 
     private void configureDefaultCommands() {
+        arm.setDefaultCommand(new KeyBoardControl());
     }
 
     private void configureButtonBindings() {
-        a.whileTrue(new RunCommand(()-> arm.setElbowAngleRelative(Math.PI / 2)));
-        b.whileTrue(new RunCommand(()-> arm.setElbowAngleRelative(0)));
+//        a.whileTrue(new RunCommand(()-> arm.setElbowAngleRelative(Math.PI / 2)));
+//        b.whileTrue(new RunCommand(()-> arm.setElbowAngleRelative(0)));
 
     }
 

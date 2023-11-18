@@ -39,7 +39,7 @@ public interface ArmIO {
         double elbowAppliedVoltage = 0;
         double shoulderAppliedCurrent = 0;
         double elbowAppliedCurrent = 0;
-        double[] shoulderTipPose = new double[3];
+        double[] shoulderTipPose = new double[2];
         double[] endEffectorPosition = new double[2];
         double shoulderAngle = 0;
         double elbowAngleSetpoint = 0;
