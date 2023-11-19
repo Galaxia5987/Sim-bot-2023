@@ -17,11 +17,10 @@ public class KeyBoardControl extends CommandBase {
     @Override
     public void execute() {
         if (controller.getRawButton(1)) {
-            arm.setEndEffectorPosition(new Translation2d(1,1), ArmIO.armKenematics);
+            arm.setEndEffectorPosition(new Translation2d(1, 1), ArmIO.armKenematics);
         }
         if (controller.getRawButton(2)) {
-            arm.setElbowPower(-0.001);
-
+            arm.setEndEffectorPosition(new Translation2d(-1, 1), ArmIO.armKenematics);
         }
         if (controller.getRawButton(3)) {
             arm.setShoulderPower(0.001);

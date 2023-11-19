@@ -50,9 +50,11 @@ public class Arm extends SubsystemBase {
     }
 
     public void setEndEffectorPosition(Translation2d endEffectorPosition, ArmKinematics armKinematics) {
-        inputs.endEffectorPosition = new double[]{endEffectorPosition.getX(), endEffectorPosition.getY()};
-        setShoulderAngle(armKinematics.inverseKinematics(endEffectorPosition).shoulderAngle);
-        setElbowAngleRelative(armKinematics.inverseKinematics(endEffectorPosition).elbowAngle);
+        inputs.endEffectorPositionSetPoint = new double[]{endEffectorPosition.getX(), endEffectorPosition.getY()};
+        //setShoulderAngle((Math.PI + armKinematics.inverseKinematics(endEffectorPosition).shoulderAngle));
+        //setElbowAngleRelative(armKinematics.inverseKinematics(endEffectorPosition).elbowAngle);
+        setShoulderAngle((armKinematics.inverseKinematics(endEffectorPosition)).shoulderAngle);
+        setElbowAngleRelative(-((armKinematics.inverseKinematics(endEffectorPosition)).elbowAngle));
     }
 
     @Override
