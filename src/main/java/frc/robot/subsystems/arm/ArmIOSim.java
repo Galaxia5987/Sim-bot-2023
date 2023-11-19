@@ -14,8 +14,8 @@ public class ArmIOSim implements ArmIO {
 
     public ArmIOSim(ArmInputs inputs) {
         this.inputs = inputs;
-        shoulder = new SingleJointedArmSim(DCMotor.getFalcon500(2), ArmConstants.SHOULDER_GEARING, ArmConstants.SHOULDER_MOMENT_OF_INERTIA, ArmConstants.SHOULDER_ARM_LENGTH, 0, Math.toRadians(150), false);
-        elbow = new SingleJointedArmSim(DCMotor.getFalcon500(2), ArmConstants.ELBOW_GEARING, ArmConstants.ELBOW_MOMENT_OF_INERTIA, ArmConstants.ELBOW_ARM_LENGTH, 0, Math.toRadians(359), false);
+        shoulder = new SingleJointedArmSim(DCMotor.getFalcon500(2), ArmConstants.SHOULDER_GEARING, ArmConstants.SHOULDER_MOMENT_OF_INERTIA, ArmConstants.SHOULDER_ARM_LENGTH, -360, Math.toRadians(360), false);
+        elbow = new SingleJointedArmSim(DCMotor.getFalcon500(2), ArmConstants.ELBOW_GEARING, ArmConstants.ELBOW_MOMENT_OF_INERTIA, ArmConstants.ELBOW_ARM_LENGTH, -360, Math.toRadians(360), false);
     }
 
     @Override

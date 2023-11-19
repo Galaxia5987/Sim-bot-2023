@@ -9,9 +9,9 @@ import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
 public class Arm extends SubsystemBase {
+    private static final ArmInputsAutoLogged inputs = new ArmInputsAutoLogged();
     static Arm INSTANCE;
     private final ArmIO io;
-    private static final ArmInputsAutoLogged inputs = new ArmInputsAutoLogged();
 
     private Arm(ArmIO io) {
         this.io = io;
@@ -51,27 +51,29 @@ public class Arm extends SubsystemBase {
 
     public void setEndEffectorPosition(Translation2d endEffectorPosition, ArmKinematics armKinematics) {
         inputs.endEffectorPosition = new double[]{endEffectorPosition.getX(), endEffectorPosition.getY()};
+        setShoulderAngle(armKinematics.inverseKinematics(endEffectorPosition).shoulderAngle);
+        setElbowAngleRelative(armKinematics.inverseKinematics(endEffectorPosition).elbowAngle);
     }
 
     @Override
     public void periodic() {
         io.updateInputs();
         Logger.getInstance().processInputs("Arm", inputs);
-        if(inputs.elbowControlMode == ArmIO.ControlMode.POSITION){
+
+        if (inputs.elbowControlMode == ArmIO.ControlMode.POSITION) {
             io.setElbowAngle(inputs.elbowAngleSetpoint);
-        }
-        else if(inputs.elbowControlMode == ArmIO.ControlMode.PRECENT_OUTPUT){
+
+        } else if (inputs.elbowControlMode == ArmIO.ControlMode.PRECENT_OUTPUT) {
             io.setElbowPower(inputs.elbowAppliedVoltage);
         }
-        if (inputs.shoulderControlMode == ArmIO.ControlMode.POSITION){
+        if (inputs.shoulderControlMode == ArmIO.ControlMode.POSITION) {
             io.setShoulderAngle(inputs.shoulderAngleSetPoint);
-        }
-        else if(inputs.shoulderControlMode == ArmIO.ControlMode.PRECENT_OUTPUT){
+        } else if (inputs.shoulderControlMode == ArmIO.ControlMode.PRECENT_OUTPUT) {
             io.setShoulderPower(inputs.shoulderAppliedVoltage);
         }
         Logger.getInstance().recordOutput("BottomArmPose", new Pose3d(new Translation3d(-0.29, 0, 0.37), new Rotation3d(Math.toRadians(0), inputs.shoulderAngle, Math.toRadians(0))));
 
-        Logger.getInstance().recordOutput("TopArmPose", new Pose3d(new Translation3d(-0.29, 0, 0.37).plus(new Translation3d(-inputs.shoulderTipPose[0], 0,inputs.shoulderTipPose[1])), new Rotation3d(Math.toRadians(0), inputs.elbowAngleAbsolute, Math.toRadians(0)))); //TODO: check how to chnage the spin of the origin
+        Logger.getInstance().recordOutput("TopArmPose", new Pose3d(new Translation3d(-0.29, 0, 0.37).plus(new Translation3d(-inputs.shoulderTipPose[0], 0, inputs.shoulderTipPose[1])), new Rotation3d(Math.toRadians(0), inputs.elbowAngleAbsolute, Math.toRadians(0)))); //TODO: check how to chnage the spin of the origin
 
 
     }

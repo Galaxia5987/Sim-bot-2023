@@ -29,6 +29,7 @@ public interface ArmIO {
     enum ControlMode {
         PRECENT_OUTPUT,
         POSITION,
+        TIP_POSITION
     }
 
     @AutoLog
@@ -45,9 +46,7 @@ public interface ArmIO {
         double elbowAngleSetpoint = 0;
         double elbowAngleRelative = 0;
         double elbowAngleAbsolute = 0;
-        ControlMode shoulderControlMode = ControlMode.POSITION;
+        ControlMode shoulderControlMode = ControlMode.PRECENT_OUTPUT;
         ControlMode elbowControlMode = ControlMode.PRECENT_OUTPUT;
-
-
     }
 }
