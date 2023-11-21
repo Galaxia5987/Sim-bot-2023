@@ -48,7 +48,7 @@ public class ArmConstants {
     public static final double ELBOW_ABSOLUTE_ENCODER_OFFSET = 0.57396956434 - ELBOW_ZERO_POSITION / 360.0;
 
     //PID
-    public static final double shoulderP = 1.0;
+    public static final double shoulderP = 4.0;
     public static final double shoulderI = 0.0;
     public static final double shoulderD = 0.0;
     public static final double elbowP = 1;
