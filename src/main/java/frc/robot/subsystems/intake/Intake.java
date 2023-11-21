@@ -1,39 +1,56 @@
 package frc.robot.subsystems.intake;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Robot;
+import frc.robot.Constants;
+import frc.robot.Ports;
 import frc.robot.subsystems.intake.commands.HoldIntakeInPlace;
+import frc.robot.utils.units.UnitModel;
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
-    private final IntakeIO io;
     private static Intake INSTANCE;
+    private final CANSparkMax motor = new CANSparkMax(Ports.Intake.INTAKE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private final TalonFX angleMotor = new TalonFX(Ports.Intake.ANGLE_MOTOR);
+    private final UnitModel unitModel = new UnitModel(IntakeConstants.TICKS_PER_DEGREE);
     private ControlMode angleMode;
     private final IntakeLoggedInputs inputs = new IntakeLoggedInputs();
     private Command lastCommand = null;
     private boolean switchedToDefaultCommand = false;
-    private final Mechanism2d mech = new Mechanism2d(3, 3);
-    private final MechanismRoot2d root = mech.getRoot("Intake", 1, 1);
-    private final MechanismLigament2d intakeP1 = root.append(new MechanismLigament2d("IntakeP1", 0.3, 0));
-    private final MechanismLigament2d intakeP2 = intakeP1.append(new MechanismLigament2d("IntakeP2", 0.3, -45));
 
-    private Intake(){
-        if (Robot.isReal()){
-            io = new IntakeIOReal();
+    private Intake() {
+        angleMotor.configFactoryDefault();
+        motor.restoreFactoryDefaults();
+
+        motor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        motor.enableVoltageCompensation(Constants.NOMINAL_VOLTAGE);
+        motor.setInverted(Ports.Intake.POWER_INVERTED);
+        for (int i = 1; i <= 6; i++) {
+            motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.fromId(i), 50000);
         }
-        else{
-            io = new IntakeIOSim();
-        }
+        motor.burnFlash();
+
+        angleMotor.setNeutralMode(NeutralMode.Brake);
+        angleMotor.enableVoltageCompensation(true);
+        angleMotor.configVoltageCompSaturation(Constants.NOMINAL_VOLTAGE);
+        angleMotor.setInverted(Ports.Intake.ANGLE_INVERTED);
+        angleMotor.config_kP(0, IntakeConstants.kP);
+        angleMotor.config_kI(0, IntakeConstants.kI);
+        angleMotor.config_kD(0, IntakeConstants.kD);
+        angleMotor.config_kF(0, IntakeConstants.kF);
+        angleMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(
+                true, 30, 0, 0
+        ));
+        angleMotor.configClosedLoopPeakOutput(0, 0.4);
     }
 
     /**
@@ -45,36 +62,22 @@ public class Intake extends SubsystemBase {
         }
         return INSTANCE;
     }
-    /** Returns the 3D pose of the intake for visualization. */
-    private Pose3d getPose3d(double angle) {
-        return new Pose3d(
-                IntakeConstants.ROOT_POSITION.getX(), 0.0, IntakeConstants.ROOT_POSITION.getY(), new Rotation3d(0.0, -angle, 0.0));
-    }
 
     /**
      * @return the relative output.
      * Return the power that the motor applies. [%]
      */
-    private double getSpinMotorPower() {
-        return inputs.spinMotorPower;
-    }
-    public double getAngleMotorAngle() {
-        return inputs.angleMotorAngle;
-    }
-
-    private double getAngleMotorVelocity() {
-        return inputs.angleMotorVelocity;
-    }
-    public double getCurrent() {
-        return inputs.angleMotorcurrent;
+    private double getPower() {
+        return motor.get();
     }
 
     /**
      * Set the motors' relative output.
+     *
      * @param power is the power that the motor applies. [%]
      */
-    public void setSpinMotorPower(double power) {
-        inputs.setpointSpinMotorPower = power;
+    public void setPower(double power) {
+        inputs.setpointPower = power;
     }
 
     /**
@@ -82,37 +85,60 @@ public class Intake extends SubsystemBase {
      *
      * @param angle is the angle of the retractor. [degrees]
      */
-    public void setAngleMotorAngle(double angle) {
-        inputs.setpointAngleMotorAngle = Math.toRadians(angle);
+    public void setAngle(double angle) {
+        inputs.setpointAngle = angle;
         angleMode = ControlMode.Position;
     }
 
     public void setAnglePower(double power) {
-        inputs.setpointAngleMotorPower = power;
+        inputs.setpointAnglePower = power;
         angleMode = ControlMode.PercentOutput;
     }
-    public void resetEncoder(double angle) {
-        io.resetEncoder(angle);
+
+    /**
+     * @return the motor's position. [degrees]
+     */
+    public double getAngle() {
+        return inputs.angle;
+    }
+
+    private double getAngleMotorVelocity() {
+        return inputs.velocity;
     }
 
     public Command lowerIntake() {
         return new InstantCommand(() -> resetEncoder(IntakeConstants.ANGLE_UP), this)
-                .andThen(new RunCommand(() -> setAngleMotorAngle(-40), this));
+                .andThen(new RunCommand(() -> setAngle(-40), this));
     }
+
+    public void resetEncoder(double angle) {
+        angleMotor.setSelectedSensorPosition(
+                unitModel.toTicks(angle)
+        );
+    }
+
+    public double getCurrent() {
+        return inputs.current;
+    }
+
     public Command run(double power) {
-        return new RunCommand(() -> this.setSpinMotorPower(power));
+        return new RunCommand(() -> this.setPower(power));
     }
 
     @Override
     public void periodic() {
-        io.updateInputs(inputs);
-        io.setSpinMotorPower(inputs.setpointSpinMotorPower);
+        inputs.power = motor.getAppliedOutput();
+        inputs.angle = unitModel.toUnits(angleMotor.getSelectedSensorPosition());
+        inputs.velocity = unitModel.toVelocity(angleMotor.getSelectedSensorVelocity());
+        inputs.current = angleMotor.getSupplyCurrent();
+        inputs.anglePower = angleMotor.getMotorOutputPercent();
 
+        motor.set(inputs.setpointPower);
         if (angleMode == ControlMode.Position){
-            io.setAngleMotorAngle(inputs.setpointAngleMotorAngle);
+            angleMotor.set(ControlMode.Position, unitModel.toTicks(inputs.setpointAngle));
         }
-        else {;
-            io.setAngleMotorPower(inputs.setpointAngleMotorPower);
+        else {
+            angleMotor.set(TalonFXControlMode.PercentOutput, inputs.setpointAnglePower);
         }
 
 
@@ -121,11 +147,7 @@ public class Intake extends SubsystemBase {
                 !(lastCommand instanceof HoldIntakeInPlace);
         lastCommand = currentCommand;
 
-        intakeP1.setAngle(Math.toDegrees(getAngleMotorAngle()) + IntakeConstants.INTAKE_MECH_OFFSET);
-
-        Logger.getInstance().recordOutput("IntakePose", getPose3d(getAngleMotorAngle() + IntakeConstants.INTAKE_SIM_ANGLE_OFFSET));
         Logger.getInstance().processInputs("Intake", inputs);
-        SmartDashboard.putData("IntakeMech", mech);
     }
 
     public boolean switchedToDefaultCommand() {
