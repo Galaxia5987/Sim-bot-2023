@@ -51,10 +51,16 @@ public class Arm extends SubsystemBase {
 
     public void setEndEffectorPosition(Translation2d endEffectorPosition, ArmKinematics armKinematics) {
         inputs.endEffectorPositionSetPoint = new double[]{endEffectorPosition.getX(), endEffectorPosition.getY()};
-        //setShoulderAngle((Math.PI + armKinematics.inverseKinematics(endEffectorPosition).shoulderAngle));
-        //setElbowAngleRelative(armKinematics.inverseKinematics(endEffectorPosition).elbowAngle);
         setShoulderAngle((armKinematics.inverseKinematics(endEffectorPosition)).shoulderAngle);
         setElbowAngleRelative(((armKinematics.inverseKinematics(endEffectorPosition)).elbowAngle));
+    }
+
+    public boolean armIsOutOfFrame() {
+        return !(inputs.shoulderTipPose[0] < 0) || !(inputs.endEffectorPose.getX() < 0);
+    }
+
+    public boolean armIsInRobot() {
+        return inputs.shoulderTipPose[1] < 0 && inputs.shoulderAngle > 90;
     }
 
     @Override
