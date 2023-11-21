@@ -21,4 +21,11 @@ public class VisionModule {
                 new VisionInputsAutoLogged()
         );
     }
+    public static VisionModule simIO(String name,  int index){
+        return new VisionModule(
+                name,
+                new VisionSimIO(),
+                new VisionInputsAutoLogged()
+        );
+    }
 }
