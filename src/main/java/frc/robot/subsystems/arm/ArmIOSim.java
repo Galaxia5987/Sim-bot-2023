@@ -58,5 +58,6 @@ public class ArmIOSim implements ArmIO {
         inputs.elbowAngleAbsolute = inputs.elbowAngleRelative + inputs.shoulderAngle;
         inputs.elbowAppliedCurrent = elbow.getCurrentDrawAmps();
         inputs.shoulderAppliedCurrent = shoulder.getCurrentDrawAmps();
+        inputs.endEffectorPose = armKenematics.forwardKinematics(inputs.shoulderAngle, inputs.elbowAngleRelative);
     }
 }
