@@ -4,6 +4,12 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
@@ -12,6 +18,16 @@ public class Arm extends SubsystemBase {
     private static final ArmInputsAutoLogged inputs = new ArmInputsAutoLogged();
     static Arm INSTANCE;
     private final ArmIO io;
+    private final Mechanism2d mechanism = new Mechanism2d(
+            3, 3
+    );
+    private final MechanismRoot2d root = mechanism.getRoot("Arm", 1, 1);
+    private final MechanismLigament2d shoulder = root.append(
+            new MechanismLigament2d("Shoulder", ArmConstants.SHOULDER_LENGTH, 0)
+    );
+    private final MechanismLigament2d elbow = shoulder.append(
+            new MechanismLigament2d("Elbow", ArmConstants.ELBOW_LENGTH, 0, 10, new Color8Bit(Color.kPurple))
+    );
 
     private Arm(ArmIO io) {
         this.io = io;
@@ -67,6 +83,9 @@ public class Arm extends SubsystemBase {
     public void periodic() {
         io.updateInputs();
         Logger.getInstance().processInputs("Arm", inputs);
+        shoulder.setAngle(Math.toDegrees(inputs.shoulderAngle));
+        elbow.setAngle(Math.toDegrees(inputs.elbowAngleRelative) - 180);
+        SmartDashboard.putData("Arm Mechanism", mechanism);
 
         if (inputs.elbowControlMode == ArmIO.ControlMode.POSITION) {
             io.setElbowAngle(inputs.elbowAngleSetpoint);
