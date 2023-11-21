@@ -69,9 +69,15 @@ public class PhotonVisionIO implements VisionIO {
                         pose.getX(),
                         pose.getY(),
                         pose.getZ(),
-                        pose.getRotation().getX(),
-                        pose.getRotation().getY(),
-                        pose.getRotation().getZ()
+                        pose.getRotation().getQuaternion().getW(),
+                        pose.getRotation().getQuaternion().getX(),  //roll
+                        pose.getRotation().getQuaternion().getY(), //pitch
+                        pose.getRotation().getQuaternion().getZ() //yaw
+                };
+                inputs.fieldOrientedRotationRad = new double[]{
+                        pose.getRotation().getX(),  //roll
+                        pose.getRotation().getY(), //pitch
+                        pose.getRotation().getZ() //yaw
                 };
 
                 result = new Result(latestResult.getTimestampSeconds(), estimatedPose.get().estimatedPose);

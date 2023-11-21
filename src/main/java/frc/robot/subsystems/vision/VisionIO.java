@@ -25,6 +25,7 @@ public interface VisionIO {
         double targetSkew = 0;
         long targetID = 0;
         double[] cameraToTarget = new double[]{0,0,0,0,0,0};
-        double[] poseFieldOriented = new double[6];
+        double[] poseFieldOriented = new double[7];
+        double[] fieldOrientedRotationRad = new double[3];
     }
 }
