@@ -111,7 +111,7 @@ public class Intake extends SubsystemBase {
         if (angleMode == ControlMode.Position){
             io.setAngleMotorAngle(inputs.setpointAngleMotorAngle);
         }
-        else {;
+        else {
             io.setAngleMotorPower(inputs.setpointAngleMotorPower);
         }
 
