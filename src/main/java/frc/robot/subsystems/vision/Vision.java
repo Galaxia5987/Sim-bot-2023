@@ -25,7 +25,9 @@ public class Vision extends SubsystemBase {
                         VisionModule.photonVisionIO("RightPie", 1)
                 );
             } else {
-                INSTANCE = new Vision();
+                INSTANCE = new Vision(
+                        VisionModule.simIO("simCamera", 0)
+                );
             }
         }
         return INSTANCE;
