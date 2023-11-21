@@ -54,7 +54,7 @@ public class Arm extends SubsystemBase {
         //setShoulderAngle((Math.PI + armKinematics.inverseKinematics(endEffectorPosition).shoulderAngle));
         //setElbowAngleRelative(armKinematics.inverseKinematics(endEffectorPosition).elbowAngle);
         setShoulderAngle((armKinematics.inverseKinematics(endEffectorPosition)).shoulderAngle);
-        setElbowAngleRelative(-((armKinematics.inverseKinematics(endEffectorPosition)).elbowAngle));
+        setElbowAngleRelative(((armKinematics.inverseKinematics(endEffectorPosition)).elbowAngle));
     }
 
     @Override
@@ -73,9 +73,9 @@ public class Arm extends SubsystemBase {
         } else if (inputs.shoulderControlMode == ArmIO.ControlMode.PRECENT_OUTPUT) {
             io.setShoulderPower(inputs.shoulderAppliedVoltage);
         }
-        Logger.getInstance().recordOutput("BottomArmPose", new Pose3d(new Translation3d(-0.29, 0, 0.37), new Rotation3d(Math.toRadians(0), inputs.shoulderAngle, Math.toRadians(0))));
+        Logger.getInstance().recordOutput("BottomArmPose", new Pose3d(ArmConstants.shoulderOrigin, new Rotation3d(Math.toRadians(0), inputs.shoulderAngle, Math.toRadians(0))));
 
-        Logger.getInstance().recordOutput("TopArmPose", new Pose3d(new Translation3d(-0.29, 0, 0.37).plus(new Translation3d(-inputs.shoulderTipPose[0], 0, inputs.shoulderTipPose[1])), new Rotation3d(Math.toRadians(0), inputs.elbowAngleAbsolute, Math.toRadians(0)))); //TODO: check how to chnage the spin of the origin
+        Logger.getInstance().recordOutput("TopArmPose", new Pose3d(ArmConstants.shoulderOrigin.plus(new Translation3d(-inputs.shoulderTipPose[0], 0, inputs.shoulderTipPose[1])), new Rotation3d(Math.toRadians(0), inputs.elbowAngleAbsolute - Math.PI, Math.toRadians(0)))); //TODO: check how to chnage the spin of the origin
 
 
     }
