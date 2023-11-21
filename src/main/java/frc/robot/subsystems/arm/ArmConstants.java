@@ -2,6 +2,7 @@ package frc.robot.subsystems.arm;
 
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import frc.robot.utils.math.ArmLinearProfile;
 
 public class ArmConstants {
@@ -53,6 +54,8 @@ public class ArmConstants {
     public static final double elbowP = 1;
     public static final double elbowI = 0.0;
     public static final double elbowD = 0.0;
+
+    public static final Translation3d shoulderOrigin = new Translation3d(-0.29, 0, 0.47);
 
 
     public static final double SHOULDER_FEED_FORWARD = 0.06;
