@@ -46,6 +46,7 @@ public interface ArmIO {
         double elbowAngleSetpoint = 0;
         double elbowAngleRelative = 0;
         double elbowAngleAbsolute = 0;
+        Translation2d endEffectorPose;
         ControlMode shoulderControlMode = ControlMode.PRECENT_OUTPUT;
         ControlMode elbowControlMode = ControlMode.PRECENT_OUTPUT;
     }
