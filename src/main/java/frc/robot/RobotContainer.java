@@ -18,7 +18,8 @@ public class RobotContainer {
     private final Joystick leftJoystick = new Joystick(1);
     private final Joystick rightJoystick = new Joystick(2);
 
-    private final JoystickButton joystickTrigger = new JoystickButton(leftJoystick, 1);
+    private final JoystickButton leftJoystickTrigger = new JoystickButton(leftJoystick, 1);
+    private final JoystickButton rightJoystickTrigger = new JoystickButton(rightJoystick, 1);
 
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -42,7 +43,8 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        joystickTrigger.onTrue(new InstantCommand(drive::resetGyro));
+        leftJoystickTrigger.onTrue(new InstantCommand(drive::resetGyro));
+        rightJoystickTrigger.onTrue(new InstantCommand(drive::resetPose));
     }
 
 
