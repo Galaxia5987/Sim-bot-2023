@@ -1,17 +1,18 @@
 package frc.robot.subsystems.arm.commands;
 
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmConstants;
 import frc.robot.subsystems.arm.ArmIO;
+import frc.robot.subsystems.intake.Intake;
 
-public class KeyBoardControl extends CommandBase {
+public class ArmKeyboardControl extends CommandBase {
     private final GenericHID controller = new GenericHID(0);
     private Arm arm = Arm.getINSTANCE();
+    private Intake intake = Intake.getInstance();
 
-    public KeyBoardControl() {
+    public ArmKeyboardControl() {
         addRequirements(arm);
     }
 
@@ -22,12 +23,6 @@ public class KeyBoardControl extends CommandBase {
         }
         if (controller.getRawButton(2)) {
             arm.setEndEffectorPosition(ArmConstants.STARTING_POSITION, ArmIO.armKenematics);
-        }
-        if (controller.getRawButton(3)) {
-            arm.setShoulderPower(0.001);
-        }
-        if (controller.getRawButton(4)) {
-            arm.setShoulderPower(-0.001);
         }
     }
 }
