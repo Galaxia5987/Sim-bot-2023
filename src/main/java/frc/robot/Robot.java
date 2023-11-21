@@ -66,6 +66,8 @@ public class Robot extends LoggedRobot {
         timer.start();
         timer.reset();
 
+        Logger.getInstance().recordOutput("BottomArmPose", new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(Math.toRadians(0), Math.toRadians(0), Math.toRadians(0))));
+        Logger.getInstance().recordOutput("TopArmPose", new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(Math.toRadians(0), Math.toRadians(0), Math.toRadians(0))));
 
         autonomousCommand = robotContainer.getAutonomousCommand();
     }

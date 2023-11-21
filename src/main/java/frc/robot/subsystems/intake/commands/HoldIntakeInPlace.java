@@ -17,9 +17,9 @@ public class HoldIntakeInPlace extends CommandBase {
     @Override
     public void execute() {
         if (intake.switchedToDefaultCommand() || Robot.justEnabled()) {
-            angle = intake.getAngle();
+            angle = intake.getAngleMotorAngle();
             angle = MathUtil.clamp(angle, IntakeConstants.ANGLE_DOWN, IntakeConstants.ANGLE_UP);
         }
-        intake.setAngle(IntakeConstants.ANGLE_UP);
+        intake.setAngleMotorAngle(IntakeConstants.ANGLE_UP);
     }
 }
