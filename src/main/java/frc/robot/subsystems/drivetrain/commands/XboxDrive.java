@@ -9,6 +9,7 @@ import frc.robot.subsystems.drivetrain.SwerveDrive;
 public class XboxDrive extends CommandBase {
     private final SwerveDrive swerveDrive;
     private final XboxController xboxController;
+    private final double multiplier = 0.4;
 
     public XboxDrive(SwerveDrive swerveDrive, XboxController xboxController) {
         this.swerveDrive = swerveDrive;
@@ -19,9 +20,9 @@ public class XboxDrive extends CommandBase {
     @Override
     public void execute() {
         swerveDrive.drive(
-                MathUtil.applyDeadband(-xboxController.getLeftY(), SwerveConstants.XBOX_DEADBAND),
-                MathUtil.applyDeadband(-xboxController.getLeftX(), SwerveConstants.XBOX_DEADBAND),
-                MathUtil.applyDeadband(-xboxController.getRightX(), SwerveConstants.XBOX_DEADBAND),
+                MathUtil.applyDeadband(-xboxController.getLeftY(), SwerveConstants.XBOX_DEADBAND) * multiplier,
+                MathUtil.applyDeadband(-xboxController.getLeftX(), SwerveConstants.XBOX_DEADBAND) * multiplier,
+                MathUtil.applyDeadband(-xboxController.getRightX(), SwerveConstants.XBOX_DEADBAND) * multiplier,
                 true
         );
     }

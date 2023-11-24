@@ -15,6 +15,7 @@ import frc.robot.subsystems.arm.commands.ArmXboxControl;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
 import frc.robot.subsystems.drivetrain.commands.JoystickDrive;
 import frc.robot.subsystems.drivetrain.commands.Lock;
+import frc.robot.subsystems.drivetrain.commands.XboxDrive;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.commands.HoldIntakeInPlace;
@@ -73,9 +74,10 @@ public class RobotContainer {
 
     private void configureDefaultCommands() {
         swerveDrive.setDefaultCommand(
-                new JoystickDrive(swerveDrive, leftJoystick, rightJoystick)
+//                new JoystickDrive(swerveDrive, leftJoystick, rightJoystick)
+                new XboxDrive(swerveDrive, xboxController)
         );
-        arm.setDefaultCommand(new ArmXboxControl(xboxController));
+//        arm.setDefaultCommand(new ArmXboxControl(xboxController));
         intake.setDefaultCommand(new HoldIntakeInPlace());
         leds.setDefaultCommand(new ProximitySensorDefaultCommand());
     }
