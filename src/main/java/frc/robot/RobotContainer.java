@@ -44,7 +44,7 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         leftJoystickTrigger.onTrue(new InstantCommand(drive::resetGyro));
-        rightJoystickTrigger.onTrue(new InstantCommand(drive::resetPose));
+        rightJoystickTrigger.onTrue(new InstantCommand(RobotState.getInstance()::reset));
     }
 
 
