@@ -24,15 +24,11 @@ public interface ArmIO {
     default void setElbowP(double kP){
 
     }
-
     default void updateInputs() {
     }
-
-
     enum ControlMode {
         PRECENT_OUTPUT,
-        POSITION,
-        TIP_POSITION
+        POSITION
     }
 
     @AutoLog
