@@ -47,7 +47,7 @@ public class ArmIOSim implements ArmIO {
         setElbowAngle(armKinematics.inverseKinematics(position).elbowAngle);
         setShoulderAngle(armKinematics.inverseKinematics(position).shoulderAngle);
     }
-    public void  setElbowP(double kP){
+    public void setElbowP(double kP){
         elbowController.setP(kP);
     }
 
