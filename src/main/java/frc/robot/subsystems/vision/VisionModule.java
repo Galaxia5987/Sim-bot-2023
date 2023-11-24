@@ -1,5 +1,6 @@
 package frc.robot.subsystems.vision;
 
+import edu.wpi.first.math.geometry.Transform3d;
 import org.photonvision.PhotonCamera;
 
 public class VisionModule {
@@ -24,7 +25,7 @@ public class VisionModule {
     public static VisionModule simIO(String name,  int index){
         return new VisionModule(
                 name,
-                new VisionSimIO(),
+                new VisionSimIO(new Transform3d()),
                 new VisionInputsAutoLogged()
         );
     }

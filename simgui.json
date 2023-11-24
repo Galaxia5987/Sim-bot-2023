@@ -2,6 +2,7 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/simCam Sim Field": "Field2d",
       "/SmartDashboard/simCam_1 Sim Field": "Field2d",
       "/SmartDashboard/simCam_2 Sim Field": "Field2d"
     }
@@ -15,9 +16,6 @@
     },
     "transitory": {
       "AdvantageKit": {
-        "RealOutputs": {
-          "open": true
-        },
         "Vision_0": {
           "open": true
         },
@@ -28,6 +26,12 @@
           "open": true
         },
         "open": true
+      },
+      "SmartDashboard": {
+        "open": true,
+        "simCam Sim Field": {
+          "open": true
+        }
       }
     }
   },
