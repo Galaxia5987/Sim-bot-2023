@@ -16,7 +16,6 @@ public class ArmAxisControl extends CommandBase {
     public ArmAxisControl(double Xvalue, double Yvalue) {
         this.Xvalue = Xvalue;
         this.Yvalue = Yvalue;
-        this.armKinematics = new ArmKinematics(ArmConstants.SHOULDER_LENGTH, ArmConstants.ELBOW_LENGTH);
         addRequirements(arm);
     }
 
@@ -24,7 +23,7 @@ public class ArmAxisControl extends CommandBase {
     @Override
     public void initialize() {
         arm.setElbowP(0.02);
-        pose = arm.getEndPosition(armKinematics);
+        pose = arm.getEndPosition();
     }
 
     @Override
@@ -33,7 +32,7 @@ public class ArmAxisControl extends CommandBase {
 
         if (!passedMaximum) {
             pose = pose.plus(new Translation2d(Xvalue, Yvalue));
-            arm.setEndEffectorPosition(pose, armKinematics);
+            arm.setEndEffectorPosition(pose);
         }
     }
 
