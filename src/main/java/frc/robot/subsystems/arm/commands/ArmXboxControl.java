@@ -36,8 +36,8 @@ public class ArmXboxControl extends CommandBase {
             arm.setShoulderAngle(shoulderHoldAngle);
             arm.setElbowAngleRelative(elbowHoldAngle);
         } else {
-            arm.setShoulderPower(0.1 * powerSho);
-            arm.setElbowPower(0.1 * powerEl);
+            arm.setShoulderPower(0.01 * powerSho);
+            arm.setElbowPower(0.01 * powerEl);
         }
     }
 
