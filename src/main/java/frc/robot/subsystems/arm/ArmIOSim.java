@@ -47,6 +47,9 @@ public class ArmIOSim implements ArmIO {
         setElbowAngle(armKinematics.inverseKinematics(position).elbowAngle);
         setShoulderAngle(armKinematics.inverseKinematics(position).shoulderAngle);
     }
+    public void  setElbowP(double kP){
+        elbowController.setP(kP);
+    }
 
     @Override
     public void updateInputs() {
@@ -58,6 +61,6 @@ public class ArmIOSim implements ArmIO {
         inputs.elbowAngleAbsolute = inputs.elbowAngleRelative + inputs.shoulderAngle;
         inputs.elbowAppliedCurrent = elbow.getCurrentDrawAmps();
         inputs.shoulderAppliedCurrent = shoulder.getCurrentDrawAmps();
-        inputs.endEffectorPose = armKenematics.forwardKinematics(inputs.shoulderAngle, inputs.elbowAngleRelative);
+        inputs.endEffectorPose = armKinematics.forwardKinematics(inputs.shoulderAngle, inputs.elbowAngleRelative);
     }
 }

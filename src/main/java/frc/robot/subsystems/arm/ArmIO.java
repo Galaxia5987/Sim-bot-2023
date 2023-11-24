@@ -5,7 +5,7 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface ArmIO {
 
-    static ArmKinematics armKenematics = new ArmKinematics(ArmConstants.SHOULDER_LENGTH, ArmConstants.ELBOW_LENGTH);
+    static ArmKinematics armKinematics = new ArmKinematics(ArmConstants.SHOULDER_LENGTH, ArmConstants.ELBOW_LENGTH);
 
     default void setShoulderPower(double power) {
     }
@@ -20,6 +20,9 @@ public interface ArmIO {
     }
 
     default void setEndEffectorPosition(Translation2d position, ArmKinematics armKinematics) {
+    }
+    default void setElbowP(double kP){
+
     }
 
     default void updateInputs() {
