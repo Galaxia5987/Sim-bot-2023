@@ -29,33 +29,33 @@ public enum ArmPosition {
     public ArmPosition nextState(ArmIO.ArmInputs armInputs, ArmPosition desiredPosition) {
         switch (desiredPosition) {
             case FEEDER:
-                if (armInputs.armPosition[1] < 0.2 && armInputs.armPosition[0] < 0) {
+                if (armInputs.endEffectorPose.getY() < 0.2 && armInputs.endEffectorPose.getX() < 0) {
                     return NEUTRAL;
                 }
                 return FEEDER;
             case PICKUP:
-                if (armInputs.armPosition[0] < 0 && armInputs.armPosition[1] < 0.5) {
+                if (armInputs.endEffectorPose.getX() < 0 && armInputs.endEffectorPose.getY() < 0.5) {
                     return PICKUP;
                 }
                 return NEUTRAL;
 
             case TOP_SCORING:
-                if (armInputs.armPosition[1] < 0.2 && armInputs.armPosition[0] < 0) {
+                if (armInputs.endEffectorPose.getY() < 0.2 && armInputs.endEffectorPose.getX() < 0) {
                     return NEUTRAL;
                 }
                 return TOP_SCORING;
             case MIDDLE_SCORING:
-                if (armInputs.armPosition[1] < 0.2 && armInputs.armPosition[0] < 0) {
+                if (armInputs.endEffectorPose.getY() < 0.2 && armInputs.endEffectorPose.getX() < 0) {
                     return NEUTRAL;
                 }
                 return MIDDLE_SCORING;
             case BOTTOM_SCORING:
-                if (armInputs.armPosition[1] < 0.2 && armInputs.armPosition[0] < 0) {
+                if (armInputs.endEffectorPose.getY() < 0.2 && armInputs.endEffectorPose.getX() < 0) {
                     return NEUTRAL;
                 }
                 return BOTTOM_SCORING;
             case FEEDER_CONE:
-                if (armInputs.armPosition[1] < 0.2 && armInputs.armPosition[0] < 0) {
+                if (armInputs.endEffectorPose.getY() < 0.2 && armInputs.endEffectorPose.getX() < 0) {
                     return NEUTRAL;
                 }
                 return FEEDER_CONE;
@@ -85,13 +85,13 @@ public enum ArmPosition {
         var endSolution = Arm.getINSTANCE().getKinematics().inverseKinematics(
                 Leds.getInstance().inConeMode() ? desiredPosition.conePose : desiredPosition.cubePose);
 
-        var startPosition = new Vector2(inputs.shoulderAngle, inputs.elbowAngle);
+        var startPosition = new Vector2(inputs.shoulderAngle, inputs.elbowAngleAbsolute); //may not be true could be relative
         var middlePosition1 = new Vector2(
-                Math.toDegrees(middleSolution1.shoulderAngle), Math.toDegrees(middleSolution1.elbowAngle));
+                middleSolution1.shoulderAngle, middleSolution1.elbowAngle);
         var middlePosition2 = new Vector2(
-                Math.toDegrees(middleSolution2.shoulderAngle), Math.toDegrees(middleSolution2.elbowAngle));
+                middleSolution2.shoulderAngle, middleSolution2.elbowAngle);
         var endPosition = new Vector2(
-                Math.toDegrees(endSolution.shoulderAngle), Math.toDegrees(endSolution.elbowAngle));
+                endSolution.shoulderAngle, endSolution.elbowAngle);
 
 //        System.out.println(middlePosition1);
 //        System.out.println(middlePosition2);
