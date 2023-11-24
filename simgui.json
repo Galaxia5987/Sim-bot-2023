@@ -14,6 +14,7 @@
       "/LiveWindow/Ungrouped/PIDController[8]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[9]": "PIDController",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/SmartDashboard/Arm Mechanism": "Mechanism2d",
       "/SmartDashboard/IntakeMech": "Mechanism2d"
     }
   },
