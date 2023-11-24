@@ -10,13 +10,15 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import frc.robot.subsystems.arm.commands.ArmXboxControl;
 import org.littletonrobotics.junction.Logger;
 
 public class Arm extends SubsystemBase {
     private static final ArmInputsAutoLogged inputs = new ArmInputsAutoLogged();
-    static Arm INSTANCE;
+    private static Arm INSTANCE;
     private final ArmIO io;
     private final Mechanism2d mechanism = new Mechanism2d(
             3, 3
@@ -28,6 +30,9 @@ public class Arm extends SubsystemBase {
     private final MechanismLigament2d elbow = shoulder.append(
             new MechanismLigament2d("Elbow", ArmConstants.ELBOW_LENGTH, 0, 10, new Color8Bit(Color.kPurple))
     );
+    private Command lastCommand = null;
+    private Command currentCommand = null;
+    private boolean changedToDefaultCommand = false;
 
     private Arm(ArmIO io) {
         this.io = io;
@@ -65,12 +70,31 @@ public class Arm extends SubsystemBase {
         inputs.shoulderControlMode = ArmIO.ControlMode.POSITION;
     }
 
-    public void setEndEffectorPosition(Translation2d endEffectorPosition, ArmKinematics armKinematics) {
+    public void setEndEffectorPosition(Translation2d endEffectorPosition) {
         inputs.endEffectorPositionSetPoint = new double[]{endEffectorPosition.getX(), endEffectorPosition.getY()};
-        setShoulderAngle((armKinematics.inverseKinematics(endEffectorPosition)).shoulderAngle);
-        setElbowAngleRelative(((armKinematics.inverseKinematics(endEffectorPosition)).elbowAngle));
+        setShoulderAngle((ArmIO.armKinematics.inverseKinematics(endEffectorPosition)).shoulderAngle);
+        setElbowAngleRelative(((ArmIO.armKinematics.inverseKinematics(endEffectorPosition)).elbowAngle));
     }
-
+    public void setElbowP(double kP){
+        io.setElbowP(kP);
+    }
+    public double getShoulderAngle(){
+        return inputs.shoulderAngle;
+    }
+    public double getElbowAngleRelative(){
+        return inputs.elbowAngleRelative;
+    }
+    public Translation2d getEndPosition() {
+        double shoulderAngle = getShoulderAngle();
+        double elbowAngle = getElbowAngleRelative();
+        return ArmIO.armKinematics.forwardKinematics(shoulderAngle, shoulderAngle + elbowAngle - Math.PI);
+    }
+    public ArmIO.ArmInputs getInputs() {
+        return inputs;
+    }
+    public ArmKinematics getKinematics() {
+        return ArmIO.armKinematics;
+    }
     public boolean armIsOutOfFrame() {
         return !(inputs.shoulderTipPose[0] < 0) || !(inputs.endEffectorPose.getX() < 0);
     }
@@ -78,11 +102,21 @@ public class Arm extends SubsystemBase {
     public boolean armIsInRobot() {
         return inputs.shoulderTipPose[1] < 0 && inputs.shoulderAngle > 90;
     }
-
+    public boolean changedToDefaultCommand() {
+        return changedToDefaultCommand;
+    }
     @Override
     public void periodic() {
         io.updateInputs();
         Logger.getInstance().processInputs("Arm", inputs);
+        currentCommand = getCurrentCommand();
+
+        if (currentCommand != null) {
+            Logger.getInstance().recordOutput("ArmCommand", currentCommand.getName());
+        }
+        changedToDefaultCommand = !(lastCommand instanceof ArmXboxControl) && (currentCommand instanceof ArmXboxControl);
+        lastCommand = currentCommand;
+
         shoulder.setAngle(Math.toDegrees(inputs.shoulderAngle));
         elbow.setAngle(Math.toDegrees(inputs.elbowAngleRelative) - 180);
         SmartDashboard.putData("Arm Mechanism", mechanism);
@@ -99,9 +133,11 @@ public class Arm extends SubsystemBase {
             io.setShoulderPower(inputs.shoulderAppliedVoltage);
         }
         Logger.getInstance().recordOutput("BottomArmPose", new Pose3d(ArmConstants.shoulderOrigin, new Rotation3d(Math.toRadians(0), inputs.shoulderAngle, Math.toRadians(0))));
-
         Logger.getInstance().recordOutput("TopArmPose", new Pose3d(ArmConstants.shoulderOrigin.plus(new Translation3d(-inputs.shoulderTipPose[0], 0, inputs.shoulderTipPose[1])), new Rotation3d(Math.toRadians(0), inputs.elbowAngleAbsolute - Math.PI, Math.toRadians(0)))); //TODO: check how to chnage the spin of the origin
-
-
     }
+    public void stop() {
+        inputs.shoulderControlMode = null;
+        inputs.elbowControlMode = null;
+    }
+
 }
