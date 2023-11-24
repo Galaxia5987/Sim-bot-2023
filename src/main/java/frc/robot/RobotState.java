@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.common.swerve.SwerveDrive;
 import frc.robot.subsystems.vision.Result;
 import frc.robot.subsystems.vision.Vision;
+import org.littletonrobotics.junction.Logger;
 
 public class RobotState {
 
@@ -44,6 +45,8 @@ public class RobotState {
                 Rotation2d.fromRadians(swerveDrive.getYaw()),
                 swerveDrive.getModulePositions()
         );
+
+        Logger.getInstance().recordOutput("estimatedPose", estimatedPose);
     }
 
     public void reset() {
