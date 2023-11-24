@@ -19,10 +19,10 @@ public class ArmKeyboardControl extends CommandBase {
     @Override
     public void execute() {
         if (controller.getRawButton(1)) {
-            arm.setEndEffectorPosition(ArmConstants.FEEDER_POSITION, ArmIO.armKinematics);
+            arm.setEndEffectorPosition(ArmConstants.FEEDER_POSITION);
         }
         if (controller.getRawButton(2)) {
-            arm.setEndEffectorPosition(ArmConstants.STARTING_POSITION, ArmIO.armKinematics);
+            arm.setEndEffectorPosition(ArmConstants.STARTING_POSITION);
         }
     }
 }
