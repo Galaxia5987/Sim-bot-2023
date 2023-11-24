@@ -10,4 +10,5 @@ public final class Constants {
     public static final double FIELD_LENGTH = 16.54;
     public static final double FIELD_WIDTH = 8.02;
     public static final double TWO_PI = 2 * Math.PI;
+    public static final int CONFIG_TIMEOUT = 10;
 }
