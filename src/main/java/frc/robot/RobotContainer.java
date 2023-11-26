@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.common.swerve.SwerveDrive;
 import frc.robot.common.swerve.commands.JoystickDrive;
 import frc.robot.common.swerve.commands.KeyboardDriveSim;
+import frc.robot.common.swerve.commands.XboxDrive;
 import frc.robot.subsystems.vision.Vision;
 
 public class RobotContainer {
@@ -38,7 +39,7 @@ public class RobotContainer {
 
     private void configureDefaultCommands() {
         drive.setDefaultCommand(
-                new KeyboardDriveSim()
+                new XboxDrive(drive, xboxController)
         );
     }
 
