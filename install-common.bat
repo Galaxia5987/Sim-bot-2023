@@ -11,6 +11,11 @@ if not exist "common" (
     git clone %repository_url%
 )
 
+cd common
+git pull origin
+git checkout 2024-common
+
+cd ..
 cd ..
 cd ..
 cd ..

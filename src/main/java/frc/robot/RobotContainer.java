@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.common.swerve.SwerveDrive;
 import frc.robot.common.swerve.commands.JoystickDrive;
+import frc.robot.common.swerve.commands.KeyboardDriveSim;
 import frc.robot.subsystems.vision.Vision;
 
 public class RobotContainer {
@@ -37,12 +38,12 @@ public class RobotContainer {
 
     private void configureDefaultCommands() {
         drive.setDefaultCommand(
-                new JoystickDrive(drive, leftJoystick, rightJoystick)
+                new KeyboardDriveSim()
         );
     }
 
     private void configureButtonBindings() {
-        joystickTrigger.onTrue(new InstantCommand(drive::resetGyro));
+//        joystickTrigger.onTrue(new InstantCommand(drive::resetGyro));
     }
 
 

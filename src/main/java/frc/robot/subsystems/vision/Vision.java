@@ -26,7 +26,7 @@ public class Vision extends SubsystemBase {
                 );
             } else {
                 INSTANCE = new Vision(
-                        VisionModule.simIO("simCamera", 0)
+                        VisionModule.simIO("simCam", 0)
                 );
             }
         }

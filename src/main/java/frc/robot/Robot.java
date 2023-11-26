@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.common.utils.math.differential.BooleanTrigger;
+import frc.robot.subsystems.vision.Vision;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
@@ -30,6 +31,7 @@ public class Robot extends LoggedRobot {
     private final Timer timer = new Timer();
     private RobotContainer robotContainer;
     private Command autonomousCommand;
+    private Vision vision = Vision.getInstance();
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -73,11 +75,8 @@ public class Robot extends LoggedRobot {
         CommandScheduler.getInstance().run();
 
         enabledTrigger.update(isEnabled());
+        RobotState.getInstance().update();
 
-//        Optional<EstimatedRobotPose> estimatedGlobalPose1 = vision.getEstimatedGlobal1();
-//        estimatedGlobalPose1.ifPresent(pose -> System.out.println(pose.estimatedPose));
-//        Optional<EstimatedRobotPose> estimatedGlobalPose2 = vision.getEstimatedGlobal2();
-//        estimatedGlobalPose2.ifPresent(pose -> System.out.println(pose.estimatedPose));
     }
 
     /**

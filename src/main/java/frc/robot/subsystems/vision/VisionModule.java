@@ -25,7 +25,7 @@ public class VisionModule {
     public static VisionModule simIO(String name,  int index){
         return new VisionModule(
                 name,
-                new VisionSimIO(new Transform3d()),
+                new VisionSimIO(VisionConstants.ROBOT_TO_CAM[index]),
                 new VisionInputsAutoLogged()
         );
     }
