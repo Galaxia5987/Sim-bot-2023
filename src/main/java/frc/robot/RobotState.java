@@ -3,16 +3,16 @@ package frc.robot;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.common.swerve.SwerveDrive;
 import frc.robot.subsystems.vision.Result;
 import frc.robot.subsystems.vision.Vision;
 import org.littletonrobotics.junction.Logger;
+import swerve.SwerveDrive;
 
 public class RobotState {
 
     private static RobotState INSTANCE = null;
 
-    private final SwerveDrive swerveDrive = SwerveDrive.getInstance();
+    private final SwerveDrive swerveDrive = SwerveDrive.getInstance(Robot.isReal());
     private final Vision vision = Vision.getInstance();
 
     private final SwerveDrivePoseEstimator estimator = new SwerveDrivePoseEstimator(
