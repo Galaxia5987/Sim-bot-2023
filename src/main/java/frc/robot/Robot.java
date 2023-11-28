@@ -40,7 +40,6 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotInit() {
 //        compressor.disable();
-        PathPlannerServer.startServer(5811);
         robotContainer = RobotContainer.getInstance();
 
         Logger.getInstance().recordMetadata("ProjectName", "Sim-bot-2023"); // Set a metadata value
