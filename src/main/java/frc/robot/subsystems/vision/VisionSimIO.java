@@ -2,36 +2,39 @@ package frc.robot.subsystems.vision;
 
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.robot.Robot;
 import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonPoseEstimator;
-import org.photonvision.SimVisionSystem;
+import org.photonvision.estimation.TargetModel;
+import org.photonvision.simulation.PhotonCameraSim;
+import org.photonvision.simulation.VisionSystemSim;
+import org.photonvision.simulation.VisionTargetSim;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
+import swerve.SwerveDrive;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class VisionSimIO implements VisionIO {
-    private SimVisionSystem simVisionSystem;
-    private PhotonCamera camera;
+    private PhotonCamera photonCamera;
+    private PhotonCameraSim cameraSim;
     private PhotonPipelineResult latestResult = new PhotonPipelineResult();
     private PhotonTrackedTarget trackedTarget = new PhotonTrackedTarget();
-    private PhotonPoseEstimator estimator;
     private Result result;
+    private List<VisionTargetSim> visionTargetsSim = new ArrayList<>();
+    private Transform3d robotToCam;
 
     public VisionSimIO(Transform3d robotToCam) {
-        simVisionSystem = new SimVisionSystem("simCam", 95, robotToCam, 1000, 1600, 1200, 0);
-        camera = new PhotonCamera(NetworkTableInstance.getDefault(), "simCam");
+        this.robotToCam = robotToCam;
+//        simVisionSystem = new VisionSystemSim("simCam", 95, robotToCam.getRotation().getY(), new Transform2d(robotToCam.getTranslation().toTranslation2d(), robotToCam.getRotation().toRotation2d()), robotToCam.getZ(), 1000, 1600, 1200, 0);
+        photonCamera = new PhotonCamera(NetworkTableInstance.getDefault(), "photonCam");
+        cameraSim = new PhotonCameraSim(photonCamera);
         try {
-            simVisionSystem.addVisionTargets(AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField());
-            estimator = new PhotonPoseEstimator(
-                    AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField(),
-//                    PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP,
-                    PhotonPoseEstimator.PoseStrategy.AVERAGE_BEST_TARGETS,
-                    camera,
-                    robotToCam
-            );
+            var field = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();
+            field.getTags().forEach((tag) ->
+                    visionTargetsSim.add(new VisionTargetSim(tag.pose, new TargetModel(0.15, 0.15))));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -40,7 +43,7 @@ public class VisionSimIO implements VisionIO {
 
     @Override
     public void setPipeLine(int pipeLineIndex) {
-        camera.setPipelineIndex(pipeLineIndex);
+//        camera.setPipelineIndex(pipeLineIndex);
     }
 
     @Override
@@ -50,47 +53,39 @@ public class VisionSimIO implements VisionIO {
 
     @Override
     public void updateInputs(VisionInputs inputs) {
-        latestResult = camera.getLatestResult();
-        if (latestResult != null) {
-            inputs.latency = (long) latestResult.getLatencyMillis();
-            inputs.hasTargets = latestResult.hasTargets();
+        var pose = SwerveDrive.getInstance(Robot.isReal()).getBotPose();
 
-            if (latestResult.getBestTarget() != null) {
-                inputs.area = latestResult.getBestTarget().getArea();
-                inputs.pitch = latestResult.getBestTarget().getPitch();
-                inputs.yaw = latestResult.getBestTarget().getYaw();
-                inputs.targetSkew = latestResult.getBestTarget().getSkew();
-                inputs.targetID = latestResult.getBestTarget().getFiducialId();
+        latestResult = cameraSim.process(0, new Pose3d(pose).plus(robotToCam), visionTargetsSim);
+        inputs.latency = (long) latestResult.getLatencyMillis();
+        inputs.hasTargets = latestResult.hasTargets();
 
-                var cameraToTarget = latestResult.getBestTarget().getBestCameraToTarget();
-                inputs.cameraToTarget = new double[]{
-                        cameraToTarget.getX(),
-                        cameraToTarget.getY(),
-                        cameraToTarget.getZ(),
-                        cameraToTarget.getRotation().getX(),
-                        cameraToTarget.getRotation().getY(),
-                        cameraToTarget.getRotation().getZ()
-                };
-            }
+        if (latestResult.getBestTarget() != null) {
+            inputs.area = latestResult.getBestTarget().getArea();
+            inputs.pitch = latestResult.getBestTarget().getPitch();
+            inputs.yaw = latestResult.getBestTarget().getYaw();
+            inputs.targetSkew = latestResult.getBestTarget().getSkew();
+            inputs.targetID = latestResult.getBestTarget().getFiducialId();
 
-            var estimatedPose = estimator.update(latestResult);
-            if (estimatedPose.isPresent()) {
-                var pose = estimatedPose.get().estimatedPose;
-                inputs.poseFieldOriented = new double[]{
-                        pose.getX(),
-                        pose.getY(),
-                        pose.getZ(),
-                        pose.getRotation().getX(),
-                        pose.getRotation().getY(),
-                        pose.getRotation().getZ()
-                };
+            var cameraToTarget = latestResult.getBestTarget().getBestCameraToTarget();
+            inputs.cameraToTarget = new double[]{
+                    cameraToTarget.getX(),
+                    cameraToTarget.getY(),
+                    cameraToTarget.getZ(),
+                    cameraToTarget.getRotation().getX(),
+                    cameraToTarget.getRotation().getY(),
+                    cameraToTarget.getRotation().getZ()
+            };
 
-                result = new Result(latestResult.getTimestampSeconds(), estimatedPose.get().estimatedPose);
-            } else {
-                latestResult = null;
-            }
+            inputs.poseFieldOriented = new double[]{
+                    pose.getX(),
+                    pose.getY(),
+                    0,
+                    0,
+                    0,
+                    pose.getRotation().getRadians()
+            };
         } else {
-            latestResult = null;
+            result = null;
         }
     }
 
