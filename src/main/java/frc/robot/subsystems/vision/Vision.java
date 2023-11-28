@@ -1,9 +1,13 @@
 package frc.robot.subsystems.vision;
 
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.PhotonCamera;
+import swerve.SwerveDrive;
+
+import static frc.robot.subsystems.vision.VisionConstants.ROBOT_TO_CAM;
 
 public class Vision extends SubsystemBase {
 
@@ -44,6 +48,7 @@ public class Vision extends SubsystemBase {
             module.io.updateInputs(module.inputs);
             Logger.getInstance().processInputs(module.name, module.inputs);
             results[i] = module.io.getLatestResult();
+            Logger.getInstance().recordOutput("RobotToCamLeft", new Pose3d(SwerveDrive.getInstance(Robot.isReal()).getBotPose()).plus(ROBOT_TO_CAM[0]));
         }
     }
 }
