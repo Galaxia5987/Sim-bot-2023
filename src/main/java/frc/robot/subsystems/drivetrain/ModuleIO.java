@@ -12,6 +12,8 @@ public interface ModuleIO {
 
     void setAngle(double angle);
 
+    default void setAngleSpeed(double speed){}
+
     default double getVelocity() {
         return 0;
     }

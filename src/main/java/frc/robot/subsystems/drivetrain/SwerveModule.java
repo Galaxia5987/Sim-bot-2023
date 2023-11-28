@@ -47,6 +47,10 @@ public class SwerveModule extends SubsystemBase {
         io.setAngle(moduleState.angle.getRadians());
     }
 
+    public void setAngleSpeed(double speed){
+        io.setAngleSpeed(speed);
+    }
+
     /**
      * Gets the position of the module.
      *
