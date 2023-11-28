@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.autonomous.Test;
 import frc.robot.autonomous.paths.BumperCone2Cubes;
 import frc.robot.autonomous.paths.BumperConeCubeHighCube;
 import frc.robot.autonomous.paths.FeederConeCubeHighCube;
@@ -21,9 +22,13 @@ import frc.robot.subsystems.arm.commands.ArmAxisControl;
 import frc.robot.subsystems.arm.commands.ArmWithSpline;
 import frc.robot.subsystems.arm.commands.ArmWithStateMachine;
 import frc.robot.subsystems.arm.commands.ArmXboxControl;
+import frc.robot.subsystems.drivetrain.ModuleIOReal;
+import frc.robot.subsystems.drivetrain.SwerveConstants;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
+import frc.robot.subsystems.drivetrain.SwerveModule;
 import frc.robot.subsystems.drivetrain.commands.JoystickDrive;
 import frc.robot.subsystems.drivetrain.commands.Lock;
+import frc.robot.subsystems.drivetrain.commands.XboxModule;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.commands.HoldIntakeInPlace;
@@ -65,6 +70,11 @@ public class RobotContainer {
     private final Trigger downPOV = new Trigger(() -> Utils.epsilonEquals(xboxController.getPOV(), 180));
     private final JoystickButton start = new JoystickButton(xboxController, XboxController.Button.kStart.value);
 
+    private final ModuleIOReal io = new ModuleIOReal(
+            20, 19, 0, true, true,
+            SwerveConstants.FRONT_LEFT_MOTION_MAGIC_CONFIGS, 1);
+    private final XboxController xboxController2 = new XboxController(1);
+
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
      */
@@ -81,46 +91,47 @@ public class RobotContainer {
     }
 
     private void configureDefaultCommands() {
-        swerveDrive.setDefaultCommand(
-                new JoystickDrive(swerveDrive, leftJoystick, rightJoystick)
-        );
-        arm.setDefaultCommand(new ArmXboxControl(xboxController));
-        intake.setDefaultCommand(new HoldIntakeInPlace());
-        leds.setDefaultCommand(new ProximitySensorDefaultCommand());
+        new XboxModule(io, xboxController2).schedule();
+//        swerveDrive.setDefaultCommand(
+//                new JoystickDrive(swerveDrive, leftJoystick, rightJoystick)
+//        );
+//        arm.setDefaultCommand(new ArmXboxControl(xboxController));
+//        intake.setDefaultCommand(new HoldIntakeInPlace());
+//        leds.setDefaultCommand(new ProximitySensorDefaultCommand());
     }
 
     private void configureButtonBindings() {
-        leftJoystickTrigger.onTrue(new InstantCommand(swerveDrive::resetGyro));
-        y.whileTrue(new ArmWithSpline(ArmPosition.TOP_SCORING));
-        x.whileTrue(new ArmWithSpline(ArmPosition.MIDDLE_SCORING));
-        b.whileTrue(new ArmWithSpline(ArmPosition.FEEDER));
-        back.whileTrue(new ArmWithSpline(ArmPosition.FEEDER_CONE));
-        a.whileTrue(new ArmWithSpline(ArmPosition.NEUTRAL));
-
-        lb.onTrue(new InstantCommand(gripper::toggle));
-
-        start.onTrue(new InstantCommand(leds::toggle));
-
-        leftJoystickTopBottom.toggleOnTrue(
-                new Lock()
-        );
-        leftJoystickTopBottom.onTrue(
-                new InstantCommand(leds::toggleRainbow)
-        );
-
-        xboxLeftTrigger.whileTrue(new PickUpCubeTeleop())
-                .onFalse(new Retract(Retract.Mode.UP).andThen(new InstantCommand(() -> intake.setPower(0))));
-        xboxRightTrigger.whileTrue(new ReturnIntake());
-
-        rb.whileTrue(new ArmAxisControl(1, 0.02, 0)
-                .until((
-                        
-                ) -> gripper.getDistance() < ArmConstants.FEEDER_DISTANCE));
-
-        leftPOV.whileTrue(new ArmAxisControl(0.33, 0.02, 0, 0, 0));
-        rightPOV.whileTrue(new ArmAxisControl(0.33, -0.02, 0, 0, 0));
-        upPOV.whileTrue(new ArmAxisControl(0.33, 0, 0.02, 0, 0));
-        downPOV.whileTrue(new ArmAxisControl(0.33, 0, -0.02, 0, 0));
+//        leftJoystickTrigger.onTrue(new InstantCommand(swerveDrive::resetGyro));
+//        y.whileTrue(new ArmWithSpline(ArmPosition.TOP_SCORING));
+//        x.whileTrue(new ArmWithSpline(ArmPosition.MIDDLE_SCORING));
+//        b.whileTrue(new ArmWithSpline(ArmPosition.FEEDER));
+//        back.whileTrue(new ArmWithSpline(ArmPosition.FEEDER_CONE));
+//        a.whileTrue(new ArmWithSpline(ArmPosition.NEUTRAL));
+//
+//        lb.onTrue(new InstantCommand(gripper::toggle));
+//
+//        start.onTrue(new InstantCommand(leds::toggle));
+//
+//        leftJoystickTopBottom.toggleOnTrue(
+//                new Lock()
+//        );
+//        leftJoystickTopBottom.onTrue(
+//                new InstantCommand(leds::toggleRainbow)
+//        );
+//
+//        xboxLeftTrigger.whileTrue(new PickUpCubeTeleop())
+//                .onFalse(new Retract(Retract.Mode.UP).andThen(new InstantCommand(() -> intake.setPower(0))));
+//        xboxRightTrigger.whileTrue(new ReturnIntake());
+//
+//        rb.whileTrue(new ArmAxisControl(1, 0.02, 0)
+//                .until((
+//
+//                ) -> gripper.getDistance() < ArmConstants.FEEDER_DISTANCE));
+//
+//        leftPOV.whileTrue(new ArmAxisControl(0.33, 0.02, 0, 0, 0));
+//        rightPOV.whileTrue(new ArmAxisControl(0.33, -0.02, 0, 0, 0));
+//        upPOV.whileTrue(new ArmAxisControl(0.33, 0, 0.02, 0, 0));
+//        downPOV.whileTrue(new ArmAxisControl(0.33, 0, -0.02, 0, 0));
     }
 
     /**
@@ -129,6 +140,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new FeederConeCubeHighCube();
+        return new Test(new SwerveModule(io, 1));
     }
 }

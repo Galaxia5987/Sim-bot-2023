@@ -51,6 +51,10 @@ public class SwerveModule extends SubsystemBase {
         io.setAngleSpeed(speed);
     }
 
+    public void setVelocity(double speed){
+        io.setVelocity(speed);
+    }
+
     /**
      * Gets the position of the module.
      *
