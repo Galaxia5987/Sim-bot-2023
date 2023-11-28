@@ -65,7 +65,7 @@ public class ModuleIOReal implements ModuleIO {
 
         angleMotor.enableVoltageCompensation(SwerveConstants.VOLT_COMP_SATURATION);
         angleMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        angleMotor.setSmartCurrentLimit(SwerveConstants.CURRENT_LIMIT);
+        angleMotor.setSmartCurrentLimit(SwerveConstants.ALT_CURRENT_LIMIT);
         angleMotor.setInverted(angleInverted);
 
         angleMotor.getPIDController().setP(motionMagicConfigs[0]);

@@ -10,6 +10,7 @@ public class SwerveConstants {
 
     public static final double VOLT_COMP_SATURATION = 12;
     public static final int CURRENT_LIMIT = 50;
+    public static final int ALT_CURRENT_LIMIT = 20;
 
     public static final double robotWidth = 0.512; //[m] //TODO: update
     public static final double robotLength = 0.67; //[m]
