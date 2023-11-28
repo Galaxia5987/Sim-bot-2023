@@ -1,10 +1,14 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commandgroups.GoToPose;
 import frc.robot.subsystems.vision.Vision;
 import swerve.SwerveDrive;
 import swerve.commands.JoystickDrive;
@@ -21,6 +25,8 @@ public class RobotContainer {
 
     private final JoystickButton leftJoystickTrigger = new JoystickButton(leftJoystick, 1);
     private final JoystickButton rightJoystickTrigger = new JoystickButton(rightJoystick, 1);
+
+    private final JoystickButton a = new JoystickButton(xboxController, XboxController.Button.kA.value);
 
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -46,6 +52,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         leftJoystickTrigger.onTrue(new InstantCommand(drive::resetGyro));
         rightJoystickTrigger.onTrue(new InstantCommand(RobotState.getInstance()::reset));
+        a.whileTrue(new GoToPose(new Pose2d(new Translation2d(2.12, 1.03), new Rotation2d(-0.06))));
     }
 
 

@@ -33,6 +33,10 @@ public class RobotState {
         return INSTANCE;
     }
 
+    public Pose2d getEstimatedPose() {
+        return estimatedPose;
+    }
+
     public void update() {
         var results = vision.getResults();
         for (Result result : results) {
