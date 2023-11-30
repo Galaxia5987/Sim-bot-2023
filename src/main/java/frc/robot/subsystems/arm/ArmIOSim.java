@@ -4,13 +4,14 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+
 public class ArmIOSim implements ArmIO {
-    private ArmInputs inputs;
-    private SingleJointedArmSim shoulder;
-    private SingleJointedArmSim elbow;
-    private PIDController shoulderController = new PIDController(ArmConstants.shoulderP, ArmConstants.shoulderI, ArmConstants.shoulderD, 0.02);
-    private PIDController elbowController = new PIDController(ArmConstants.elbowP, ArmConstants.elbowI, ArmConstants.elbowD, 0.02);
-    private double angleCalculated = 0;
+    private final ArmInputs inputs;
+    private final SingleJointedArmSim shoulder;
+    private final SingleJointedArmSim elbow;
+    private final PIDController shoulderController = new PIDController(ArmConstants.shoulderP, ArmConstants.shoulderI, ArmConstants.shoulderD, 0.02);
+    private final PIDController elbowController = new PIDController(ArmConstants.elbowP, ArmConstants.elbowI, ArmConstants.elbowD, 0.02);
+    private final double angleCalculated = 0;
 
     public ArmIOSim(ArmInputs inputs) {
         this.inputs = inputs;
@@ -30,7 +31,7 @@ public class ArmIOSim implements ArmIO {
 
     @Override
     public void setShoulderAngle(double angle) {
-        inputs.shoulderAppliedVoltage = shoulderController.calculate(inputs.shoulderAngle ,angle);
+        inputs.shoulderAppliedVoltage = shoulderController.calculate(inputs.shoulderAngle, angle);
         shoulder.setInputVoltage(inputs.shoulderAppliedVoltage);
 
     }
@@ -47,7 +48,8 @@ public class ArmIOSim implements ArmIO {
         setElbowAngle(armKinematics.inverseKinematics(position).elbowAngle);
         setShoulderAngle(armKinematics.inverseKinematics(position).shoulderAngle);
     }
-    public void setElbowP(double kP){
+
+    public void setElbowP(double kP) {
         elbowController.setP(kP);
     }
 
@@ -56,7 +58,7 @@ public class ArmIOSim implements ArmIO {
         shoulder.update(0.02);
         elbow.update(0.02);
         inputs.shoulderAngle = shoulder.getAngleRads();
-        inputs.shoulderTipPose = new double[]{Math.cos(inputs.shoulderAngle)*ArmConstants.SHOULDER_LENGTH,Math.sin(inputs.shoulderAngle)*ArmConstants.SHOULDER_LENGTH };
+        inputs.shoulderTipPose = new double[]{Math.cos(inputs.shoulderAngle) * ArmConstants.SHOULDER_LENGTH, Math.sin(inputs.shoulderAngle) * ArmConstants.SHOULDER_LENGTH};
         inputs.elbowAngleRelative = elbow.getAngleRads();
         inputs.elbowAngleAbsolute = inputs.elbowAngleRelative + inputs.shoulderAngle;
         inputs.elbowAppliedCurrent = elbow.getCurrentDrawAmps();

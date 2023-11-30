@@ -4,23 +4,18 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.server.PathPlannerServer;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.LoggedSubsystem;
-import frc.robot.utils.TunableNumber;
-import frc.robot.utils.math.differential.BooleanTrigger;
+import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import utils.math.differential.BooleanTrigger;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -29,16 +24,15 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  * project.
  */
 public class Robot extends LoggedRobot {
-    private static final BooleanTrigger enabledTrigger = new BooleanTrigger(false, false);
-    public static boolean debug = false;
+
+    public static boolean replay = false;
+    private static final BooleanTrigger justEnabled = new BooleanTrigger();
     private final Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
-    private final Timer timer = new Timer();
     private RobotContainer robotContainer;
     private Command autonomousCommand;
-    private final BooleanTrigger encoderTrigger = new BooleanTrigger(false, false);
 
     public static boolean justEnabled() {
-        return enabledTrigger.triggered();
+        return justEnabled.triggered();
     }
 
     /**
@@ -47,26 +41,26 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void robotInit() {
-//        compressor.disable();
-        PathPlannerServer.startServer(5811);
         robotContainer = RobotContainer.getInstance();
 
-        Logger.getInstance().recordMetadata("ProjectName", "Sim-bot-2023"); // Set a metadata value
+        Logger.getInstance().recordMetadata("ProjectName", "Robot-template");
 
         if (isReal()) {
-            Logger.getInstance().addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-            Logger.getInstance().addDataReceiver(new WPILOGWriter("home/lvuser")); // Publish data to NetworkTables
-            new PowerDistribution(1, PowerDistribution.ModuleType.kRev); // Enables power distribution logging
+            Logger.getInstance().addDataReceiver(new NT4Publisher());
+            Logger.getInstance().addDataReceiver(new WPILOGWriter("home/lvuser"));
+
+            try (PowerDistribution pwr = new PowerDistribution(1, PowerDistribution.ModuleType.kRev)) {
+                System.out.println("Power distribution working");
+            }
         } else {
+            if (replay) {
+                Logger.getInstance().setReplaySource(new WPILOGReader(LogFileUtil.findReplayLog()));
+            }
             Logger.getInstance().addDataReceiver(new NT4Publisher());
         }
 
-        Logger.getInstance().start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
-
-        timer.start();
-        timer.reset();
-
-        autonomousCommand = robotContainer.getAutonomousCommand();
+        Logger.getInstance().start();
+        compressor.enableDigital();
     }
 
     /**
@@ -78,16 +72,9 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void robotPeriodic() {
-        LoggedSubsystem.getSubsystems().forEach(LoggedSubsystem::updateSubsystem);
-        TunableNumber.INSTANCES.forEach(TunableNumber::update);
+        justEnabled.update(isEnabled());
+
         CommandScheduler.getInstance().run();
-
-        enabledTrigger.update(isEnabled());
-//        encoderTrigger.update(SwerveDrive.getInstance().encodersConnected());
-
-//        if (encoderTrigger.triggered()) {
-//            SwerveDrive.getInstance().updateOffsets(SwerveConstants.OFFSETS);
-//        }
     }
 
     /**
@@ -102,7 +89,10 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void autonomousInit() {
-        // schedule the autonomous command (example)
+        // Make sure command is compiled beforehand, otherwise there will be a delay.
+        autonomousCommand = robotContainer.getAutonomousCommand();
+
+        // Schedule the autonomous command
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }
@@ -138,7 +128,6 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void disabledInit() {
-        CommandScheduler.getInstance().cancelAll();
     }
 
     /**

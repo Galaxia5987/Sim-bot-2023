@@ -5,13 +5,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.arm.Arm;
-import frc.robot.utils.Utils;
-import frc.robot.utils.math.differential.BooleanTrigger;
+import utils.Utils;
+import utils.math.differential.BooleanTrigger;
 
 public class ArmXboxControl extends CommandBase {
     private final Arm arm = Arm.getINSTANCE();
     private final XboxController xboxController;
-    private final BooleanTrigger holdTrigger = new BooleanTrigger(false, false);
+    private final BooleanTrigger holdTrigger = new BooleanTrigger();
     private double shoulderHoldAngle;
     private double elbowHoldAngle;
 

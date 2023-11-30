@@ -3,7 +3,6 @@ package frc.robot.subsystems.arm;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
-import frc.robot.utils.math.ArmLinearProfile;
 
 public class ArmConstants {
 
@@ -84,9 +83,6 @@ public class ArmConstants {
             ELBOW_MASS, ELBOW_LENGTH, ELBOW_MOMENT_OF_INERTIA, ELBOW_CENTER_OF_MASS_RADIUS, ELBOW_GEARING, ELBOW_NUMBER_OF_MOTORS);
 
     public static final SystemConstants ARM_CONSTANTS = new SystemConstants(SHOULDER_JOINT_CONSTANTS, ELBOW_JOINT_CONSTANTS);
-
-    public static final ArmLinearProfile.Waypoint ARM_OUT_OF_ROBOT_POINT1 = new ArmLinearProfile.Waypoint(0, 0, 0, 0.5);
-    public static final ArmLinearProfile.Waypoint ARM_OUT_OF_ROBOT_POINT2 = new ArmLinearProfile.Waypoint(0, 0, 0, 0);
 
     public static final double FEEDER_DISTANCE = 23;
     public static final double FEEDER_MINIMUM_DISTANCE = 16;

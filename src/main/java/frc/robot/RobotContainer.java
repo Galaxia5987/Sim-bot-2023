@@ -9,26 +9,25 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commandgroups.PickUpCubeTeleop;
 import frc.robot.commandgroups.ReturnIntake;
 import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.ArmConstants;
 import frc.robot.subsystems.arm.ArmPosition;
+import frc.robot.subsystems.arm.commands.ArmAxisControl;
 import frc.robot.subsystems.arm.commands.ArmWithSpline;
-import frc.robot.subsystems.arm.commands.ArmXboxControl;
-import frc.robot.subsystems.drivetrain.SwerveDrive;
-import frc.robot.subsystems.drivetrain.commands.JoystickDrive;
-import frc.robot.subsystems.drivetrain.commands.Lock;
-import frc.robot.subsystems.drivetrain.commands.XboxDrive;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.commands.HoldIntakeInPlace;
 import frc.robot.subsystems.intake.commands.ProximitySensorDefaultCommand;
 import frc.robot.subsystems.intake.commands.Retract;
 import frc.robot.subsystems.leds.Leds;
-import frc.robot.utils.Utils;
+import swerve.SwerveDrive;
+import swerve.commands.XboxDrive;
+import utils.Utils;
 
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
     private final Arm arm = Arm.getINSTANCE();
     private final Leds leds = Leds.getInstance();
-    private final SwerveDrive swerveDrive = SwerveDrive.getInstance();
+    private final SwerveDrive swerveDrive = SwerveDrive.getInstance(Robot.isReal());
     private final Intake intake = Intake.getInstance();
     private final Gripper gripper = Gripper.getInstance();
     private final XboxController xboxController = new XboxController(0);
@@ -95,7 +94,7 @@ public class RobotContainer {
         start.onTrue(new InstantCommand(leds::toggle));
 
         leftJoystickTopBottom.toggleOnTrue(
-                new Lock()
+                new InstantCommand(swerveDrive::lock, swerveDrive)
         );
         leftJoystickTopBottom.onTrue(
                 new InstantCommand(leds::toggleRainbow)
@@ -105,10 +104,8 @@ public class RobotContainer {
                 .onFalse(new Retract(Retract.Mode.UP).andThen(new InstantCommand(() -> intake.setSpinMotorPower(0))));
         xboxRightTrigger.whileTrue(new ReturnIntake());
 
-//        rb.whileTrue(new ArmAxisControl(1, 0.02, 0)
-//                .until((
-//
-//                ) -> gripper.getDistance() < ArmConstants.FEEDER_DISTANCE));
+        rb.whileTrue(new ArmAxisControl(0.02, 0.02)
+                .until(() -> gripper.getDistance() < ArmConstants.FEEDER_DISTANCE));
     }
 
     /**

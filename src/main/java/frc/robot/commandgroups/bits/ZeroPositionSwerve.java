@@ -3,12 +3,13 @@ package frc.robot.commandgroups.bits;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.drivetrain.SwerveDrive;
+import frc.robot.Robot;
+import swerve.SwerveDrive;
 
 import java.util.Arrays;
 
 public class ZeroPositionSwerve extends CommandBase {
-    private final SwerveDrive swerve = SwerveDrive.getInstance();
+    private final SwerveDrive swerve = SwerveDrive.getInstance(Robot.isReal());
     private final Timer timer = new Timer();
     private final SwerveModuleState[] zeroStates = new SwerveModuleState[4];
 

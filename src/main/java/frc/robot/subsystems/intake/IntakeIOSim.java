@@ -10,11 +10,12 @@ public class IntakeIOSim implements IntakeIO {
     private final SingleJointedArmSim angleMotor;
     private final PIDController angleFeedback;
 
-    public IntakeIOSim(){
+    public IntakeIOSim() {
         spinMotor = new FlywheelSim(DCMotor.getNEO(1), IntakeConstants.SPIN_GEAR_RATIO, 1);
-        angleMotor = new SingleJointedArmSim(DCMotor.getFalcon500(1), IntakeConstants.ANGLE_GEAR_RATIO, 1.7, 42,-Math.PI * 2, Math.PI * 2, false); //could be wrong type of motor or max/min angle
+        angleMotor = new SingleJointedArmSim(DCMotor.getFalcon500(1), IntakeConstants.ANGLE_GEAR_RATIO, 1.7, 42, -Math.PI * 2, Math.PI * 2, false); //could be wrong type of motor or max/min angle
         angleFeedback = new PIDController(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD);
     }
+
     @Override
     public void updateInputs(IntakeLoggedInputs inputs) {
         inputs.spinMotorPower = inputs.setpointSpinMotorPower;

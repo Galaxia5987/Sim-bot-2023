@@ -20,7 +20,7 @@ public interface VisionIO {
         double area = 0;
         double targetSkew = 0;
         long targetID = 0;
-        double[] cameraToTarget = new double[]{0,0,0,0,0,0};
+        double[] cameraToTarget = new double[]{0, 0, 0, 0, 0, 0};
         double[] poseFieldOriented = new double[6];
     }
 }

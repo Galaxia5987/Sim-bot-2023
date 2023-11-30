@@ -8,13 +8,14 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import frc.robot.Constants;
 import frc.robot.Ports;
-import frc.robot.utils.units.UnitModel;
+import utils.units.UnitModel;
 
 public class IntakeIOReal implements IntakeIO {
     private final CANSparkMax spinMotor = new CANSparkMax(Ports.Intake.INTAKE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
     private final TalonFX angleMotor = new TalonFX(Ports.Intake.ANGLE_MOTOR);
     private final UnitModel unitModel = new UnitModel(IntakeConstants.TICKS_PER_DEGREE);
-    IntakeIOReal(){
+
+    public IntakeIOReal() {
         angleMotor.configFactoryDefault();
         spinMotor.restoreFactoryDefaults();
 
@@ -39,6 +40,7 @@ public class IntakeIOReal implements IntakeIO {
         ));
         angleMotor.configClosedLoopPeakOutput(0, 0.4);
     }
+
     @Override
     public void setSpinMotorPower(double power) {
         spinMotor.set(power);
@@ -53,12 +55,14 @@ public class IntakeIOReal implements IntakeIO {
     public void setAngleMotorPower(double power) {
         angleMotor.set(ControlMode.PercentOutput, power);
     }
+
     @Override
     public void resetEncoder(double angle) {
-            angleMotor.setSelectedSensorPosition(
-                    unitModel.toTicks(angle)
-            );
+        angleMotor.setSelectedSensorPosition(
+                unitModel.toTicks(angle)
+        );
     }
+
     @Override
     public void updateInputs(IntakeLoggedInputs inputs) {
         inputs.spinMotorPower = spinMotor.getAppliedOutput();

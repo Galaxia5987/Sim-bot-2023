@@ -8,9 +8,9 @@ import frc.robot.subsystems.arm.ArmKinematics;
 
 public class ArmAxisControl extends CommandBase {
     private final Arm arm = Arm.getINSTANCE();
-    private ArmKinematics armKinematics;
     private final double Xvalue;
     private final double Yvalue;
+    private ArmKinematics armKinematics;
     private Translation2d pose = new Translation2d(0, 0);
 
     public ArmAxisControl(double Xvalue, double Yvalue) {

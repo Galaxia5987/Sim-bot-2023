@@ -16,22 +16,21 @@ import frc.robot.subsystems.intake.commands.HoldIntakeInPlace;
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
-    private final IntakeIO io;
     private static Intake INSTANCE;
-    private ControlMode angleMode;
+    private final IntakeIO io;
     private final IntakeLoggedInputs inputs = new IntakeLoggedInputs();
-    private Command lastCommand = null;
-    private boolean switchedToDefaultCommand = false;
     private final Mechanism2d mech = new Mechanism2d(3, 3);
     private final MechanismRoot2d root = mech.getRoot("Intake", 1, 1);
     private final MechanismLigament2d intakeP1 = root.append(new MechanismLigament2d("IntakeP1", 0.3, 0));
     private final MechanismLigament2d intakeP2 = intakeP1.append(new MechanismLigament2d("IntakeP2", 0.3, -45));
+    private ControlMode angleMode;
+    private Command lastCommand = null;
+    private boolean switchedToDefaultCommand = false;
 
-    private Intake(){
-        if (Robot.isReal()){
+    private Intake() {
+        if (Robot.isReal()) {
             io = new IntakeIOReal();
-        }
-        else{
+        } else {
             io = new IntakeIOSim();
         }
     }
@@ -45,7 +44,10 @@ public class Intake extends SubsystemBase {
         }
         return INSTANCE;
     }
-    /** Returns the 3D pose of the intake for visualization. */
+
+    /**
+     * Returns the 3D pose of the intake for visualization.
+     */
     private Pose3d getPose3d(double angle) {
         return new Pose3d(
                 IntakeConstants.ROOT_POSITION.getX(), 0.0, IntakeConstants.ROOT_POSITION.getY(), new Rotation3d(0.0, -angle, 0.0));
@@ -58,23 +60,18 @@ public class Intake extends SubsystemBase {
     private double getSpinMotorPower() {
         return inputs.spinMotorPower;
     }
-    public double getAngleMotorAngle() {
-        return inputs.angleMotorAngle;
-    }
-
-    private double getAngleMotorVelocity() {
-        return inputs.angleMotorVelocity;
-    }
-    public double getCurrent() {
-        return inputs.angleMotorcurrent;
-    }
 
     /**
      * Set the motors' relative output.
+     *
      * @param power is the power that the motor applies. [%]
      */
     public void setSpinMotorPower(double power) {
         inputs.setpointSpinMotorPower = power;
+    }
+
+    public double getAngleMotorAngle() {
+        return inputs.angleMotorAngle;
     }
 
     /**
@@ -87,10 +84,19 @@ public class Intake extends SubsystemBase {
         angleMode = ControlMode.Position;
     }
 
+    private double getAngleMotorVelocity() {
+        return inputs.angleMotorVelocity;
+    }
+
+    public double getCurrent() {
+        return inputs.angleMotorcurrent;
+    }
+
     public void setAnglePower(double power) {
         inputs.setpointAngleMotorPower = power;
         angleMode = ControlMode.PercentOutput;
     }
+
     public void resetEncoder(double angle) {
         io.resetEncoder(angle);
     }
@@ -99,6 +105,7 @@ public class Intake extends SubsystemBase {
         return new InstantCommand(() -> resetEncoder(IntakeConstants.ANGLE_UP), this)
                 .andThen(new RunCommand(() -> setAngleMotorAngle(-40), this));
     }
+
     public Command run(double power) {
         return new RunCommand(() -> this.setSpinMotorPower(power));
     }
@@ -108,10 +115,9 @@ public class Intake extends SubsystemBase {
         io.updateInputs(inputs);
         io.setSpinMotorPower(inputs.setpointSpinMotorPower);
 
-        if (angleMode == ControlMode.Position){
+        if (angleMode == ControlMode.Position) {
             io.setAngleMotorAngle(inputs.setpointAngleMotorAngle);
-        }
-        else {
+        } else {
             io.setAngleMotorPower(inputs.setpointAngleMotorPower);
         }
 

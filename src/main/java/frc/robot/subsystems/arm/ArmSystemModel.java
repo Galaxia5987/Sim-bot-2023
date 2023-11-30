@@ -1,6 +1,6 @@
 package frc.robot.subsystems.arm;
 
-import frc.robot.utils.motors.FalconConstants;
+import edu.wpi.first.math.system.plant.DCMotor;
 import org.ejml.data.MatrixType;
 import org.ejml.simple.SimpleMatrix;
 
@@ -49,13 +49,15 @@ public class ArmSystemModel {
         int n1 = shoulderJointConstants.numberOfMotors;
         int n2 = elbowJointConstants.numberOfMotors;
 
-        B_MATRIX.set(0, 0, g1 * n1 * FalconConstants.Kt / FalconConstants.R);
-        B_MATRIX.set(1, 1, g2 * n2 * FalconConstants.Kt / FalconConstants.R);
+        var falcon = DCMotor.getFalcon500(1);
+
+        B_MATRIX.set(0, 0, g1 * n1 * falcon.KtNMPerAmp / falcon.rOhms);
+        B_MATRIX.set(1, 1, g2 * n2 * falcon.KtNMPerAmp / falcon.rOhms);
         B_MATRIX.set(1, 0, 0);
         B_MATRIX.set(0, 1, 0);
 
-        Kb_MATRIX.set(0, 0, g1 * g1 * n1 * FalconConstants.Kt / FalconConstants.R / FalconConstants.Kv);
-        Kb_MATRIX.set(1, 1, g2 * g2 * n2 * FalconConstants.Kt / FalconConstants.R / FalconConstants.Kv);
+        Kb_MATRIX.set(0, 0, g1 * g1 * n1 * falcon.KtNMPerAmp / falcon.rOhms / falcon.KvRadPerSecPerVolt);
+        Kb_MATRIX.set(1, 1, g2 * g2 * n2 * falcon.KtNMPerAmp / falcon.rOhms / falcon.KvRadPerSecPerVolt);
         Kb_MATRIX.set(1, 0, 0);
         Kb_MATRIX.set(0, 1, 0);
     }

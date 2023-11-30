@@ -2,9 +2,8 @@ package frc.robot.subsystems.arm;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.subsystems.leds.Leds;
-import frc.robot.utils.math.Vector2;
-import frc.robot.utils.math.spline.CubicBezierSpline;
-import frc.robot.utils.math.spline.QuinticBezierSpline;
+import utils.math.Vector2;
+import utils.math.spline.QuinticBezierSpline;
 
 public enum ArmPosition {
 

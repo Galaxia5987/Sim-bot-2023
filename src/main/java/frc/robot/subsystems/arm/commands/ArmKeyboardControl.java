@@ -4,13 +4,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmConstants;
-import frc.robot.subsystems.arm.ArmIO;
 import frc.robot.subsystems.intake.Intake;
 
 public class ArmKeyboardControl extends CommandBase {
     private final GenericHID controller = new GenericHID(0);
-    private Arm arm = Arm.getINSTANCE();
-    private Intake intake = Intake.getInstance();
+    private final Arm arm = Arm.getINSTANCE();
+    private final Intake intake = Intake.getInstance();
 
     public ArmKeyboardControl() {
         addRequirements(arm);

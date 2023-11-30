@@ -17,13 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VisionSimIO implements VisionIO {
-    private PhotonCamera photonCamera;
-    private PhotonCameraSim cameraSim;
+    private final PhotonCamera photonCamera;
+    private final PhotonCameraSim cameraSim;
     private PhotonPipelineResult latestResult = new PhotonPipelineResult();
-    private PhotonTrackedTarget trackedTarget = new PhotonTrackedTarget();
+    private final PhotonTrackedTarget trackedTarget = new PhotonTrackedTarget();
     private Result result;
-    private List<VisionTargetSim> visionTargetsSim = new ArrayList<>();
-    private Transform3d robotToCam;
+    private final List<VisionTargetSim> visionTargetsSim = new ArrayList<>();
+    private final Transform3d robotToCam;
 
     public VisionSimIO(Transform3d robotToCam) {
         this.robotToCam = robotToCam;

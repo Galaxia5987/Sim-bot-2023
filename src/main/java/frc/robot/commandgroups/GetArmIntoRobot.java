@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmPosition;
 import frc.robot.subsystems.arm.commands.ArmWithSpline;
+
 public class GetArmIntoRobot extends SequentialCommandGroup {
 
     public GetArmIntoRobot() {

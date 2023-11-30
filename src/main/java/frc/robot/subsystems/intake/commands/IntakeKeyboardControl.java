@@ -7,7 +7,7 @@ import frc.robot.subsystems.intake.IntakeConstants;
 
 public class IntakeKeyboardControl extends CommandBase {
     private final GenericHID controller = new GenericHID(0);
-    private Intake intake = Intake.getInstance();
+    private final Intake intake = Intake.getInstance();
 
     public IntakeKeyboardControl() {
         addRequirements(intake);

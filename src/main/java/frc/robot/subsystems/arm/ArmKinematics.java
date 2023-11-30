@@ -1,8 +1,7 @@
 package frc.robot.subsystems.arm;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import frc.robot.utils.math.AngleUtil;
+import utils.math.AngleUtil;
 
 /**
  * This class contains the kinematics for the arm.
