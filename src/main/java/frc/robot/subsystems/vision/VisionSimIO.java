@@ -19,11 +19,11 @@ import java.util.List;
 public class VisionSimIO implements VisionIO {
     private final PhotonCamera photonCamera;
     private final PhotonCameraSim cameraSim;
-    private PhotonPipelineResult latestResult = new PhotonPipelineResult();
     private final PhotonTrackedTarget trackedTarget = new PhotonTrackedTarget();
-    private Result result;
     private final List<VisionTargetSim> visionTargetsSim = new ArrayList<>();
     private final Transform3d robotToCam;
+    private PhotonPipelineResult latestResult = new PhotonPipelineResult();
+    private Result result;
 
     public VisionSimIO(Transform3d robotToCam) {
         this.robotToCam = robotToCam;

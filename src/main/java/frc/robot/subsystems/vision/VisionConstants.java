@@ -4,7 +4,6 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import org.photonvision.simulation.SimVisionTarget;
 
 public class VisionConstants {
     public static final Transform3d[] ROBOT_TO_CAM = new Transform3d[]{

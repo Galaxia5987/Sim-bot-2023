@@ -25,8 +25,8 @@ import utils.math.differential.BooleanTrigger;
  */
 public class Robot extends LoggedRobot {
 
-    public static boolean replay = false;
     private static final BooleanTrigger justEnabled = new BooleanTrigger();
+    public static boolean replay = false;
     private final Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
     private RobotContainer robotContainer;
     private Command autonomousCommand;
@@ -43,23 +43,23 @@ public class Robot extends LoggedRobot {
     public void robotInit() {
         robotContainer = RobotContainer.getInstance();
 
-        Logger.getInstance().recordMetadata("ProjectName", "Robot-template");
+        Logger.recordMetadata("ProjectName", "Robot-template");
 
         if (isReal()) {
-            Logger.getInstance().addDataReceiver(new NT4Publisher());
-            Logger.getInstance().addDataReceiver(new WPILOGWriter("home/lvuser"));
+            Logger.addDataReceiver(new NT4Publisher());
+            Logger.addDataReceiver(new WPILOGWriter("home/lvuser"));
 
             try (PowerDistribution pwr = new PowerDistribution(1, PowerDistribution.ModuleType.kRev)) {
                 System.out.println("Power distribution working");
             }
         } else {
             if (replay) {
-                Logger.getInstance().setReplaySource(new WPILOGReader(LogFileUtil.findReplayLog()));
+                Logger.setReplaySource(new WPILOGReader(LogFileUtil.findReplayLog()));
             }
-            Logger.getInstance().addDataReceiver(new NT4Publisher());
+            Logger.addDataReceiver(new NT4Publisher());
         }
 
-        Logger.getInstance().start();
+        Logger.start();
         compressor.enableDigital();
     }
 

@@ -117,11 +117,11 @@ public class Arm extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs();
-        Logger.getInstance().processInputs("Arm", inputs);
+        Logger.processInputs("Arm", inputs);
         currentCommand = getCurrentCommand();
 
         if (currentCommand != null) {
-            Logger.getInstance().recordOutput("ArmCommand", currentCommand.getName());
+            Logger.recordOutput("ArmCommand", currentCommand.getName());
         }
         changedToDefaultCommand = !(lastCommand instanceof ArmXboxControl) && (currentCommand instanceof ArmXboxControl);
         lastCommand = currentCommand;
@@ -141,8 +141,8 @@ public class Arm extends SubsystemBase {
         } else if (inputs.shoulderControlMode == ArmIO.ControlMode.PRECENT_OUTPUT) {
             io.setShoulderPower(inputs.shoulderAppliedVoltage);
         }
-        Logger.getInstance().recordOutput("BottomArmPose", new Pose3d(ArmConstants.shoulderOrigin, new Rotation3d(Math.toRadians(0), inputs.shoulderAngle, Math.toRadians(0))));
-        Logger.getInstance().recordOutput("TopArmPose", new Pose3d(ArmConstants.shoulderOrigin.plus(new Translation3d(-inputs.shoulderTipPose[0], 0, inputs.shoulderTipPose[1])), new Rotation3d(Math.toRadians(0), inputs.elbowAngleAbsolute - Math.PI, Math.toRadians(0)))); //TODO: check how to chnage the spin of the origin
+        Logger.recordOutput("BottomArmPose", new Pose3d(ArmConstants.shoulderOrigin, new Rotation3d(Math.toRadians(0), inputs.shoulderAngle, Math.toRadians(0))));
+        Logger.recordOutput("TopArmPose", new Pose3d(ArmConstants.shoulderOrigin.plus(new Translation3d(-inputs.shoulderTipPose[0], 0, inputs.shoulderTipPose[1])), new Rotation3d(Math.toRadians(0), inputs.elbowAngleAbsolute - Math.PI, Math.toRadians(0)))); //TODO: check how to chnage the spin of the origin
     }
 
     public void stop() {

@@ -22,7 +22,7 @@ public abstract class LoggedSubsystem<T extends LoggableInputs> extends Subsyste
 
     public void updateSubsystem() {
         updateInputs();
-        Logger.getInstance().processInputs(getSubsystemName(), loggerInputs);
+        Logger.processInputs(getSubsystemName(), loggerInputs);
     }
 
     public abstract void updateInputs();
