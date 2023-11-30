@@ -1,12 +1,12 @@
 package frc.robot.subsystems.intake.commands;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeConstants;
 
-public class HoldIntakeInPlace extends CommandBase {
+public class HoldIntakeInPlace extends Command {
     private final Intake intake = Intake.getInstance();
     private double angle;
 

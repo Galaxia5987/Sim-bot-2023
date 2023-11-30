@@ -2,10 +2,10 @@ package frc.robot.subsystems.intake.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.intake.Intake;
 
-public class XboxWristControl extends CommandBase {
+public class XboxWristControl extends Command {
     private final Intake intake = Intake.getInstance();
     private final XboxController xboxController;
 

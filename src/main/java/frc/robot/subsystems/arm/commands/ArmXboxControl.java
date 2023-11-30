@@ -2,13 +2,13 @@ package frc.robot.subsystems.arm.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.arm.Arm;
 import utils.Utils;
 import utils.math.differential.BooleanTrigger;
 
-public class ArmXboxControl extends CommandBase {
+public class ArmXboxControl extends Command {
     private final Arm arm = Arm.getINSTANCE();
     private final XboxController xboxController;
     private final BooleanTrigger holdTrigger = new BooleanTrigger();

@@ -1,10 +1,10 @@
 package frc.robot.subsystems.intake.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeConstants;
 
-public class Retract extends CommandBase {
+public class Retract extends Command {
     private final Intake intake = Intake.getInstance();
     private final Mode mode;
 

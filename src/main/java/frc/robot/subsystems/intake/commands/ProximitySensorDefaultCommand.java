@@ -1,6 +1,6 @@
 package frc.robot.subsystems.intake.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.arm.ArmConstants;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.intake.ProximitySensor;
@@ -8,7 +8,7 @@ import frc.robot.subsystems.leds.LedConstants;
 import frc.robot.subsystems.leds.Leds;
 
 
-public class ProximitySensorDefaultCommand extends CommandBase {
+public class ProximitySensorDefaultCommand extends Command {
     private final ProximitySensor proximitySensor = ProximitySensor.getInstance();
     private final Leds leds = Leds.getInstance();
     private final Gripper gripper = Gripper.getInstance();

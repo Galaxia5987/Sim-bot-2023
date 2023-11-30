@@ -3,7 +3,7 @@ package frc.robot.subsystems.arm.commands;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmConstants;
 import frc.robot.subsystems.arm.ArmKinematics;
@@ -11,7 +11,7 @@ import frc.robot.subsystems.arm.ArmKinematics;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
-public class SetArmsPositionAngular extends CommandBase {
+public class SetArmsPositionAngular extends Command {
     private final Arm arm = Arm.getINSTANCE();
     private final DoubleSupplier shoulderAngle;
     private final DoubleSupplier elbowAngle;
@@ -48,12 +48,8 @@ public class SetArmsPositionAngular extends CommandBase {
     public void initialize() {
         double currentShoulderAngle = arm.getShoulderAngle();
         double currentElbowAngle = arm.getElbowAngleRelative();
-        shoulderProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(180, 540),
-                new TrapezoidProfile.State(shoulderAngle.getAsDouble(), finalShoulderVelocity),
-                new TrapezoidProfile.State(currentShoulderAngle, 0));
-        elbowProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(360, 2080),
-                new TrapezoidProfile.State(elbowAngle.getAsDouble(), finalElbowVelocity),
-                new TrapezoidProfile.State(currentElbowAngle, 0));
+        shoulderProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(180, 540));
+        elbowProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(360, 2080));
 
         timer.start();
         timer.reset();
@@ -61,9 +57,15 @@ public class SetArmsPositionAngular extends CommandBase {
 
     @Override
     public void execute() {
+        double currentShoulderAngle = arm.getShoulderAngle();
+        double currentElbowAngle = arm.getElbowAngleRelative();
         double time = timer.get();
-        double shoulderSetpoint = shoulderProfile.calculate(time).position;
-        double elbowSetpoint = elbowProfile.calculate(time).position;
+        double shoulderSetpoint = shoulderProfile.calculate(time,
+                new TrapezoidProfile.State(shoulderAngle.getAsDouble(), finalShoulderVelocity),
+                new TrapezoidProfile.State(currentShoulderAngle, 0)).position;
+        double elbowSetpoint = elbowProfile.calculate(time,
+                new TrapezoidProfile.State(elbowAngle.getAsDouble(), finalElbowVelocity),
+                new TrapezoidProfile.State(currentElbowAngle, 0)).position;
 
         arm.setShoulderAngle(shoulderSetpoint);
         arm.setElbowAngleRelative(elbowSetpoint);

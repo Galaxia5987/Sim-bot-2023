@@ -3,6 +3,7 @@ package frc.robot.subsystems.arm;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 public class ArmIOSim implements ArmIO {
@@ -15,8 +16,12 @@ public class ArmIOSim implements ArmIO {
 
     public ArmIOSim(ArmInputs inputs) {
         this.inputs = inputs;
-        shoulder = new SingleJointedArmSim(DCMotor.getFalcon500(2), ArmConstants.SHOULDER_GEARING, ArmConstants.SHOULDER_MOMENT_OF_INERTIA, ArmConstants.SHOULDER_ARM_LENGTH, Math.toRadians(-60), Math.toRadians(150), false);
-        elbow = new SingleJointedArmSim(DCMotor.getFalcon500(2), ArmConstants.ELBOW_GEARING, ArmConstants.ELBOW_MOMENT_OF_INERTIA, ArmConstants.ELBOW_ARM_LENGTH, Math.toRadians(-360), Math.toRadians(360), false);
+        shoulder = new SingleJointedArmSim(LinearSystemId.createSingleJointedArmSystem(
+                DCMotor.getFalcon500(2), ArmConstants.SHOULDER_MOMENT_OF_INERTIA, ArmConstants.SHOULDER_GEARING
+        ), DCMotor.getFalcon500(2), ArmConstants.SHOULDER_GEARING, ArmConstants.SHOULDER_ARM_LENGTH, Math.toRadians(-60), Math.toRadians(150), false, 0);
+        elbow = new SingleJointedArmSim(LinearSystemId.createSingleJointedArmSystem(
+                DCMotor.getFalcon500(2), ArmConstants.ELBOW_MOMENT_OF_INERTIA, ArmConstants.ELBOW_GEARING
+        ), DCMotor.getFalcon500(2), ArmConstants.ELBOW_GEARING, ArmConstants.ELBOW_ARM_LENGTH, Math.toRadians(-360), Math.toRadians(360), false, 0);
     }
 
     @Override

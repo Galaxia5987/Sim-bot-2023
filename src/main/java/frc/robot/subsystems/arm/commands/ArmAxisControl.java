@@ -1,12 +1,12 @@
 package frc.robot.subsystems.arm.commands;
 
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmConstants;
 import frc.robot.subsystems.arm.ArmKinematics;
 
-public class ArmAxisControl extends CommandBase {
+public class ArmAxisControl extends Command {
     private final Arm arm = Arm.getINSTANCE();
     private final double Xvalue;
     private final double Yvalue;

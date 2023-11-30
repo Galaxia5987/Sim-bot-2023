@@ -2,13 +2,13 @@ package frc.robot.subsystems.arm.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmPosition;
 import utils.math.Vector2;
 import utils.math.spline.QuinticBezierSpline;
 
-public class ArmWithSpline extends CommandBase {
+public class ArmWithSpline extends Command {
 
     private final Arm arm = Arm.getINSTANCE();
     private final ArmPosition desiredPosition;

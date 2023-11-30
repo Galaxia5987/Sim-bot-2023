@@ -2,6 +2,7 @@ package frc.robot.subsystems.intake;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
@@ -12,7 +13,9 @@ public class IntakeIOSim implements IntakeIO {
 
     public IntakeIOSim() {
         spinMotor = new FlywheelSim(DCMotor.getNEO(1), IntakeConstants.SPIN_GEAR_RATIO, 1);
-        angleMotor = new SingleJointedArmSim(DCMotor.getFalcon500(1), IntakeConstants.ANGLE_GEAR_RATIO, 1.7, 42, -Math.PI * 2, Math.PI * 2, false); //could be wrong type of motor or max/min angle
+        angleMotor = new SingleJointedArmSim(LinearSystemId.createSingleJointedArmSystem(
+                DCMotor.getFalcon500(1), 2, IntakeConstants.ANGLE_GEAR_RATIO
+        ), DCMotor.getFalcon500(1), IntakeConstants.ANGLE_GEAR_RATIO, 0.7, -Math.PI * 2, Math.PI * 2, false, 0); //could be wrong type of motor or max/min angle
         angleFeedback = new PIDController(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD);
     }
 
