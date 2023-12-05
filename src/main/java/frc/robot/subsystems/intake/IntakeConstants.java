@@ -29,4 +29,7 @@ public class IntakeConstants {
     public static final double INTAKE_Y = 0.443;
     public static final double INTAKE_SIM_ANGLE_OFFSET = -44.8;
     public static final Translation2d ROOT_POSITION = new Translation2d(INTAKE_X, INTAKE_Y);
+    public static final double kP_SIM = 0;
+    public static final double kI_SIM = 0;
+    public static final double kD_SIM = 0;
 }

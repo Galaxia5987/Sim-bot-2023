@@ -1,22 +1,33 @@
 package frc.robot.subsystems.intake;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import frc.robot.Constants;
 import frc.robot.Ports;
+import utils.Utils;
 import utils.units.UnitModel;
+
 
 public class IntakeIOReal implements IntakeIO {
     private final CANSparkMax spinMotor = new CANSparkMax(Ports.Intake.INTAKE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
-    private final TalonFX angleMotor = new TalonFX(Ports.Intake.ANGLE_MOTOR);
+    private final TalonFX angleMotorPhx = new TalonFX(0);
+
+    private final TalonFXConfigurator angleConfigurator;
+    private final TalonFXConfiguration angleConfiguration = new TalonFXConfiguration();
     private final UnitModel unitModel = new UnitModel(IntakeConstants.TICKS_PER_DEGREE);
 
     public IntakeIOReal() {
-        angleMotor.configFactoryDefault();
+        angleConfigurator = angleMotorPhx.getConfigurator();
+        angleConfiguration.Slot0.kP = IntakeConstants.kP;
+        angleConfiguration.Slot0.kI = IntakeConstants.kI;
+        angleConfiguration.Slot0.kD = IntakeConstants.kD;
+
         spinMotor.restoreFactoryDefaults();
 
         spinMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
@@ -27,18 +38,7 @@ public class IntakeIOReal implements IntakeIO {
         }
         spinMotor.burnFlash();
 
-        angleMotor.setNeutralMode(NeutralMode.Brake);
-        angleMotor.enableVoltageCompensation(true);
-        angleMotor.configVoltageCompSaturation(Constants.NOMINAL_VOLTAGE);
-        angleMotor.setInverted(Ports.Intake.ANGLE_INVERTED);
-        angleMotor.config_kP(0, IntakeConstants.kP);
-        angleMotor.config_kI(0, IntakeConstants.kI);
-        angleMotor.config_kD(0, IntakeConstants.kD);
-        angleMotor.config_kF(0, IntakeConstants.kF);
-        angleMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(
-                true, 30, 0, 0
-        ));
-        angleMotor.configClosedLoopPeakOutput(0, 0.4);
+angleConfiguration.
     }
 
     @Override
@@ -48,8 +48,10 @@ public class IntakeIOReal implements IntakeIO {
 
     @Override
     public void setAngleMotorAngle(double angle) {
-        angleMotor.set(ControlMode.Position, angle);
-    }
+
+
+
+        angleMotorPhx.setControl(new PositionVoltage(Utils.));
 
     @Override
     public void setAngleMotorPower(double power) {
@@ -70,5 +72,8 @@ public class IntakeIOReal implements IntakeIO {
         inputs.angleMotorVelocity = unitModel.toVelocity(angleMotor.getSelectedSensorVelocity());
         inputs.angleMotorcurrent = angleMotor.getSupplyCurrent();
         inputs.angleMotorPower = angleMotor.getMotorOutputPercent();
+
+        angleConfigurator.apply(angleConfiguration.Slot0);
+
     }
 }
