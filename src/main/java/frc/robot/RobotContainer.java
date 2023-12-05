@@ -1,11 +1,19 @@
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commandgroups.PickUpCubeAuto;
 import frc.robot.commandgroups.PickUpCubeTeleop;
 import frc.robot.commandgroups.ReturnIntake;
 import frc.robot.subsystems.arm.Arm;
@@ -19,7 +27,10 @@ import frc.robot.subsystems.intake.commands.HoldIntakeInPlace;
 import frc.robot.subsystems.intake.commands.ProximitySensorDefaultCommand;
 import frc.robot.subsystems.intake.commands.Retract;
 import frc.robot.subsystems.leds.Leds;
+import swerve.SwerveConstants;
 import swerve.SwerveDrive;
+import swerve.SwerveDriveInputsAutoLogged;
+import swerve.commands.KeyboardDriveSim;
 import swerve.commands.XboxDrive;
 import utils.Utils;
 
@@ -56,10 +67,29 @@ public class RobotContainer {
     private final Trigger downPOV = new Trigger(() -> Utils.epsilonEquals(xboxController.getPOV(), 180));
     private final JoystickButton start = new JoystickButton(xboxController, XboxController.Button.kStart.value);
 
+
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
      */
     private RobotContainer() {
+        NamedCommands.registerCommand("pickUpCube", new PickUpCubeAuto());
+
+        HolonomicPathFollowerConfig followerConfig = new HolonomicPathFollowerConfig(
+                new PIDConstants(SwerveConstants.AUTO_X_Kp, SwerveConstants.AUTO_X_Ki, SwerveConstants.AUTO_X_Kd),
+                new PIDConstants(SwerveConstants.AUTO_ROTATION_Kp, SwerveConstants.AUTO_ROTATION_Ki, SwerveConstants.AUTO_ROTATION_Kd),
+                SwerveConstants.MAX_X_Y_VELOCITY,
+                Math.hypot(SwerveConstants.robotWidth / 2, SwerveConstants.robotLength / 2),
+                new ReplanningConfig()
+        );
+        AutoBuilder.configureHolonomic(
+                swerveDrive::getBotPose,
+                swerveDrive::resetPose,
+                swerveDrive::getCurrentSpeeds,
+                (ChassisSpeeds speeds) -> swerveDrive.drive(speeds, false),
+                followerConfig,
+                swerveDrive
+        );
+
         configureDefaultCommands();
         configureButtonBindings();
     }
@@ -114,6 +144,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return null;
+        return AutoBuilder.buildAuto("Auto");
     }
 }
