@@ -9,7 +9,12 @@ public class VisionConstants {
                     new Rotation3d(Math.toRadians(0), Math.toRadians(0), Math.toRadians(142.5))),
             new Transform3d( //right cam
                     new Translation3d(-0.2363, -0.1, 0.196),
-                    new Rotation3d(Math.toRadians(0)+0.16, Math.toRadians(-28)-0.085, Math.toRadians(-151)))};
+                    new Rotation3d(Math.toRadians(0)+0.16, Math.toRadians(-28)-0.085, Math.toRadians(-151))),
+            new Transform3d( //limelight
+                    new Translation3d(-0.2263, 0.286, 0.76),
+                    new Rotation3d(Math.toRadians(0), Math.toRadians(0), Math.toRadians(16.62)))
+    };
+
 //     new Transform3d( //right cam
 //                    new Translation3d(-0.2363, -0.527, 0.196),
 //                    new Rotation3d(Math.toRadians(0)+0.16, Math.toRadians(-28)-0.085, Math.toRadians(-151)))};
