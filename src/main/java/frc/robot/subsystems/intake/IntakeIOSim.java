@@ -2,61 +2,56 @@ package frc.robot.subsystems.intake;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.sim.TalonFXSimState;
+import edu.wpi.first.math.util.Units;
+import utils.motors.TalonFXSim;
 
 public class IntakeIOSim implements IntakeIO {
-    private final TalonFXSimState angleMotorPhx;
-    private final TalonFX talonFXAngle;
-    private final TalonFX talonFXPower;
-    private final TalonFXSimState powerMotorPhx;
-    private final TalonFXConfigurator angleConfigurator;
-    private final TalonFXConfigurator powerConfigurator;
+    private final TalonFXSim angleMotorSim;
+    private final TalonFXSim powerMotorSim;
     private final TalonFXConfiguration angleConfiguration;
 
     public IntakeIOSim() {
         angleConfiguration = new TalonFXConfiguration();
 
-        talonFXAngle = new TalonFX(0);
-        talonFXPower = new TalonFX(1);
-
-        angleMotorPhx = new TalonFXSimState(talonFXAngle);
-        powerMotorPhx = new TalonFXSimState(talonFXPower);
-
-        angleConfigurator = talonFXAngle.getConfigurator();
-        powerConfigurator = talonFXPower.getConfigurator();
+        angleMotorSim = new TalonFXSim(0, IntakeConstants.ANGLE_GEAR_RATIO, 1);
+        powerMotorSim = new TalonFXSim(1, IntakeConstants.SPIN_GEAR_RATIO, 1);
 
         angleConfiguration.Slot0.kP = IntakeConstants.kP_SIM;
         angleConfiguration.Slot0.kI = IntakeConstants.kI_SIM;
         angleConfiguration.Slot0.kD = IntakeConstants.kD_SIM;
-
-        angleConfigurator.apply(angleConfiguration.Slot0);
-
+        angleMotorSim.configure(angleConfiguration);
     }
 
     @Override
     public void updateInputs(IntakeLoggedInputs inputs) {
-        inputs.angleMotorPower = angleMotorPhx.getMotorVoltage() / 12;
-        inputs.angleMotorcurrent = angleMotorPhx.getSupplyCurrent();
-        inputs.angleMotorVelocity = talonFXAngle.getVelocity().getValue();
-        inputs.angleMotorAngle = talonFXAngle.getRotorPosition().getValue() * Math.PI * 2 % Math.PI * 2;
-        inputs.spinMotorCurrent = powerMotorPhx.getSupplyCurrent();
-        inputs.spinMotorPower = powerMotorPhx.getMotorVoltage() / 12;
+        inputs.angleMotorPower = angleMotorSim.getAppliedVoltage() / 12;
+        inputs.angleMotorcurrent = angleMotorSim.getAppliedCurrent();
+        inputs.angleMotorVelocity = angleMotorSim.getRotorVelocity();
+        inputs.angleMotorAngle = angleMotorSim.getRotorPosition() * Math.PI * 2 % Math.PI * 2;
+        inputs.spinMotorCurrent = powerMotorSim.getAppliedVoltage();
+        inputs.spinMotorPower = powerMotorSim.getAppliedVoltage() / 12;
     }
 
     @Override
     public void setSpinMotorPower(double power) {
-        powerMotorPhx.setSupplyVoltage(power * 12);
+        var motorRequest = new DutyCycleOut(power);
+        powerMotorSim.setControl(motorRequest);
     }
 
     @Override
     public void setAngleMotorAngle(double angle) {
-        angleMotorPhx.setRawRotorPosition(angle / 2 * Math.PI);
+        var motorRequest = new PositionVoltage(Units.radiansToRotations(angle));
+        angleMotorSim.setControl(motorRequest);
     }
 
     @Override
     public void setAngleMotorPower(double power) {
-        angleMotorPhx.setSupplyVoltage(power * 12);
+        var motorRequest = new DutyCycleOut(power);
+        angleMotorSim.setControl(motorRequest);
     }
 
 
