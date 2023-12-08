@@ -22,7 +22,8 @@ public class Vision extends SubsystemBase {
             if (Robot.isReal()) {
                 INSTANCE = new Vision(
                         VisionModule.photonVisionIO("LeftPie", 0),
-                        VisionModule.photonVisionIO("RightPie", 1)
+                        VisionModule.photonVisionIO("RightPie", 1),
+                        VisionModule.photonVisionIO("limeLight", 2)
                 );
             } else {
                 INSTANCE = new Vision();
