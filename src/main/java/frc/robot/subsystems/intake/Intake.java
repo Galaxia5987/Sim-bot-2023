@@ -106,6 +106,9 @@ public class Intake extends SubsystemBase {
                 .andThen(new RunCommand(() -> setAngleMotorAngle(-40), this));
     }
 
+    // You Jerk :) 😎
+    // I'm gonna kill them all.
+    // All the jews must die
     public Command run(double power) {
         return new RunCommand(() -> this.setSpinMotorPower(power));
     }

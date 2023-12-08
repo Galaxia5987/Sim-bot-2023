@@ -1,50 +1,59 @@
 package frc.robot.subsystems.intake;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.system.plant.LinearSystemId;
-import edu.wpi.first.wpilibj.simulation.FlywheelSim;
-import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.sim.TalonFXSimState;
+import edu.wpi.first.math.util.Units;
+import utils.motors.TalonFXSim;
 
 public class IntakeIOSim implements IntakeIO {
-    private final FlywheelSim spinMotor;
-    private final SingleJointedArmSim angleMotor;
-    private final PIDController angleFeedback;
+    private final TalonFXSim angleMotorSim;
+    private final TalonFXSim powerMotorSim;
+    private final TalonFXConfiguration angleConfiguration;
 
     public IntakeIOSim() {
-        spinMotor = new FlywheelSim(DCMotor.getNEO(1), IntakeConstants.SPIN_GEAR_RATIO, 1);
-        angleMotor = new SingleJointedArmSim(LinearSystemId.createSingleJointedArmSystem(
-                DCMotor.getFalcon500(1), 2, IntakeConstants.ANGLE_GEAR_RATIO
-        ), DCMotor.getFalcon500(1), IntakeConstants.ANGLE_GEAR_RATIO, 0.7, -Math.PI * 2, Math.PI * 2, false, 0); //could be wrong type of motor or max/min angle
-        angleFeedback = new PIDController(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD);
+        angleConfiguration = new TalonFXConfiguration();
+
+        angleMotorSim = new TalonFXSim(0, IntakeConstants.ANGLE_GEAR_RATIO, 1);
+        powerMotorSim = new TalonFXSim(1, IntakeConstants.SPIN_GEAR_RATIO, 1);
+
+        angleConfiguration.Slot0.kP = IntakeConstants.kP_SIM;
+        angleConfiguration.Slot0.kI = IntakeConstants.kI_SIM;
+        angleConfiguration.Slot0.kD = IntakeConstants.kD_SIM;
+        angleMotorSim.configure(angleConfiguration);
     }
 
     @Override
     public void updateInputs(IntakeLoggedInputs inputs) {
-        inputs.spinMotorPower = inputs.setpointSpinMotorPower;
-        inputs.spinMotorCurrent = spinMotor.getCurrentDrawAmps();
-        inputs.angleMotorAngle = angleMotor.getAngleRads();
-        inputs.angleMotorcurrent = angleMotor.getCurrentDrawAmps();
-
-        spinMotor.update(0.02);
-        angleMotor.update(0.02);
+        inputs.angleMotorPower = angleMotorSim.getAppliedVoltage() / 12;
+        inputs.angleMotorcurrent = angleMotorSim.getAppliedCurrent();
+        inputs.angleMotorVelocity = angleMotorSim.getRotorVelocity();
+        inputs.angleMotorAngle = angleMotorSim.getRotorPosition() * Math.PI * 2 % Math.PI * 2;
+        inputs.spinMotorCurrent = powerMotorSim.getAppliedVoltage();
+        inputs.spinMotorPower = powerMotorSim.getAppliedVoltage() / 12;
     }
 
     @Override
     public void setSpinMotorPower(double power) {
-        spinMotor.setInputVoltage(power * 12);
+        var motorRequest = new DutyCycleOut(power);
+        powerMotorSim.setControl(motorRequest);
     }
 
     @Override
     public void setAngleMotorAngle(double angle) {
-        double angleMotorAppliedVoltage = angleFeedback.calculate(angleMotor.getAngleRads(), angle);
-        angleMotor.setInputVoltage(angleMotorAppliedVoltage);
+        var motorRequest = new PositionVoltage(Units.radiansToRotations(angle));
+        angleMotorSim.setControl(motorRequest);
     }
 
     @Override
     public void setAngleMotorPower(double power) {
-        angleMotor.setInputVoltage(power * 12);
+        var motorRequest = new DutyCycleOut(power);
+        angleMotorSim.setControl(motorRequest);
     }
+
 
     @Override
     public void resetEncoder(double angle) {
