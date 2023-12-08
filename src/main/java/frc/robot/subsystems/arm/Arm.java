@@ -17,7 +17,6 @@ import frc.robot.subsystems.arm.commands.ArmXboxControl;
 import org.littletonrobotics.junction.Logger;
 
 public class Arm extends SubsystemBase {
-    private static final ArmInputsAutoLogged inputs = new ArmInputsAutoLogged();
     private static Arm INSTANCE;
     private final ArmIO io;
     private final Mechanism2d mechanism = new Mechanism2d(
