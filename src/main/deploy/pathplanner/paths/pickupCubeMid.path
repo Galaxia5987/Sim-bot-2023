@@ -80,7 +80,14 @@
       "command": {
         "type": "parallel",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "pickUpCube"
+              }
+            }
+          ]
         }
       }
     },
@@ -88,9 +95,16 @@
       "name": "ConeHigh",
       "waypointRelativePos": 0,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "armHigh"
+              }
+            }
+          ]
         }
       }
     },
@@ -100,7 +114,14 @@
       "command": {
         "type": "parallel",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "armHigh"
+              }
+            }
+          ]
         }
       }
     },
@@ -110,37 +131,65 @@
       "command": {
         "type": "parallel",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "pickUpCube"
+              }
+            }
+          ]
         }
       }
     },
     {
-      "name": "wait",
+      "name": "wait1",
       "waypointRelativePos": 1.0,
       "command": {
         "type": "parallel",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.0
+              }
+            }
+          ]
         }
       }
     },
     {
-      "name": "wait",
+      "name": "wait2",
       "waypointRelativePos": 1.95,
       "command": {
         "type": "parallel",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.0
+              }
+            }
+          ]
         }
       }
     },
     {
-      "name": "wait",
+      "name": "wait3",
       "waypointRelativePos": 4.0,
       "command": {
         "type": "parallel",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.0
+              }
+            }
+          ]
         }
       }
     }
