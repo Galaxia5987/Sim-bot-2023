@@ -89,7 +89,7 @@ public class Intake extends SubsystemBase {
     }
 
     public double getCurrent() {
-        return inputs.angleMotorcurrent;
+        return inputs.angleMotorAppliedCurrent;
     }
 
     public void setAnglePower(double power) {
