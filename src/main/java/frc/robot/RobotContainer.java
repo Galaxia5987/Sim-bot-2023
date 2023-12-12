@@ -27,6 +27,8 @@ import frc.robot.subsystems.intake.commands.HoldIntakeInPlace;
 import frc.robot.subsystems.intake.commands.ProximitySensorDefaultCommand;
 import frc.robot.subsystems.intake.commands.Retract;
 import frc.robot.subsystems.leds.Leds;
+import frc.robot.subsystems.leds.command.PurpleLed;
+import frc.robot.subsystems.leds.command.YellowLed;
 import swerve.SwerveConstants;
 import swerve.SwerveDrive;
 import swerve.SwerveDriveInputsAutoLogged;
@@ -73,6 +75,9 @@ public class RobotContainer {
      */
     private RobotContainer() {
         NamedCommands.registerCommand("pickUpCube", new PickUpCubeAuto());
+        NamedCommands.registerCommand("armHigh", new ArmWithSpline(ArmPosition.TOP_SCORING));
+        NamedCommands.registerCommand("coneLed", new YellowLed());
+        NamedCommands.registerCommand("cubeLed", new PurpleLed());
 
         HolonomicPathFollowerConfig followerConfig = new HolonomicPathFollowerConfig(
                 new PIDConstants(SwerveConstants.AUTO_X_Kp, SwerveConstants.AUTO_X_Ki, SwerveConstants.AUTO_X_Kd),
