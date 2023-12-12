@@ -1,0 +1,161 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.0,
+        "y": 0.5
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.9413470271081135,
+        "y": 0.5
+      },
+      "isLocked": false
+    },
+    {
+      "anchor": {
+        "x": 6.612115135785193,
+        "y": 0.8919657211639663
+      },
+      "prevControl": {
+        "x": 6.560967616559761,
+        "y": 0.8919657211639663
+      },
+      "nextControl": {
+        "x": 6.663262655010624,
+        "y": 0.8919657211639663
+      },
+      "isLocked": false
+    },
+    {
+      "anchor": {
+        "x": 1.7406100432742944,
+        "y": 1.0291912167276542
+      },
+      "prevControl": {
+        "x": 1.4196014410772588,
+        "y": 1.0291912167276542
+      },
+      "nextControl": {
+        "x": 2.025616755032105,
+        "y": 1.0291912167276542
+      },
+      "isLocked": false
+    },
+    {
+      "anchor": {
+        "x": 5.297037469966523,
+        "y": 1.0291912167276542
+      },
+      "prevControl": {
+        "x": 4.836534067777359,
+        "y": 0.13888463916193772
+      },
+      "nextControl": {
+        "x": 5.811633078330351,
+        "y": 2.0240760595643867
+      },
+      "isLocked": false
+    },
+    {
+      "anchor": {
+        "x": 6.452018724294224,
+        "y": 2.1269951812371524
+      },
+      "prevControl": {
+        "x": 6.3029185941719055,
+        "y": 2.1269951812371524
+      },
+      "nextControl": null,
+      "isLocked": false
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "PickupCube",
+      "waypointRelativePos": 2.4,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    },
+    {
+      "name": "ConeHigh",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    },
+    {
+      "name": "CubeHigh",
+      "waypointRelativePos": 1.8,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    },
+    {
+      "name": "PickupCube",
+      "waypointRelativePos": 3.4,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    },
+    {
+      "name": "wait",
+      "waypointRelativePos": 1.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    },
+    {
+      "name": "wait",
+      "waypointRelativePos": 1.95,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    },
+    {
+      "name": "wait",
+      "waypointRelativePos": 4.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.7,
+    "maxAcceleration": 3.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": null
+}
