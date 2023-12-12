@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -14,7 +15,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.arm.commands.ArmXboxControl;
+import org.eclipse.jetty.util.log.Log;
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.CustomStructs;
 import org.littletonrobotics.junction.Logger;
+import utils.Utils;
 
 public class Arm extends SubsystemBase {
     private static final ArmInputsAutoLogged inputs = new ArmInputsAutoLogged();
@@ -106,8 +111,9 @@ public class Arm extends SubsystemBase {
         return !(inputs.shoulderTipPose[0] < 0) || !(inputs.endEffectorPose.getX() < 0);
     }
 
+    @AutoLogOutput
     public boolean armIsInRobot() {
-        return inputs.shoulderTipPose[1] < 0 && inputs.shoulderAngle > 90;
+        return (inputs.endEffectorPose.getY() < 0) && (inputs.shoulderAngle > Math.PI / 2);
     }
 
     public boolean changedToDefaultCommand() {
@@ -141,8 +147,8 @@ public class Arm extends SubsystemBase {
         } else if (inputs.shoulderControlMode == ArmIO.ControlMode.PRECENT_OUTPUT) {
             io.setShoulderPower(inputs.shoulderAppliedVoltage);
         }
-        Logger.recordOutput("BottomArmPose", new Pose3d(ArmConstants.shoulderOrigin, new Rotation3d(Math.toRadians(0), inputs.shoulderAngle, Math.toRadians(0))));
-        Logger.recordOutput("TopArmPose", new Pose3d(ArmConstants.shoulderOrigin.plus(new Translation3d(-inputs.shoulderTipPose[0], 0, inputs.shoulderTipPose[1])), new Rotation3d(Math.toRadians(0), inputs.elbowAngleAbsolute - Math.PI, Math.toRadians(0)))); //TODO: check how to chnage the spin of the origin
+        Logger.recordOutput("BottomArmPose", Utils.pose3dToArray(new Pose3d(ArmConstants.shoulderOrigin, new Rotation3d(Math.toRadians(0), inputs.shoulderAngle, Math.toRadians(0)))));
+        Logger.recordOutput("TopArmPose", Utils.pose3dToArray(new Pose3d(ArmConstants.shoulderOrigin.plus(new Translation3d(-inputs.shoulderTipPose[0], 0, inputs.shoulderTipPose[1])), new Rotation3d(Math.toRadians(0), inputs.elbowAngleAbsolute - Math.PI, Math.toRadians(0))))); //TODO: check how to chnage the spin of the origin
     }
 
     public void stop() {
