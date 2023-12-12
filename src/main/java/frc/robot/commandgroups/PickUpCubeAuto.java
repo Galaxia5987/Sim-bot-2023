@@ -16,7 +16,7 @@ public class PickUpCubeAuto extends ParallelCommandGroup {
 
         addCommands(
                 new GetArmIntoRobot(),
-                new WaitUntilCommand(() -> !arm.armIsOutOfFrame()).andThen(new InstantCommand(gripper::open, gripper))
+                new WaitUntilCommand(arm::armIsInRobot).andThen(new InstantCommand(gripper::open, gripper))
                         .andThen(new Feed(false))
         );
     }
