@@ -1,5 +1,6 @@
 package frc.robot.subsystems.intake;
 
+import com.ctre.phoenix.Util;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -14,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.intake.commands.HoldIntakeInPlace;
 import org.littletonrobotics.junction.Logger;
+import utils.Utils;
 
 public class Intake extends SubsystemBase {
     private static Intake INSTANCE;
@@ -132,7 +134,9 @@ public class Intake extends SubsystemBase {
 
         intakeP1.setAngle(Math.toDegrees(getAngleMotorAngle()) + IntakeConstants.INTAKE_MECH_OFFSET);
 
-        Logger.recordOutput("IntakePose", getPose3d(getAngleMotorAngle() + IntakeConstants.INTAKE_SIM_ANGLE_OFFSET));
+
+var intake3d=  getPose3d(getAngleMotorAngle() + IntakeConstants.INTAKE_SIM_ANGLE_OFFSET);
+        Logger.recordOutput("IntakePose", Utils.pose3dToArray(intake3d));
         Logger.processInputs("Intake", inputs);
         SmartDashboard.putData("IntakeMech", mech);
     }
