@@ -2,6 +2,11 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.FollowPathHolonomic;
+import com.pathplanner.lib.commands.FollowPathWithEvents;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.PathPlannerTrajectory;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -68,24 +73,25 @@ public class RobotContainer {
     private final Trigger upPOV = new Trigger(() -> Utils.epsilonEquals(xboxController.getPOV(), 0));
     private final Trigger downPOV = new Trigger(() -> Utils.epsilonEquals(xboxController.getPOV(), 180));
     private final JoystickButton start = new JoystickButton(xboxController, XboxController.Button.kStart.value);
+    private final HolonomicPathFollowerConfig followerConfig = new HolonomicPathFollowerConfig(
+            new PIDConstants(SwerveConstants.AUTO_X_Kp, SwerveConstants.AUTO_X_Ki, SwerveConstants.AUTO_X_Kd),
+            new PIDConstants(SwerveConstants.AUTO_ROTATION_Kp, SwerveConstants.AUTO_ROTATION_Ki, SwerveConstants.AUTO_ROTATION_Kd),
+            SwerveConstants.MAX_X_Y_VELOCITY,
+            Math.hypot(SwerveConstants.robotWidth / 2, SwerveConstants.robotLength / 2),
+            new ReplanningConfig()
+    );
 
 
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
      */
     private RobotContainer() {
-        NamedCommands.registerCommand("pickUpCube", new PickUpCubeAuto());
+        NamedCommands.registerCommand("pickUpCube", new PickUpCubeTeleop());
         NamedCommands.registerCommand("armHigh", new ArmWithSpline(ArmPosition.TOP_SCORING));
         NamedCommands.registerCommand("coneLed", new YellowLed());
         NamedCommands.registerCommand("cubeLed", new PurpleLed());
 
-        HolonomicPathFollowerConfig followerConfig = new HolonomicPathFollowerConfig(
-                new PIDConstants(SwerveConstants.AUTO_X_Kp, SwerveConstants.AUTO_X_Ki, SwerveConstants.AUTO_X_Kd),
-                new PIDConstants(SwerveConstants.AUTO_ROTATION_Kp, SwerveConstants.AUTO_ROTATION_Ki, SwerveConstants.AUTO_ROTATION_Kd),
-                SwerveConstants.MAX_X_Y_VELOCITY,
-                Math.hypot(SwerveConstants.robotWidth / 2, SwerveConstants.robotLength / 2),
-                new ReplanningConfig()
-        );
+
         AutoBuilder.configureHolonomic(
                 swerveDrive::getBotPose,
                 swerveDrive::resetPose,
