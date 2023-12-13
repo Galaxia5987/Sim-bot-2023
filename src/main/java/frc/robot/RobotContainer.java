@@ -5,8 +5,10 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathHolonomic;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
+import com.pathplanner.lib.path.PathSegment;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -41,11 +43,19 @@ import swerve.commands.KeyboardDriveSim;
 import swerve.commands.XboxDrive;
 import utils.Utils;
 
+import java.awt.geom.Path2D;
+
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
     private final Arm arm = Arm.getINSTANCE();
     private final Leds leds = Leds.getInstance();
-    private final SwerveDrive swerveDrive = SwerveDrive.getInstance(Robot.isReal());
+    static {
+        SwerveDrive.setInstance(Robot.isReal(),
+        Ports.SwerveDrive.DRIVE_IDS,
+        Ports.SwerveDrive.ANGLE_IDS,Ports.SwerveDrive.ENCODER_IDS
+        );
+    }
+    private final SwerveDrive swerveDrive = SwerveDrive.getInstance();
     private final Intake intake = Intake.getInstance();
     private final Gripper gripper = Gripper.getInstance();
     private final XboxController xboxController = new XboxController(0);
@@ -100,6 +110,7 @@ public class RobotContainer {
                 followerConfig,
                 swerveDrive
         );
+
 
         configureDefaultCommands();
         configureButtonBindings();
