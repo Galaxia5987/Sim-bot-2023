@@ -45,7 +45,7 @@ public class Vision extends SubsystemBase {
             module.io.updateInputs(module.inputs);
             Logger.processInputs(module.name, module.inputs);
             results[i] = module.io.getLatestResult();
-            Logger.recordOutput("RobotToCamLeft", new Pose3d(SwerveDrive.getInstance(Robot.isReal()).getBotPose()).plus(VisionConstants.ROBOT_TO_CAM[0]));
+            Logger.recordOutput("RobotToCamLeft", new Pose3d(SwerveDrive.getInstance().getBotPose()).plus(VisionConstants.ROBOT_TO_CAM[0]));
         }
     }
 }

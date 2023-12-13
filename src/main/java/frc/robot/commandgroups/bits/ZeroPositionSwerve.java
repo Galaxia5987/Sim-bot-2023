@@ -9,7 +9,7 @@ import swerve.SwerveDrive;
 import java.util.Arrays;
 
 public class ZeroPositionSwerve extends Command {
-    private final SwerveDrive swerve = SwerveDrive.getInstance(Robot.isReal());
+    private final SwerveDrive swerve = SwerveDrive.getInstance();
     private final Timer timer = new Timer();
     private final SwerveModuleState[] zeroStates = new SwerveModuleState[4];
 
