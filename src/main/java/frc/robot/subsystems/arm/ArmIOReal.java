@@ -11,11 +11,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Ports;
-import frc.robot.subsystems.LoggedSubsystem;
 import utils.math.AngleUtil;
 import utils.units.UnitModel;
 
-public class ArmReal implements ArmIO {
+public class ArmIOReal implements ArmIO {
     private static Arm INSTANCE = null;
 
     private final ArmKinematics kinematics = new ArmKinematics(ArmConstants.SHOULDER_ARM_LENGTH, ArmConstants.ELBOW_ARM_LENGTH);
@@ -41,7 +40,7 @@ public class ArmReal implements ArmIO {
 
     private double ySetpoint = 0;
 
-    private ArmReal() {
+    private ArmIOReal() {
         shoulderMainMotor.
         shoulderMainMotor.configFactoryDefault();
         shoulderAuxMotor.configFactoryDefault();
@@ -77,7 +76,7 @@ public class ArmReal implements ArmIO {
      */
     public static Arm getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new ArmReal();
+            INSTANCE = new ArmIOReal();
         }
         return INSTANCE;
     }
