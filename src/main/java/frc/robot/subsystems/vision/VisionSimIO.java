@@ -52,7 +52,7 @@ public class VisionSimIO implements VisionIO {
 
     @Override
     public void updateInputs(VisionInputs inputs) {
-        var pose = SwerveDrive.getInstance(Robot.isReal()).getBotPose();
+        var pose = SwerveDrive.getInstance().getBotPose();
 
         latestResult = cameraSim.process(0, new Pose3d(pose).plus(robotToCam), visionTargetsSim);
         inputs.latency = (long) latestResult.getLatencyMillis();

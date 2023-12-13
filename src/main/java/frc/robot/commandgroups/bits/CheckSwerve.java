@@ -7,7 +7,7 @@ import swerve.SwerveDrive;
 
 public class CheckSwerve extends SequentialCommandGroup {
     public CheckSwerve() {
-        SwerveDrive swerveDrive = SwerveDrive.getInstance(Robot.isReal());
+        SwerveDrive swerveDrive = SwerveDrive.getInstance();
         addCommands(
                 new RunCommand(swerveDrive::checkSwerve, swerveDrive).withTimeout(5),
                 new ZeroPositionSwerve().withTimeout(2)
