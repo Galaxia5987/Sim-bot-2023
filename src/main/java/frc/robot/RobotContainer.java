@@ -27,7 +27,13 @@ public class RobotContainer {
     private static RobotContainer INSTANCE = null;
     private final Arm arm = Arm.getINSTANCE();
     private final Leds leds = Leds.getInstance();
-    private final SwerveDrive swerveDrive = SwerveDrive.getInstance(Robot.isReal());
+    static {
+        SwerveDrive.setInstance(Robot.isReal(),
+                Ports.SwerveDrive.DRIVE_IDS,
+                Ports.SwerveDrive.ANGLE_IDS,
+                Ports.SwerveDrive.ENCODER_IDS);
+    }
+    private final SwerveDrive swerveDrive = SwerveDrive.getInstance();
     private final Intake intake = Intake.getInstance();
     private final Gripper gripper = Gripper.getInstance();
     private final XboxController xboxController = new XboxController(0);
