@@ -17,6 +17,7 @@ import frc.robot.subsystems.arm.commands.ArmWithSpline;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.commands.HoldIntakeInPlace;
+import frc.robot.subsystems.intake.commands.IntakeKeyboardControl;
 import frc.robot.subsystems.intake.commands.ProximitySensorDefaultCommand;
 import frc.robot.subsystems.intake.commands.Retract;
 import frc.robot.subsystems.leds.Leds;
@@ -85,12 +86,12 @@ public class RobotContainer {
                 new XboxDrive(swerveDrive, xboxController)
         );
 //        arm.setDefaultCommand(new ArmXboxControl(xboxController));
-        intake.setDefaultCommand(new HoldIntakeInPlace());
+        intake.setDefaultCommand(new IntakeKeyboardControl());
         leds.setDefaultCommand(new ProximitySensorDefaultCommand());
     }
 
     private void configureButtonBindings() {
-        a.whileTrue(new RunCommand(()-> intake.setAngleMotorAngle(Math.PI)));
+      //  a.whileTrue(new RunCommand(()-> intake.setAngleMotorAngle(Math.PI)));
     }
 
     /**
