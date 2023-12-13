@@ -4,14 +4,16 @@ import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class IntakeLoggedInputs implements LoggableInputs {
-    public double spinMotorPower;
     public double setpointSpinMotorPower;
     public double setpointAngleMotorPower;
     public double setpointAngleMotorAngle;
+    public double angleMotorAppliedVoltage;
+    public double angleMotorAppliedCurrent;
     public double angleMotorPower;
     public double angleMotorAngle;
-    public double angleMotorcurrent;
-    public double spinMotorCurrent;
+    public double spinMotorPower;
+    public double spinMotorAppliedCurrent;
+    public double spinMotorAppliedVoltage;
     public double angleMotorVelocity;
 
 
@@ -26,7 +28,7 @@ public class IntakeLoggedInputs implements LoggableInputs {
         table.put("setpointAngleMotorAngle", setpointAngleMotorAngle);
         table.put("angleMotorAngle", angleMotorAngle);
         table.put("angleMotorVelocity", angleMotorVelocity);
-        table.put("angleMotorCurrent", angleMotorcurrent);
+        table.put("angleMotorCurrent", angleMotorAppliedCurrent);
         table.put("angleMotorPower", angleMotorPower);
     }
 

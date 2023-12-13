@@ -16,9 +16,11 @@ public class IntakeKeyboardControl extends Command {
     @Override
     public void execute() {
         if (controller.getRawButton(3)) {
+            System.out.println(controller.getRawButton(3));
             intake.setAngleMotorAngle(IntakeConstants.ANGLE_UP);
         }
         if (controller.getRawButton(4)) {
+            System.out.println(controller.getRawButton(4));
             intake.setAngleMotorAngle(IntakeConstants.ANGLE_DOWN);
         }
     }

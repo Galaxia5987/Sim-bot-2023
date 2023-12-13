@@ -1,5 +1,6 @@
 package frc.robot.subsystems.intake;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
 import edu.wpi.first.math.geometry.Translation2d;
 import utils.units.Units;
 
@@ -9,7 +10,8 @@ public class IntakeConstants {
     public static final double kP = 2;
     public static final double kI = 0;
     public static final double kD = 0.2;
-    public static final double kF = 0;
+    public static final double kF = 0; // not relevant anymore
+    public static final Slot0Configs PIDGains = new Slot0Configs().withKP(IntakeConstants.kP).withKI(IntakeConstants.kI).withKD(IntakeConstants.kD);
 
     public static final double FALCON_TICKS_PER_ROTATION = 2048;
     public static final double TICKS_PER_DEGREE = FALCON_TICKS_PER_ROTATION / 360 * ANGLE_GEAR_RATIO;
@@ -29,7 +31,4 @@ public class IntakeConstants {
     public static final double INTAKE_Y = 0.443;
     public static final double INTAKE_SIM_ANGLE_OFFSET = -44.8;
     public static final Translation2d ROOT_POSITION = new Translation2d(INTAKE_X, INTAKE_Y);
-    public static final double kP_SIM = 0;
-    public static final double kI_SIM = 0;
-    public static final double kD_SIM = 0;
 }
