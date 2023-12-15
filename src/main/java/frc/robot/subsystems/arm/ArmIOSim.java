@@ -58,8 +58,14 @@ public class ArmIOSim implements ArmIO {
         elbowController.setP(kP);
     }
 
+
     @Override
-    public void updateInputs() {
+    public String getSubsystemName() {
+        return "arm";
+    }
+
+    @Override
+    public void updateInputs(ArmInputsLogged inputs) {
         shoulder.update(0.02);
         elbow.update(0.02);
         inputs.shoulderAngle = shoulder.getAngleRads();
