@@ -8,6 +8,8 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import frc.robot.Constants;
 import frc.robot.Ports;
 
@@ -44,8 +46,8 @@ public class IntakeIOReal implements IntakeIO {
     }
 
     @Override
-    public void setAngleMotorAngle(double angle) {
-        motorControlReqeust = new PositionVoltage(angle);
+    public void setAngleMotorAngle(Rotation2d angle) {
+        motorControlReqeust = new PositionVoltage(angle.getRotations());
         angleMotor.setControl(motorControlReqeust);
     }
 
@@ -61,11 +63,13 @@ public class IntakeIOReal implements IntakeIO {
 
     @Override
     public void updateInputs(IntakeLoggedInputs inputs) {
+        var powerDistribution = new PowerDistribution(0, PowerDistribution.ModuleType.kRev);
+
         inputs.angleMotorAppliedVoltage = angleMotor.getMotorVoltage().getValue();
         inputs.angleMotorAppliedCurrent = angleMotor.getSupplyCurrent().getValue();
-        inputs.angleMotorPower = inputs.angleMotorAppliedVoltage / 12;
-        inputs.angleMotorAngle = angleMotor.getPosition().getValue();
-        inputs.angleMotorVelocity = angleMotor.getVelocity().getValue();
+        inputs.angleMotorPower = inputs.angleMotorAppliedVoltage / powerDistribution.getVoltage();
+        inputs.angleMotorAngle = Rotation2d.fromRotations(angleMotor.getPosition().getValue());
+        inputs.angleMotorVelocity = Rotation2d.fromRotations(angleMotor.getVelocity().getValue());
         inputs.spinMotorPower = spinMotor.getAppliedOutput();
         inputs.spinMotorAppliedCurrent = spinMotor.getOutputCurrent();
         inputs.spinMotorAppliedVoltage = spinMotor.getVoltageCompensationNominalVoltage();

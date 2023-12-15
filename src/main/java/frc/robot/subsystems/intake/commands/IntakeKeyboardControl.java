@@ -1,5 +1,6 @@
 package frc.robot.subsystems.intake.commands;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.intake.Intake;
@@ -17,11 +18,11 @@ public class IntakeKeyboardControl extends Command {
     public void execute() {
         if (controller.getRawButton(3)) {
             System.out.println(controller.getRawButton(3));
-            intake.setAngleMotorAngle(IntakeConstants.ANGLE_UP);
+            intake.setAngleMotorAngle(Rotation2d.fromDegrees(IntakeConstants.ANGLE_UP));
         }
         if (controller.getRawButton(4)) {
             System.out.println(controller.getRawButton(4));
-            intake.setAngleMotorAngle(IntakeConstants.ANGLE_DOWN);
+            intake.setAngleMotorAngle(Rotation2d.fromDegrees(IntakeConstants.ANGLE_DOWN));
         }
     }
 }

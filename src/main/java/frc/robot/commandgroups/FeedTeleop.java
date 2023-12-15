@@ -1,5 +1,6 @@
 package frc.robot.commandgroups;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.intake.Intake;
@@ -12,7 +13,7 @@ public class FeedTeleop extends ParallelCommandGroup {
 
         addCommands(
                 new Retract(Retract.Mode.DOWN)
-                        .andThen(new RunCommand(() -> intake.setAngleMotorAngle(IntakeConstants.ANGLE_DOWN))),
+                        .andThen(new RunCommand(() -> intake.setAngleMotorAngle(Rotation2d.fromDegrees(IntakeConstants.ANGLE_DOWN)))),
                 intake.run(outtake ? -IntakeConstants.INTAKE_POWER : IntakeConstants.INTAKE_POWER)
         );
     }

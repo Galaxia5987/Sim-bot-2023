@@ -1,6 +1,7 @@
 package frc.robot.subsystems.intake.commands;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.intake.Intake;
@@ -17,9 +18,9 @@ public class HoldIntakeInPlace extends Command {
     @Override
     public void execute() {
         if (intake.switchedToDefaultCommand() || Robot.justEnabled()) {
-            angle = intake.getAngleMotorAngle();
+            angle = intake.getAngleMotorAngle().getRadians();
             angle = MathUtil.clamp(angle, IntakeConstants.ANGLE_DOWN, IntakeConstants.ANGLE_UP);
         }
-        intake.setAngleMotorAngle(IntakeConstants.ANGLE_UP);
+        intake.setAngleMotorAngle(Rotation2d.fromDegrees( IntakeConstants.ANGLE_UP));
     }
 }

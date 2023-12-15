@@ -1,8 +1,8 @@
 package frc.robot.subsystems.intake;
 
-import com.ctre.phoenix.Util;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -72,21 +72,21 @@ public class Intake extends SubsystemBase {
         inputs.setpointSpinMotorPower = power;
     }
 
-    public double getAngleMotorAngle() {
+    public Rotation2d getAngleMotorAngle() {
         return inputs.angleMotorAngle;
     }
 
     /**
      * Sets the angles position.
      *
-     * @param angle is the angle of the retractor. [degrees]
+     * @param angleMotorAngle is the angle of the retractor. [degrees]
      */
-    public void setAngleMotorAngle(double angle) {
-        inputs.setpointAngleMotorAngle = Math.toRadians(angle);
+    public void setAngleMotorAngle(Rotation2d angleMotorAngle) {
+        inputs.setpointAngleMotorAngle = angleMotorAngle;
         angleMode = ControlMode.Position;
     }
 
-    private double getAngleMotorVelocity() {
+    private Rotation2d getAngleMotorVelocity() {
         return inputs.angleMotorVelocity;
     }
 
@@ -105,12 +105,12 @@ public class Intake extends SubsystemBase {
 
     public Command lowerIntake() {
         return new InstantCommand(() -> resetEncoder(IntakeConstants.ANGLE_UP), this)
-                .andThen(new RunCommand(() -> setAngleMotorAngle(-40), this));
+                .andThen(new RunCommand(() -> setAngleMotorAngle(Rotation2d.fromDegrees(-40)), this));
     }
 
     // You Jerk :) 😎
     // I'm gonna kill them all.
-    // All the jews must die
+    // All the juice must die
     public Command run(double power) {
         return new RunCommand(() -> this.setSpinMotorPower(power));
     }
@@ -132,10 +132,10 @@ public class Intake extends SubsystemBase {
                 !(lastCommand instanceof HoldIntakeInPlace);
         lastCommand = currentCommand;
 
-        intakeP1.setAngle(Math.toDegrees(getAngleMotorAngle()) + IntakeConstants.INTAKE_MECH_OFFSET);
+        intakeP1.setAngle(getAngleMotorAngle().getDegrees() + IntakeConstants.INTAKE_MECH_OFFSET);
 
 
-var intake3d=  getPose3d(getAngleMotorAngle() + IntakeConstants.INTAKE_SIM_ANGLE_OFFSET);
+        var intake3d = getPose3d(getAngleMotorAngle().getRadians() + Math.toRadians(IntakeConstants.INTAKE_SIM_ANGLE_OFFSET)); //TODO: ??!?!! check
         Logger.recordOutput("IntakePose", Utils.pose3dToArray(intake3d));
         Logger.processInputs("Intake", inputs);
         SmartDashboard.putData("IntakeMech", mech);

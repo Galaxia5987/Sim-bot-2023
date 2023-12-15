@@ -1,20 +1,21 @@
 package frc.robot.subsystems.intake;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class IntakeLoggedInputs implements LoggableInputs {
     public double setpointSpinMotorPower;
     public double setpointAngleMotorPower;
-    public double setpointAngleMotorAngle;
+    public Rotation2d setpointAngleMotorAngle = new Rotation2d();
     public double angleMotorAppliedVoltage;
     public double angleMotorAppliedCurrent;
     public double angleMotorPower;
-    public double angleMotorAngle;
+    public Rotation2d angleMotorAngle = new Rotation2d();
     public double spinMotorPower;
     public double spinMotorAppliedCurrent;
     public double spinMotorAppliedVoltage;
-    public double angleMotorVelocity;
+    public Rotation2d angleMotorVelocity = new Rotation2d();
 
 
     /**
@@ -25,9 +26,10 @@ public class IntakeLoggedInputs implements LoggableInputs {
         table.put("spinMotorPower", spinMotorPower);
         table.put("setpointSpinMotorPower", setpointSpinMotorPower);
         table.put("setpointAngleMotorPower", setpointAngleMotorPower);
-        table.put("setpointAngleMotorAngle", setpointAngleMotorAngle);
-        table.put("angleMotorAngle", angleMotorAngle);
-        table.put("angleMotorVelocity", angleMotorVelocity);
+        table.put("setpointAngleMotorAngle", setpointAngleMotorAngle.getDegrees());
+
+        table.put("angleMotorAngle", angleMotorAngle.getDegrees());
+        table.put("angleMotorVelocity", angleMotorVelocity.getDegrees());
         table.put("angleMotorCurrent", angleMotorAppliedCurrent);
         table.put("angleMotorPower", angleMotorPower);
     }
@@ -37,8 +39,8 @@ public class IntakeLoggedInputs implements LoggableInputs {
      */
     @Override
     public void fromLog(LogTable table) {
-        spinMotorPower = table.getDouble("power", spinMotorPower);
-        angleMotorAngle = table.getDouble("angle", angleMotorAngle);
-        angleMotorVelocity = table.getDouble("velocity", angleMotorVelocity);
+        spinMotorPower = table.get("power", spinMotorPower);
+        angleMotorAngle = table.get("angle", angleMotorAngle);
+        angleMotorVelocity = table.get("velocity", angleMotorVelocity);
     }
 }
