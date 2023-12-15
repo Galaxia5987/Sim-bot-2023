@@ -1,5 +1,6 @@
 package frc.robot.subsystems.arm;
 
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -45,6 +46,8 @@ public class ArmConstants {
     public static final double END_POSITION_LOWER_X_LIMIT = 0; //[cm]
     public static final double SHOULDER_ABSOLUTE_ENCODER_OFFSET = 0.4090 - SHOULDER_ZERO_POSITION / 360.0;
     public static final double ELBOW_ABSOLUTE_ENCODER_OFFSET = 0.57396956434 - ELBOW_ZERO_POSITION / 360.0;
+    public static final SupplyCurrentLimitConfiguration CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(true, 50, 0, 0);
+
 
     //PID
     public static final double shoulderP = 4.0;
