@@ -2,7 +2,7 @@ package frc.robot.subsystems.intake;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
 import edu.wpi.first.math.geometry.Translation2d;
-import utils.units.Units;
+import lib.units.Units;
 
 public class IntakeConstants {
     public static final double ANGLE_GEAR_RATIO = 35.26;

@@ -6,7 +6,7 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Timer;
-import utils.motors.TalonFXSim;
+import lib.motors.TalonFXSim;
 
 public class IntakeIOSim implements IntakeIO {
     private final TalonFXSim angleMotorSim;
@@ -56,8 +56,8 @@ public class IntakeIOSim implements IntakeIO {
         inputs.angleMotorPower = angleMotorSim.getAppliedVoltage() / 12;
         inputs.angleMotorAppliedCurrent = angleMotorSim.getAppliedCurrent();
         inputs.angleMotorAppliedVoltage = angleMotorSim.getAppliedVoltage();
-        inputs.angleMotorVelocity = Rotation2d.fromRotations(angleMotorSim.getRotorVelocity());
-        inputs.angleMotorAngle = Rotation2d.fromRotations(angleMotorSim.getRotorPosition());
+        inputs.angleMotorVelocity = Rotation2d.fromRotations(angleMotorSim.getVelocity());
+        inputs.angleMotorAngle = Rotation2d.fromRotations(angleMotorSim.getPosition());
         inputs.spinMotorAppliedCurrent = powerMotorSim.getAppliedVoltage();
         inputs.spinMotorPower = powerMotorSim.getAppliedVoltage() / 12;
 

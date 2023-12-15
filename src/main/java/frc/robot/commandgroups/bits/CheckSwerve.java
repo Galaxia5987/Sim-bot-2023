@@ -3,7 +3,7 @@ package frc.robot.commandgroups.bits;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
-import swerve.SwerveDrive;
+import frc.robot.swerve.SwerveDrive;
 
 public class CheckSwerve extends SequentialCommandGroup {
     public CheckSwerve() {

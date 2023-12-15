@@ -3,42 +3,36 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commandgroups.PickUpCubeTeleop;
-import frc.robot.commandgroups.ReturnIntake;
 import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.arm.ArmConstants;
-import frc.robot.subsystems.arm.ArmPosition;
-import frc.robot.subsystems.arm.commands.ArmAxisControl;
-import frc.robot.subsystems.arm.commands.ArmWithSpline;
 import frc.robot.subsystems.gripper.Gripper;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.commands.HoldIntakeInPlace;
-import frc.robot.subsystems.intake.commands.IntakeKeyboardControl;
 import frc.robot.subsystems.intake.commands.ProximitySensorDefaultCommand;
 import frc.robot.subsystems.intake.commands.Retract;
 import frc.robot.subsystems.leds.Leds;
-import swerve.SwerveDrive;
-import swerve.commands.XboxDrive;
-import utils.Utils;
+import frc.robot.swerve.SwerveDrive;
+import frc.robot.swerve.commands.XboxDrive;
+import lib.Utils;
 
 
 public class RobotContainer {
     private static RobotContainer INSTANCE = null;
-    private final Arm arm = Arm.getINSTANCE();
-    private final Leds leds = Leds.getInstance();
+
     static {
         SwerveDrive.setInstance(Robot.isReal(),
                 Ports.SwerveDrive.DRIVE_IDS,
                 Ports.SwerveDrive.ANGLE_IDS,
                 Ports.SwerveDrive.ENCODER_IDS);
     }
+
+//    private final Arm arm = Arm.getINSTANCE();
+    private final Leds leds = Leds.getInstance();
     private final SwerveDrive swerveDrive = SwerveDrive.getInstance();
     private final Intake intake = Intake.getInstance();
-    private final Gripper gripper = Gripper.getInstance();
+//    private final Gripper gripper = Gripper.getInstance();
     private final XboxController xboxController = new XboxController(0);
     private final Joystick leftJoystick = new Joystick(1);
     private final Joystick rightJoystick = new Joystick(2);
@@ -86,12 +80,16 @@ public class RobotContainer {
                 new XboxDrive(swerveDrive, xboxController)
         );
 //        arm.setDefaultCommand(new ArmXboxControl(xboxController));
-        intake.setDefaultCommand(new IntakeKeyboardControl());
+        intake.setDefaultCommand(new HoldIntakeInPlace());
         leds.setDefaultCommand(new ProximitySensorDefaultCommand());
     }
 
     private void configureButtonBindings() {
-      //  a.whileTrue(new RunCommand(()-> intake.setAngleMotorAngle(Math.PI)));
+        a.whileTrue(new RunCommand(()-> intake.setSpinMotorPower(0.5)));
+        b.whileTrue(new RunCommand(()-> intake.setSpinMotorPower(-0.5)));
+        x.whileTrue(new RunCommand(()-> intake.setAnglePower(0.5)));
+        y.whileTrue(new RunCommand(()-> intake.setAnglePower(-0.5)));
+
     }
 
     /**

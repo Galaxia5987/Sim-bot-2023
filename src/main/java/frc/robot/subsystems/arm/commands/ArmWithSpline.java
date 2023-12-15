@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmPosition;
-import utils.math.Vector2;
-import utils.math.spline.QuinticBezierSpline;
+import lib.math.Vector2;
+import lib.math.spline.QuinticBezierSpline;
 
 public class ArmWithSpline extends Command {
 

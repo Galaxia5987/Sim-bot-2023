@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.intake.commands.HoldIntakeInPlace;
 import org.littletonrobotics.junction.Logger;
-import utils.Utils;
+import lib.Utils;
 
 public class Intake extends SubsystemBase {
     private static Intake INSTANCE;
