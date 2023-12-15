@@ -23,7 +23,7 @@ public class ArmInputsLogged implements LoggableInputs {
     public double shoulderAcceleration;
     public double elbowAcceleration;
     public Rotation2d shoulderError;
-    public double elbowError;
+    public Rotation2d elbowError;
     public double shoulderOutputVoltage;
     public double elbowOutputVoltage;
     public double[] finalSetpointAngles;

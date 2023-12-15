@@ -5,6 +5,7 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface ArmIO {
 
+
     ArmKinematics armKinematics = new ArmKinematics(ArmConstants.SHOULDER_LENGTH, ArmConstants.ELBOW_LENGTH);
 
     default void setShoulderPower(double power) {
@@ -28,6 +29,10 @@ public interface ArmIO {
 
     default void updateInputs() {
     }
+
+    String getSubsystemName();
+
+    void updateInputs(ArmInputsLogged inputs);
 
     enum ControlMode {
         PRECENT_OUTPUT,
