@@ -13,15 +13,19 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import frc.robot.Constants;
 import frc.robot.Ports;
 
+import javax.swing.text.Position;
+
 
 public class IntakeIOReal implements IntakeIO {
 
 
     private final CANSparkMax spinMotor = new CANSparkMax(Ports.Intake.INTAKE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
-    private final TalonFX angleMotor = new TalonFX(0);
+    private final TalonFX angleMotor = new TalonFX(21);
     private final TalonFXConfigurator angleConfigurator;
     private TalonFXConfiguration angleConfiguration = new TalonFXConfiguration();
-    private ControlRequest motorControlReqeust = null;
+
+    private final DutyCycleOut dutyCycleRequest = new DutyCycleOut(0);
+    private final PositionVoltage positionRequest = new PositionVoltage(0);
 
     public IntakeIOReal() {
         angleConfiguration.Feedback.SensorToMechanismRatio = IntakeConstants.ANGLE_GEAR_RATIO;
@@ -38,7 +42,9 @@ public class IntakeIOReal implements IntakeIO {
             spinMotor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.fromId(i), 50000);
         }
         spinMotor.burnFlash();
+        System.out.println(angleMotor);
     }
+
 
     @Override
     public void setSpinMotorPower(double power) {
@@ -47,14 +53,12 @@ public class IntakeIOReal implements IntakeIO {
 
     @Override
     public void setAngleMotorAngle(Rotation2d angle) {
-        motorControlReqeust = new PositionVoltage(angle.getRotations());
-        angleMotor.setControl(motorControlReqeust);
+        angleMotor.setControl(positionRequest.withPosition(angle.getRotations()).withEnableFOC(true));
     }
 
     @Override
     public void setAngleMotorPower(double power) {
-        motorControlReqeust = new DutyCycleOut(power);
-        angleMotor.setControl(motorControlReqeust);
+        angleMotor.setControl(dutyCycleRequest.withOutput(power).withEnableFOC(true));
     }
 
     @Override
