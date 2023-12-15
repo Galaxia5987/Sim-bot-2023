@@ -18,6 +18,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class Arm extends SubsystemBase {
     private static Arm INSTANCE;
+    private final ArmInputsLogged inputs = new ArmInputsLogged();
     private final ArmIO io;
     private final Mechanism2d mechanism = new Mechanism2d(
             3, 3
@@ -27,24 +28,24 @@ public class Arm extends SubsystemBase {
             new MechanismLigament2d("Shoulder", ArmConstants.SHOULDER_LENGTH, 0)
     );
     private final MechanismLigament2d elbow = shoulder.append(
-            new MechanismLigament2d("Elbow", ArmConstants.ELBOW_LENGTH, 0, 10, new Color8Bit(Color.kPurple))
+            new MechanismLigament2d("Elbow", ArmConstants.ELBOW_LENGTH, 0)
     );
     private Command lastCommand = null;
     private Command currentCommand = null;
     private boolean changedToDefaultCommand = false;
 
-    private Arm(ArmIO io) {
-        this.io = io;
+
+    private Arm() {
+        if (Robot.isReal()) {
+            io = new ArmIOReal();
+        } else {
+            io = new ArmIOReal();
+        }
     }
 
     public static Arm getINSTANCE() {
         if (INSTANCE == null) {
-            if (Robot.isReal()) {
-                INSTANCE = new Arm(new ArmIOSim(inputs));
-
-            } else {
-                INSTANCE = new Arm(new ArmIOSim(inputs));
-            }
+            INSTANCE = new Arm();
         }
         return INSTANCE;
     }
@@ -93,7 +94,7 @@ public class Arm extends SubsystemBase {
         return ArmIO.armKinematics.forwardKinematics(shoulderAngle, shoulderAngle + elbowAngle - Math.PI);
     }
 
-    public ArmIO.ArmInputs getInputs() {
+    public ArmInputsLogged getInputs() {
         return inputs;
     }
 
