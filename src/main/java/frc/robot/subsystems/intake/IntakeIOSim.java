@@ -17,7 +17,7 @@ public class IntakeIOSim implements IntakeIO {
     public IntakeIOSim() {
         angleConfiguration = new TalonFXConfiguration();
 
-        angleMotorSim = new TalonFXSim(1, 1, 0.00001);
+        angleMotorSim = new TalonFXSim(1, IntakeConstants.ANGLE_GEAR_RATIO, 0.00001);
         powerMotorSim = new TalonFXSim(1, 1, 0.00001);
         angleMotorSim.setController(angleController);
 
@@ -33,7 +33,7 @@ public class IntakeIOSim implements IntakeIO {
 
     @Override
     public void setAngleMotorAngle(Rotation2d angle) {
-        angleMotorSim.setControl(new PositionVoltage(angle.getRotations() * IntakeConstants.ANGLE_GEAR_RATIO));
+        angleMotorSim.setControl(new PositionVoltage(angle.getRotations()));
     }
 
     @Override
@@ -56,8 +56,8 @@ public class IntakeIOSim implements IntakeIO {
         inputs.angleMotorPower = angleMotorSim.getAppliedVoltage() / 12;
         inputs.angleMotorAppliedCurrent = angleMotorSim.getAppliedCurrent();
         inputs.angleMotorAppliedVoltage = angleMotorSim.getAppliedVoltage();
-        inputs.angleMotorVelocity = Rotation2d.fromRotations(angleMotorSim.getRotorVelocity() / IntakeConstants.ANGLE_GEAR_RATIO);
-        inputs.angleMotorAngle = Rotation2d.fromRotations(angleMotorSim.getRotorPosition() / IntakeConstants.ANGLE_GEAR_RATIO);
+        inputs.angleMotorVelocity = Rotation2d.fromRotations(angleMotorSim.getRotorVelocity());
+        inputs.angleMotorAngle = Rotation2d.fromRotations(angleMotorSim.getRotorPosition());
         inputs.spinMotorAppliedCurrent = powerMotorSim.getAppliedVoltage();
         inputs.spinMotorPower = powerMotorSim.getAppliedVoltage() / 12;
 

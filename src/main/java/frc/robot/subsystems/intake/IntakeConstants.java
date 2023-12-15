@@ -7,7 +7,7 @@ import utils.units.Units;
 public class IntakeConstants {
     public static final double ANGLE_GEAR_RATIO = 35.26;
     public static final double SPIN_GEAR_RATIO = 10; //Not a real value
-    public static final double kP = 0.1;
+    public static final double kP = 0.1*ANGLE_GEAR_RATIO;
     public static final double kI = 0;
     public static final double kD = 0;
     public static final double kF = 0; // not relevant anymore
