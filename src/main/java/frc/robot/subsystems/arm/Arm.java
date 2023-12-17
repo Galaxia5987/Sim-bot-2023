@@ -8,8 +8,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -18,7 +16,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class Arm extends SubsystemBase {
     private static Arm INSTANCE;
-    private final ArmInputsLogged inputs = new ArmInputsLogged();
+    private final ArmInputs inputs = new ArmInputs();
     private final ArmIO io;
     private final Mechanism2d mechanism = new Mechanism2d(
             3, 3
@@ -94,7 +92,7 @@ public class Arm extends SubsystemBase {
         return ArmIO.armKinematics.forwardKinematics(shoulderAngle, shoulderAngle + elbowAngle - Math.PI);
     }
 
-    public ArmInputsLogged getInputs() {
+    public ArmInputs getInputs() {
         return inputs;
     }
 
