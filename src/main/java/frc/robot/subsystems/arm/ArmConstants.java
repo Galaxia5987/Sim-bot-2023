@@ -2,6 +2,10 @@ package frc.robot.subsystems.arm;
 
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.Slot1Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 
@@ -35,8 +39,28 @@ public class ArmConstants {
     public static final double TICKS_PER_RADIAN_SHOULDER = SHOULDER_FALCON_TICKS_PER_REVOLUTION / (Math.PI * 2);
     public static final double ELBOW_FALCON_TICKS_PER_REVOLUTION = 2048 * ELBOW_GEARING;
     public static final double TICKS_PER_RADIAN_ELBOW = ELBOW_FALCON_TICKS_PER_REVOLUTION / (Math.PI * 2);
-    public static final TalonFXInvertType MAIN_CLOCKWISE = TalonFXInvertType.Clockwise;
+    public static final boolean MAIN_CLOCKWISE = true;
     public static final TalonFXInvertType AUX_CLOCKWISE = TalonFXInvertType.Clockwise;
+    public static final TalonFXConfiguration shoulderMainMotorConfig = new TalonFXConfiguration();
+    public static final TalonFXConfiguration shoulderAuxMotorConfig = new TalonFXConfiguration();
+    public static final TalonFXConfiguration elbowMainMotorConfig = new TalonFXConfiguration();
+    public static final TalonFXConfiguration elbowAuxMotorConfig = new TalonFXConfiguration();
+
+    public static final Slot0Configs SHOULDER_PID= new Slot0Configs()
+                .withKP(ArmConstants.shoulderP)
+                .withKI(ArmConstants.shoulderI)
+                .withKD(ArmConstants.shoulderD);
+
+    public static final Slot1Configs ELBOW_PID = new Slot1Configs()
+                .withKP(ArmConstants.elbowP)
+                .withKI(ArmConstants.elbowI)
+                .withKD(ArmConstants.elbowD);
+
+    public static final double SENSOR_TO_MECHANISM_RATIO= 1;
+    public static final double ROTOR_TO_SENSOR_RATIO= 1;
+
+
+
 
     public static final double ELBOW_ZERO_POSITION = 360 - 53.33; //[degrees]
     public static final double SHOULDER_ZERO_POSITION = 180 - 65.53; //[degrees]
@@ -46,7 +70,7 @@ public class ArmConstants {
     public static final double END_POSITION_LOWER_X_LIMIT = 0; //[cm]
     public static final double SHOULDER_ABSOLUTE_ENCODER_OFFSET = 0.4090 - SHOULDER_ZERO_POSITION / 360.0;
     public static final double ELBOW_ABSOLUTE_ENCODER_OFFSET = 0.57396956434 - ELBOW_ZERO_POSITION / 360.0;
-    public static final SupplyCurrentLimitConfiguration CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(true, 50, 0, 0);
+    public static final double CURRENT_LIMIT = 10;
 
 
     //PID
