@@ -7,14 +7,14 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 public class ArmIOSim implements ArmIO {
-    private final ArmInputsLogged inputs;
+    private final ArmInputs inputs;
     private final SingleJointedArmSim shoulder;
     private final SingleJointedArmSim elbow;
     private final PIDController shoulderController = new PIDController(ArmConstants.shoulderP, ArmConstants.shoulderI, ArmConstants.shoulderD, 0.02);
     private final PIDController elbowController = new PIDController(ArmConstants.elbowP, ArmConstants.elbowI, ArmConstants.elbowD, 0.02);
     private final double angleCalculated = 0;
 
-    public ArmIOSim(ArmInputsLogged inputs) {
+    public ArmIOSim(ArmInputs inputs) {
         this.inputs = inputs;
         shoulder = new SingleJointedArmSim(LinearSystemId.createSingleJointedArmSystem(
                 DCMotor.getFalcon500(2), ArmConstants.SHOULDER_MOMENT_OF_INERTIA, ArmConstants.SHOULDER_GEARING
@@ -38,7 +38,6 @@ public class ArmIOSim implements ArmIO {
     public void setShoulderAngle(double angle) {
         inputs.shoulderAppliedVoltage = shoulderController.calculate(inputs.shoulderAngle, angle);
         shoulder.setInputVoltage(inputs.shoulderAppliedVoltage);
-
     }
 
     @Override
@@ -65,7 +64,7 @@ public class ArmIOSim implements ArmIO {
     }
 
     @Override
-    public void updateInputs(ArmInputsLogged inputs) {
+    public void updateInputs(ArmInputs inputs) {
         shoulder.update(0.02);
         elbow.update(0.02);
         inputs.shoulderAngle = shoulder.getAngleRads();

@@ -32,7 +32,7 @@ public interface ArmIO {
 
     String getSubsystemName();
 
-    void updateInputs(ArmInputsLogged inputs);
+    void updateInputs(ArmInputs inputs);
 
     enum ControlMode {
         PRECENT_OUTPUT,

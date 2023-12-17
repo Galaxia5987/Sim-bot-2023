@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
-public class ArmInputsLogged implements LoggableInputs {
+public class ArmInputs implements LoggableInputs {
 
     public double shoulderAngle;
     public double elbowAngle;
