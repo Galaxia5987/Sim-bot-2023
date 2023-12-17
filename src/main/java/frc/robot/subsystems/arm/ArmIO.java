@@ -1,10 +1,10 @@
 package frc.robot.subsystems.arm;
 
 import edu.wpi.first.math.geometry.Translation2d;
-import org.littletonrobotics.junction.AutoLog;
 
 public interface ArmIO {
-
+    double currentShoulderAngle = 0;
+    double currentElbowAngle = 0;
 
     ArmKinematics armKinematics = new ArmKinematics(ArmConstants.SHOULDER_LENGTH, ArmConstants.ELBOW_LENGTH);
 
