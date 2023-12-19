@@ -45,6 +45,10 @@ public class ArmConstants {
     public static final TalonFXConfiguration shoulderAuxMotorConfig = new TalonFXConfiguration();
     public static final TalonFXConfiguration elbowMainMotorConfig = new TalonFXConfiguration();
     public static final TalonFXConfiguration elbowAuxMotorConfig = new TalonFXConfiguration();
+    public static final double SHOULDER_FEED_FORWARD_MULTIPLIER = 0;
+    public static final double ELBOW_FEED_FORWARD_MULTIPLIER = 0;
+    public static final int SHOULDER_VELOCITY = 0;
+    public static final int ELBOW_VELOCITY = 0;
 
     public static final Slot0Configs SHOULDER_PID= new Slot0Configs()
                 .withKP(ArmConstants.shoulderP)

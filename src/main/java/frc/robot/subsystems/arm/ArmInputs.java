@@ -26,7 +26,7 @@ public class ArmInputs implements LoggableInputs {
     public Rotation2d elbowError;
     public double shoulderOutputVoltage;
     public double elbowOutputVoltage;
-    public double[] finalSetpointAngles;
+    public Translation2d finalSetpointAngles;
     public double ySetpoint;
     public double xSetpoint;
     public double shoulderAngleSetPoint = 0;

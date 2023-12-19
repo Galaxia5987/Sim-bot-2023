@@ -4,10 +4,7 @@ package frc.robot.subsystems.arm;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.ControlRequest;
-import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.controls.StrictFollower;
+import com.ctre.phoenix6.controls.*;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -51,6 +48,7 @@ public class ArmIOReal implements ArmIO {
 
 
     ArmIOReal() {
+
         this.shoulderEncoder = new DutyCycleEncoder(Ports.ArmPorts.SHOULDER_ENCODER);
         this.elbowEncoder = new DutyCycleEncoder(Ports.ArmPorts.ELBOW_ENCODER);
 
@@ -91,6 +89,7 @@ public class ArmIOReal implements ArmIO {
 
         elbowMainMotor.setNeutralMode(NeutralModeValue.Brake);
         elbowMainMotor.setInverted(MAIN_CLOCKWISE);
+
     }
 
     /**
@@ -139,7 +138,7 @@ public class ArmIOReal implements ArmIO {
      * @param angle desired angle. [degrees]
      */
     public void setShoulderJointAngle(Rotation2d angle) {
-        setShoulderJointAngle(angle.getRadians(), 0, 0);
+        setShoulderJointAngle(angle.getRadians(), SHOULDER_FEED_FORWARD_MULTIPLIER, SHOULDER_VELOCITY);
     }
 
 
@@ -148,8 +147,9 @@ public class ArmIOReal implements ArmIO {
         Rotation2d error = new Rotation2d(angle).minus(new Rotation2d(currentShoulderAngle));
         if (shoulderEncoder.isConnected()) {
             motorControlRequest = new PositionVoltage(angle);
-            shoulderMainMotor.setControl(new PositionVoltage(angle, velocity, true, shoulderFeedforward * ffMultiplier, 0, true));
-
+            shoulderMainMotor.setControl(new PositionDutyCycle(angle, velocity, true,
+                    shoulderFeedforward * ffMultiplier, 0, true)
+                    .withEnableFOC(true));
         } else {
             shoulderMainMotor.stopMotor();
         }
@@ -170,7 +170,7 @@ public class ArmIOReal implements ArmIO {
      * @param angle desired angle. [degrees]
      */
     public void setElbowJointAngle(Rotation2d angle) {
-        setElbowJointAngle(angle.getRadians(), 0, 0);
+        setElbowJointAngle(angle.getRadians(), ELBOW_FEED_FORWARD, ELBOW_VELOCITY);
     }
 
     /**
@@ -183,8 +183,9 @@ public class ArmIOReal implements ArmIO {
         Rotation2d error = new Rotation2d(angle).minus(new Rotation2d(currentShoulderAngle));
         if (elbowEncoder.isConnected()) {
             motorControlRequest = new PositionVoltage(angle);
-            elbowMainMotor.setControl(new PositionVoltage(angle, velocity, true, shoulderFeedforward * ffMultiplier, 1, true));
-
+            elbowMainMotor.setControl(new PositionDutyCycle(angle, velocity, true,
+                    elbowFeedforward * ffMultiplier, 1, true)
+                    .withEnableFOC(true));
         } else {
             elbowMainMotor.stopMotor();
         }
@@ -196,9 +197,9 @@ public class ArmIOReal implements ArmIO {
      * @return Translation2d of the position.
      */
     public Translation2d getEndPosition() {
-        double shoulderAngle = getShoulderJointAngle().getRadians();
-        double elbowAngle = getElbowJointAngle().getRadians();
-        return kinematics.forwardKinematics(shoulderAngle, shoulderAngle + elbowAngle - Math.PI);
+        Rotation2d shoulderAngle = getShoulderJointAngle();
+        Rotation2d elbowAngle = getElbowJointAngle();
+        return kinematics.forwardKinematics(shoulderAngle.getRadians(),shoulderAngle.getRadians() + elbowAngle.getRadians() - Math.PI);
     }
 
     /**
@@ -233,8 +234,7 @@ public class ArmIOReal implements ArmIO {
 
     public void setFinalSetpointAngles(Translation2d position, ArmInputs inputs) {
         var solution = kinematics.inverseKinematics(position);
-        inputs.finalSetpointAngles[0] = Math.toDegrees(solution.shoulderAngle);
-        inputs.finalSetpointAngles[1] = Math.toDegrees(solution.elbowAngle);
+        inputs.finalSetpointAngles = new Translation2d( Math.toDegrees(solution.shoulderAngle), Math.toDegrees(solution.elbowAngle));
     }
 
     /**
@@ -255,9 +255,10 @@ public class ArmIOReal implements ArmIO {
 
     public Translation2d getElbowJointPosition() {
         Rotation2d shoulderAngle = getShoulderJointAngle();
-        return new Translation2d(
-                ArmConstants.SHOULDER_ARM_LENGTH * shoulderAngle.getCos(),
-                ArmConstants.SHOULDER_ARM_LENGTH * shoulderAngle.getSin());
+                return new Translation2d(
+                        SHOULDER_ARM_LENGTH,
+                        shoulderAngle
+                );
     }
 
     public boolean armIsOutOfFrame() {
