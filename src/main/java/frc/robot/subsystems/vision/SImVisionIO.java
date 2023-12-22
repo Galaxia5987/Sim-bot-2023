@@ -1,28 +1,33 @@
 package frc.robot.subsystems.vision;
 
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import frc.robot.swerve.SwerveDrive;
+import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
-import org.photonvision.SimPhotonCamera;
-import org.photonvision.SimVisionSystem;
-import swerve.SwerveDrive;
+import org.photonvision.simulation.PhotonCameraSim;
+import org.photonvision.simulation.SimCameraProperties;
+import org.photonvision.simulation.VisionSystemSim;
 
-public class SImVisionIO implements VisionIO{
-    private SimPhotonCamera simCamera;
+public class SImVisionIO implements VisionIO {
     private final PhotonPoseEstimator estimator;
-    private SimVisionSystem coprocessorSim;
-    private SImVisionIO(){
-        simCamera = new SimPhotonCamera(simCamera.getCameraTable().getInstance() , "simCam");
-        coprocessorSim = new SimVisionSystem("simCam", 0,0, new Transform2d(VisionConstants.ROBOT_TO_CAM[2].getTranslation().toTranslation2d(), VisionConstants.ROBOT_TO_CAM[2].getTranslation().toTranslation2d().getAngle()), VisionConstants.ROBOT_TO_CAM[2].getZ(), 10000, 54, 41, 0);
+    private VisionSystemSim coprocessorSim;
+    private PhotonCameraSim simCamera;
+
+    private SImVisionIO(int camIndex) {
+        var cameraProp = new SimCameraProperties();
+        cameraProp.setCalibration(1600, 1200, Rotation2d.fromDegrees(90));
+        simCamera = new PhotonCameraSim(new PhotonCamera("simCam"), cameraProp);
+        coprocessorSim = new VisionSystemSim("simCamSys");
+        coprocessorSim.addCamera(simCamera, VisionConstants.ROBOT_TO_CAM[camIndex]);
 
         try {
             estimator = new PhotonPoseEstimator(
                     AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField(),
                     PhotonPoseEstimator.PoseStrategy.AVERAGE_BEST_TARGETS,
-                    simCamera,
+                    simCamera.getCamera(),
                     VisionConstants.ROBOT_TO_CAM[2]
             );
         } catch (Exception e) {
@@ -31,38 +36,28 @@ public class SImVisionIO implements VisionIO{
     }
 
 
-
-
-
-
-
-
     @Override
     public void setPipeLine(int pipeLineIndex) {
-
+        simCamera.getCamera().setPipelineIndex(pipeLineIndex);
     }
 
     @Override
     public Result getLatestResult() {
-        return null;
+        return new Result(simCamera.getCamera().getLatestResult().getTimestampSeconds(), new Pose3d(simCamera.getCamera().getLatestResult().getBestTarget().getBestCameraToTarget().getTranslation(),simCamera.getCamera().getLatestResult().getBestTarget().getBestCameraToTarget().getRotation()));
     }
 
     @Override
     public void updateInputs(VisionInputs inputs) {
-        for (int i = 1; i < VisionConstants.TARGET_POSITION_SIM.length; i++) {
-            coprocessorSim.addSimVisionTarget(VisionConstants.SIM_VISION_TARGETS[i]);
-            coprocessorSim.processFrame(SwerveDrive.getInstance(false).getBotPose());
-        }
-       estimator.update(SwerveDrive.getInstance(false).getRotation2d(), leftDist, rightDist);
 
-        var res = cam.getLatestResult();
-        if (res.hasTargets()) {
-            var imageCaptureTime = res.getTimestampSeconds();
-            var camToTargetTrans = res.getBestTarget().getBestCameraToTarget();
-            var camPose = Constants.kFarTargetPose.transformBy(camToTargetTrans.inverse());
-            m_poseEstimator.addVisionMeasurement(
-                    camPose.transformBy(Constants.kCameraToRobot).toPose2d(), imageCaptureTime);
+        for (int i = 1; i < VisionConstants.TARGET_POSITION_SIM.length; i++) {
+            coprocessorSim.addVisionTargets(VisionConstants.SIM_VISION_TARGETS[i]);
+            coprocessorSim.update(SwerveDrive.getInstance().getBotPose());
         }
+        estimator.update();
+
+
 
     }
+
+}
 }
