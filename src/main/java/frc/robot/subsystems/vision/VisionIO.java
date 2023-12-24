@@ -1,9 +1,5 @@
 package frc.robot.subsystems.vision;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import frc.robot.Robot;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface VisionIO {
@@ -11,7 +7,7 @@ public interface VisionIO {
 
     void setPipeLine(int pipeLineIndex);
 
-    void updateInputs(VisionInputs inputs);
+    void updateInputs(VisionInputsAutoLogged inputs);
 
     Result getLatestResult();
 

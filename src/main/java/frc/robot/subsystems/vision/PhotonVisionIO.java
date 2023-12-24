@@ -1,6 +1,5 @@
 package frc.robot.subsystems.vision;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Transform3d;
 import org.photonvision.PhotonCamera;
@@ -35,7 +34,7 @@ public class PhotonVisionIO implements VisionIO {
     }
 
     @Override
-    public void updateInputs(VisionInputs inputs) {
+    public void updateInputs(VisionInputsAutoLogged inputs) {
         var latestResult = camera.getLatestResult();
         for (int i = 0; i < latestResult.targets.size(); i++) {
         }
