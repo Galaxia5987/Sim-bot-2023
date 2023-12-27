@@ -2,6 +2,7 @@ package frc.robot.subsystems.arm;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
@@ -44,7 +45,7 @@ public class ArmInputs implements LoggableInputs {
     ArmIO.ControlMode elbowControlMode;
 
 
-    @Override
+    
     public void toLog(LogTable table) {
         table.put("shoulderAngle", shoulderAngle);
         table.put("elbowAngle", elbowAngle);
