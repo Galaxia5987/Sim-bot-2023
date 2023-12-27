@@ -38,7 +38,6 @@ public class ArmIOSim implements ArmIO {
     public void setShoulderAngle(double angle) {
         inputs.shoulderAppliedVoltage = shoulderController.calculate(inputs.shoulderAngle, angle);
         shoulder.setInputVoltage(inputs.shoulderAppliedVoltage);
-
     }
 
     @Override
@@ -58,8 +57,14 @@ public class ArmIOSim implements ArmIO {
         elbowController.setP(kP);
     }
 
+
     @Override
-    public void updateInputs() {
+    public String getSubsystemName() {
+        return "arm";
+    }
+
+    @Override
+    public void updateInputs(ArmInputs inputs) {
         shoulder.update(0.02);
         elbow.update(0.02);
         inputs.shoulderAngle = shoulder.getAngleRads();

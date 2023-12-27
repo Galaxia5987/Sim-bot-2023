@@ -25,7 +25,7 @@ public enum ArmPosition {
         this.conePose = conePose;
     }
 
-    public ArmPosition nextState(ArmIO.ArmInputs armInputs, ArmPosition desiredPosition) {
+    public ArmPosition nextState(ArmInputs armInputs, ArmPosition desiredPosition) {
         switch (desiredPosition) {
             case FEEDER:
                 if (armInputs.endEffectorPose.getY() < 0.2 && armInputs.endEffectorPose.getX() < 0) {
@@ -63,7 +63,7 @@ public enum ArmPosition {
         }
     }
 
-    public QuinticBezierSpline getSpline(ArmIO.ArmInputs inputs, ArmPosition desiredPosition) {
+    public QuinticBezierSpline getSpline(ArmInputs inputs, ArmPosition desiredPosition) {
         var middleMan = desiredPosition.nextState(inputs, desiredPosition);
         Translation2d middlePose2, middlePose1;
         if (middleMan == NEUTRAL && desiredPosition != NEUTRAL) {
