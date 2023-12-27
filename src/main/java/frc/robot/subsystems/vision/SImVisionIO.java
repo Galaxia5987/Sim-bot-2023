@@ -49,7 +49,7 @@ public class SImVisionIO implements VisionIO {
     }
 
     @Override
-    public void updateInputs(VisionInputsAutoLogged inputs) {
+    public void updateInputs(VisionInputsLogged inputs) {
 
         for (int i = 1; i < VisionConstants.TARGET_POSITION_SIM.length; i++) {
             coprocessorSim.addVisionTargets(VisionConstants.SIM_VISION_TARGETS[i]);

@@ -18,7 +18,6 @@ public class PhotonVisionIO implements VisionIO {
         try {
             estimator = new PhotonPoseEstimator(
                     AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField(),
-//                    PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP,
                     PhotonPoseEstimator.PoseStrategy.AVERAGE_BEST_TARGETS,
                     camera,
                     robotToCamera
@@ -34,7 +33,7 @@ public class PhotonVisionIO implements VisionIO {
     }
 
     @Override
-    public void updateInputs(VisionInputsAutoLogged inputs) {
+    public void updateInputs(VisionInputsLogged inputs) {
         var latestResult = camera.getLatestResult();
         for (int i = 0; i < latestResult.targets.size(); i++) {
         }
